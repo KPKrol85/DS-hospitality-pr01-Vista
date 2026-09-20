@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="800" height="500" role="img" aria-label="Mapa lokalizacji hotelu Vista">
+  <defs>
+    <style>
+      .bg { fill: #f4f5f7; }
+      .grid { stroke: #e2e5ea; stroke-width: 2; }
+      .pin { fill: #d44; }
+      .pin-center { fill: #fff; }
+      .label { font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; font-size: 18px; fill: #555; }
+    </style>
+  </defs>
+
+  <rect class="bg" x="0" y="0" width="800" height="500"></rect>
+
+  <!-- grid lines -->
+  <g class="grid">
+    <line x1="0" y1="100" x2="800" y2="100"></line>
+    <line x1="0" y1="200" x2="800" y2="200"></line>
+    <line x1="0" y1="300" x2="800" y2="300"></line>
+    <line x1="0" y1="400" x2="800" y2="400"></line>
+
+    <line x1="200" y1="0" x2="200" y2="500"></line>
+    <line x1="400" y1="0" x2="400" y2="500"></line>
+    <line x1="600" y1="0" x2="600" y2="500"></line>
+  </g>
+
+  <!-- location pin -->
+  <g transform="translate(400 230)">
+    <path class="pin" d="M0 -60 C30 -60 50 -40 50 -10 C50 20 0 80 0 80 C0 80 -50 20 -50 -10 C-50 -40 -30 -60 0 -60 Z"></path>
+    <circle class="pin-center" cx="0" cy="-15" r="12"></circle>
+  </g>
+
+  <!-- label -->
+  <text class="label" x="400" y="460" text-anchor="middle">
+    Lokalizacja hotelu Vista — mapa statyczna
+  </text>
+</svg>

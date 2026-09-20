@@ -1,0 +1,55 @@
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://hospitality-pr01-vista.netlify.app/#website",
+      "url": "https://hospitality-pr01-vista.netlify.app/",
+      "name": "Vista",
+      "alternateName": "Vista — Hotels & Travel",
+      "inLanguage": "pl-PL"
+    },
+    {
+      "@type": "CollectionPage",
+      "@id": "https://hospitality-pr01-vista.netlify.app/offers.html#webpage",
+      "url": "https://hospitality-pr01-vista.netlify.app/offers.html",
+      "name": "Vista | Oferty — Hotels & Travel",
+      "description": "Aktualne oferty i rabaty w Vista — Hotels & Travel: weekendy dla dwojga, pakiety biznesowe i sezonowe promocje.",
+      "isPartOf": {
+        "@id": "https://hospitality-pr01-vista.netlify.app/#website"
+      },
+      "about": {
+        "@id": "https://hospitality-pr01-vista.netlify.app/#hotel"
+      },
+      "primaryImageOfPage": {
+        "@id": "https://hospitality-pr01-vista.netlify.app/offers.html#primaryimage"
+      },
+      "inLanguage": "pl-PL"
+    },
+    {
+      "@type": "ImageObject",
+      "@id": "https://hospitality-pr01-vista.netlify.app/offers.html#primaryimage",
+      "url": "https://hospitality-pr01-vista.netlify.app/assets/img/og/og-1200x630.jpg",
+      "contentUrl": "https://hospitality-pr01-vista.netlify.app/assets/img/og/og-1200x630.jpg",
+      "caption": "Nowoczesny hotel nad morzem — Vista — Hotels & Travel"
+    },
+    {
+      "@type": "Hotel",
+      "@id": "https://hospitality-pr01-vista.netlify.app/#hotel",
+      "name": "Vista",
+      "alternateName": "Vista — Hotels & Travel",
+      "url": "https://hospitality-pr01-vista.netlify.app/",
+      "logo": "https://hospitality-pr01-vista.netlify.app/assets/img/logo/logo-128x128.svg",
+      "telephone": "+48533537091",
+      "email": "kontakt@kp-code.pl",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Marynarki Wojennej 12/31",
+        "postalCode": "33-100",
+        "addressLocality": "Tarnów",
+        "addressCountry": "PL"
+      },
+      "inLanguage": "pl-PL"
+    }
+  ]
+}

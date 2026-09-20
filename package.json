@@ -1,0 +1,42 @@
+{
+  "name": "pr-01-vista-hotels-and-travel",
+  "version": "1.0.0",
+  "description": "Profesjonalna, dostępna i responsywna wersja projektu „Vista — Hotels & Travel” w czystym HTML/CSS/JS. Projekt zawiera tryby Light/Dark/Auto, PWA, lekkie animacje, modularny JS oraz konfigurację Netlify z nagłówkami bezpieczeństwa.",
+  "scripts": {
+    "build:css": "postcss ./css/style.css -o ./css/style.min.css && node ./scripts/verify-build.mjs css ./css/style.min.css",
+    "build:js": "esbuild ./js/script.js --bundle --minify --target=es2018 --format=iife --outfile=./js/script.min.js && node ./scripts/verify-build.mjs js ./js/script.min.js",
+    "build": "npm run build:css && npm run build:js && npm run build:dist",
+    "dist:clean": "node ./scripts/build-dist.mjs --clean",
+    "build:dist": "node ./scripts/build-dist.mjs",
+    "watch:css": "postcss ./css/style.css -o ./css/style.min.css -w",
+    "watch:js": "esbuild ./js/script.js --bundle --minify --target=es2018 --format=iife --outfile=./js/script.min.js --watch",
+    "img:opt": "node scripts/optimize-images.mjs",
+    "img:clean": "node scripts/optimize-images.mjs --clean",
+    "img:watch": "node scripts/optimize-images.mjs --watch",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "check:links": "node scripts/check-link-integrity.mjs",
+    "test:a11y": "npm exec --yes --package=playwright@1.54.2 --package=axe-core@4.10.3 node scripts/a11y-axe.mjs"
+  },
+  "keywords": [
+    "frontend",
+    "css",
+    "html",
+    "js",
+    "pwa",
+    "tourism",
+    "portfolio"
+  ],
+  "author": "Kamil Król",
+  "license": "MIT",
+  "devDependencies": {
+    "@playwright/test": "^1.58.2",
+    "autoprefixer": "^10.4.27",
+    "chokidar": "^4.0.3",
+    "cssnano": "^7.1.2",
+    "esbuild": "^0.25.10",
+    "postcss": "^8.5.6",
+    "postcss-cli": "^11.0.1",
+    "postcss-import": "^16.1.1",
+    "sharp": "^0.34.4"
+  }
+}

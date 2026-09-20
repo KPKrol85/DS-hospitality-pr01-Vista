@@ -1,0 +1,55 @@
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://hospitality-pr01-vista.netlify.app/#website",
+      "url": "https://hospitality-pr01-vista.netlify.app/",
+      "name": "Vista",
+      "alternateName": "Vista — Hotels & Travel",
+      "inLanguage": "pl-PL"
+    },
+    {
+      "@type": "AboutPage",
+      "@id": "https://hospitality-pr01-vista.netlify.app/onas.html#webpage",
+      "url": "https://hospitality-pr01-vista.netlify.app/onas.html",
+      "name": "Vista | O nas — Hotels & Travel",
+      "description": "Poznaj markę Vista — Hotels & Travel. Nasza filozofia to eleganckie doświadczenia hotelowe, podróże premium i dbałość o detale.",
+      "isPartOf": {
+        "@id": "https://hospitality-pr01-vista.netlify.app/#website"
+      },
+      "about": {
+        "@id": "https://hospitality-pr01-vista.netlify.app/#hotel"
+      },
+      "primaryImageOfPage": {
+        "@id": "https://hospitality-pr01-vista.netlify.app/onas.html#primaryimage"
+      },
+      "inLanguage": "pl-PL"
+    },
+    {
+      "@type": "ImageObject",
+      "@id": "https://hospitality-pr01-vista.netlify.app/onas.html#primaryimage",
+      "url": "https://hospitality-pr01-vista.netlify.app/assets/img/optimized/about/wnetrze-hotelu-vista.png",
+      "contentUrl": "https://hospitality-pr01-vista.netlify.app/assets/img/optimized/about/wnetrze-hotelu-vista.png",
+      "caption": "Eleganckie wnętrze hotelowe marki Vista"
+    },
+    {
+      "@type": "Hotel",
+      "@id": "https://hospitality-pr01-vista.netlify.app/#hotel",
+      "name": "Vista",
+      "alternateName": "Vista — Hotels & Travel",
+      "url": "https://hospitality-pr01-vista.netlify.app/",
+      "logo": "https://hospitality-pr01-vista.netlify.app/assets/img/logo/logo-128x128.svg",
+      "telephone": "+48533537091",
+      "email": "kontakt@kp-code.pl",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Marynarki Wojennej 12/31",
+        "postalCode": "33-100",
+        "addressLocality": "Tarnów",
+        "addressCountry": "PL"
+      },
+      "inLanguage": "pl-PL"
+    }
+  ]
+}

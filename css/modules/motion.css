@@ -1,0 +1,17 @@
+@media (prefers-reduced-motion: reduce) {
+  .benefit {
+    transition: none;
+    transform: none;
+    box-shadow: var(--elev);
+  }
+  .offer-card {
+    transition: none;
+  }
+  .offer-card:hover {
+    transform: none;
+  }
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}

@@ -1,0 +1,83 @@
+{
+  "name": "Vista — Hotels & Travel",
+  "short_name": "Vista",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#0d0f14",
+  "theme_color": "#2dc7a6",
+
+  "icons": [
+    {
+      "src": "assets/img/ui/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "assets/img/ui/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "assets/img/ui/web-app-manifest-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "assets/img/ui/web-app-manifest-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "assets/img/ui/favicon-96x96.png",
+      "sizes": "96x96",
+      "type": "image/png"
+    },
+    {
+      "src": "assets/img/ui/favicon-1024x1024.png",
+      "sizes": "1024x1024",
+      "type": "image/png"
+    }
+  ],
+
+  "screenshots": [
+    {
+      "src": "assets/img/screenshots/mobile.jpg",
+      "sizes": "720x1280",
+      "type": "image/jpeg",
+      "form_factor": "narrow",
+      "label": "Widok strony mobilnej"
+    },
+    {
+      "src": "assets/img/screenshots/desktop.jpg",
+      "sizes": "1280x720",
+      "type": "image/jpeg",
+      "form_factor": "wide",
+      "label": "Widok strony desktopowej"
+    }
+  ],
+
+  "shortcuts": [
+    {
+      "name": "Pokoje",
+      "short_name": "Pokoje",
+      "url": "rooms.html",
+      "icons": [{ "src": "assets/img/shortcuts/pokoje.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "Kontakt & Rezerwacje",
+      "short_name": "Kontakt",
+      "url": "contact.html",
+      "icons": [{ "src": "assets/img/shortcuts/kontakt.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "Galeria",
+      "short_name": "Galeria",
+      "url": "gallery.html",
+      "icons": [{ "src": "assets/img/shortcuts/galeria.png", "sizes": "96x96" }]
+    }
+  ]
+}

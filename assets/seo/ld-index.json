@@ -1,0 +1,71 @@
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://hospitality-pr01-vista.netlify.app/#website",
+      "url": "https://hospitality-pr01-vista.netlify.app/",
+      "name": "Vista",
+      "alternateName": "Vista — Hotels & Travel",
+      "inLanguage": "pl-PL"
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://hospitality-pr01-vista.netlify.app/#webpage",
+      "url": "https://hospitality-pr01-vista.netlify.app/",
+      "name": "Vista — Hotels & Travel",
+      "description": "Vista — Hotels & Travel. Nowoczesny projekt front-end HTML / CSS / JS dla branży turystyczno-hotelarskiej z eleganckim, lekkim motywem.",
+      "isPartOf": {
+        "@id": "https://hospitality-pr01-vista.netlify.app/#website"
+      },
+      "about": {
+        "@id": "https://hospitality-pr01-vista.netlify.app/#hotel"
+      },
+      "primaryImageOfPage": {
+        "@id": "https://hospitality-pr01-vista.netlify.app/#primaryimage"
+      },
+      "inLanguage": "pl-PL"
+    },
+    {
+      "@type": "ImageObject",
+      "@id": "https://hospitality-pr01-vista.netlify.app/#primaryimage",
+      "url": "https://hospitality-pr01-vista.netlify.app/assets/img/og/og-1200x630.jpg",
+      "contentUrl": "https://hospitality-pr01-vista.netlify.app/assets/img/og/og-1200x630.jpg",
+      "caption": "Nowoczesny hotel z widokiem na morze — Vista — Hotels & Travel"
+    },
+    {
+      "@type": "Hotel",
+      "@id": "https://hospitality-pr01-vista.netlify.app/#hotel",
+      "name": "Vista",
+      "alternateName": "Vista — Hotels & Travel",
+      "url": "https://hospitality-pr01-vista.netlify.app/",
+      "description": "Nowoczesny projekt front-end HTML / CSS / JS dla branży turystyczno-hotelarskiej z eleganckim, lekkim motywem.",
+      "image": {
+        "@id": "https://hospitality-pr01-vista.netlify.app/#primaryimage"
+      },
+      "logo": "https://hospitality-pr01-vista.netlify.app/assets/img/logo/logo-128x128.svg",
+      "telephone": "+48533537091",
+      "email": "kontakt@kp-code.pl",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Marynarki Wojennej 12/31",
+        "postalCode": "33-100",
+        "addressLocality": "Tarnów",
+        "addressCountry": "PL"
+      },
+      "contactPoint": [
+        {
+          "@type": "ContactPoint",
+          "telephone": "+48533537091",
+          "email": "kontakt@kp-code.pl",
+          "contactType": "customer service",
+          "areaServed": "PL",
+          "availableLanguage": [
+            "pl"
+          ]
+        }
+      ],
+      "inLanguage": "pl-PL"
+    }
+  ]
+}

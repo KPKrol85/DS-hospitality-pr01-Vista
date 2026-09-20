@@ -1,0 +1,24 @@
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://hospitality-pr01-vista.netlify.app/#website",
+      "url": "https://hospitality-pr01-vista.netlify.app/",
+      "name": "Vista",
+      "alternateName": "Vista — Hotels & Travel",
+      "inLanguage": "pl-PL"
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://hospitality-pr01-vista.netlify.app/cookies.html#webpage",
+      "url": "https://hospitality-pr01-vista.netlify.app/cookies.html",
+      "name": "Vista | Pliki cookies — Hotels & Travel",
+      "description": "Zasady dotyczące plików cookies w serwisie Vista — Hotels & Travel — dowiedz się, jakie ciasteczka wykorzystujemy i jak możesz nimi zarządzać.",
+      "isPartOf": {
+        "@id": "https://hospitality-pr01-vista.netlify.app/#website"
+      },
+      "inLanguage": "pl-PL"
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+
+[data-theme="dark"] .icon--mono {
+  filter: invert(1) brightness(1.1);
+}
+[data-theme="dark"] .footer__text a .footer__icon-img.icon--mono {
+  filter: invert(1) brightness(1.1) contrast(1.05);
+}
+[data-theme="dark"] .grid-2 .footer__icon-img.icon--mono {
+  filter: invert(1) brightness(1.1) contrast(1.05);
+}
+[data-theme="dark"] .contact-info::after {
+  filter: invert(1) brightness(1.2) contrast(1.05);
+  opacity: 0.25;
+}

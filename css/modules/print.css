@@ -1,0 +1,20 @@
+
+@media print {
+  .site-header,
+  .site-footer,
+  .hero__media,
+  .gallery-grid,
+  .map,
+  .btn,
+  nav,
+  .lightbox {
+    display: none !important;
+  }
+  body {
+    background: #fff;
+    color: #000;
+  }
+  .section {
+    padding: 0;
+  }
+}

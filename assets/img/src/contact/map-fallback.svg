@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" role="img" aria-labelledby="mapTitle mapDesc">
+  <title id="mapTitle">Mapa okolicy hotelu Vista w Tarnowie</title>
+  <desc id="mapDesc">Statyczna mapa lokalizacji hotelu Vista przy ulicy Marynarki Wojennej 12/31 w Tarnowie.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f3efe7" />
+      <stop offset="1" stop-color="#ebe3d5" />
+    </linearGradient>
+  </defs>
+  <rect width="1280" height="720" fill="url(#bg)" />
+  <g stroke="#dacfbf" stroke-width="10" fill="none" stroke-linecap="round">
+    <path d="M40 640C210 500 320 460 540 470C710 475 850 440 1240 210" />
+    <path d="M140 120C320 210 420 230 640 220C930 210 1120 140 1240 80" />
+    <path d="M140 360C290 360 400 320 560 300C760 270 920 290 1180 360" />
+  </g>
+  <g stroke="#c6baa7" stroke-width="6" fill="none" stroke-linecap="round">
+    <path d="M200 40L360 680" />
+    <path d="M520 20L680 700" />
+    <path d="M840 40L1020 690" />
+  </g>
+  <g transform="translate(640 360)">
+    <circle r="74" fill="#0d0f14" fill-opacity="0.08" />
+    <path d="M0-88C-40-88-72-56-72-16C-72 34 0 120 0 120S72 34 72-16C72-56 40-88 0-88Z" fill="#0d0f14" />
+    <circle cy="-18" r="28" fill="#f7f6f3" />
+  </g>
+  <rect x="32" y="588" width="540" height="96" rx="16" fill="#ffffff" fill-opacity="0.86" />
+  <text x="68" y="640" font-family="Inter, Arial, sans-serif" font-size="36" fill="#0d0f14">ul. Marynarki Wojennej 12/31, Tarnów</text>
+</svg>
