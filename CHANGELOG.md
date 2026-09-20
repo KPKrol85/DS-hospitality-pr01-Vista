@@ -24,6 +24,8 @@ All significant changes to this project are documented in this file.
 - Added ignore rules for generated output, dependencies, local configuration, and test reports while retaining project sources and the lockfile.
 - Established modular CSS and JavaScript sources, PostCSS and esbuild asset builds, and a `dist` pipeline that rewrites HTML asset references and generates a content-versioned service worker.
 - Included a Sharp-based image pipeline and responsive image assets in AVIF, WebP, and fallback formats.
+- Moved CSS and JavaScript production bundles into disposable `dist/` output; both `build` and `build:dist` now rebuild a clean package from current sources, while standalone bundle commands preserve other distribution files. Set Netlify to run the full build and publish `dist/`.
+- Limited service worker registration to production-marked HTML, added scoped cleanup of prior Vista registrations and caches during development, and generated the production worker from packaged assets.
 
 ### Testing
 

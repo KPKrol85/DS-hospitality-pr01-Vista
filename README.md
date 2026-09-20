@@ -46,16 +46,20 @@ Projekt używa npm i zawiera `package-lock.json`:
 npm ci
 ```
 
+### Praca lokalna
+
+Uruchom pliki HTML z katalogu głównego przez lokalny serwer HTTP. Strony źródłowe ładują czytelne `css/style.css` i `js/script.js` wraz z modułami JavaScript. Nie wymagają wygenerowanych plików `.min` ani wcześniejszego buildu. W tym trybie nie jest automatycznie rejestrowany produkcyjny Service Worker. Kod deweloperski sprawdza i usuwa wcześniejszą rejestrację Vista dla jej właściwego zakresu oraz pamięci podręczne należące do Vista, jeśli pozostały po uruchomieniu produkcyjnego pakietu na tym samym originie.
+
 ### Build produkcyjny
 
-Po zmianie obrazów źródłowych można odtworzyć ich warianty, a następnie zbudować zasoby i pakiet dystrybucyjny:
+Po zmianie obrazów źródłowych można odtworzyć ich warianty, a następnie zbudować pełny pakiet dystrybucyjny:
 
 ```bash
 npm run img:opt
 npm run build
 ```
 
-`npm run build` tworzy `css/style.min.css` i `js/script.min.js`, po czym `scripts/build-dist.mjs` przygotowuje ignorowany przez Git katalog `dist/`. Podczas pakowania skrypt przepisuje odwołania w źródłowych stronach HTML na minifikowane zasoby, kopiuje wybrane pliki i generuje wersję `pwa/service-worker.js` dla `dist/`. Samo `npm run build:dist` wykorzystuje już istniejące pliki `.min`, dlatego po zmianach CSS lub JavaScript potrzebny jest pełny build. Źródłowe strony HTML odwołują się do `css/style.css` i `js/script.js`; plików w `dist/` nie należy edytować ręcznie.
+`npm run build` jest aliasem `npm run build:dist`. Obie komendy czyszczą `dist/`, generują z aktualnych źródeł `dist/css/style.min.css` i `dist/js/script.min.js`, pakują wymagane pliki publiczne, przepisują odwołania w kopiach HTML i weryfikują wynik. Produkcyjny HTML otrzymuje znacznik `data-vista-build="production"`, który steruje rejestracją Service Workera. Worker powstaje po przygotowaniu zasobów pakietu. `npm run build:css` i `npm run build:js` tworzą osobne pliki w `dist/` bez czyszczenia pozostałej zawartości; `npm run dist:clean` usuwa tylko wygenerowany katalog `dist/`. Plików w `dist/` nie należy edytować ręcznie ani dodawać do repozytorium.
 
 ### Testy i walidacja
 
@@ -68,7 +72,7 @@ npm run test:a11y
 
 ### Wdrożenie
 
-`scripts/build-dist.mjs` kopiuje `netlify/_headers` i `netlify/_redirects` do katalogu `dist/`, jeśli pliki są dostępne. Repozytorium zawiera więc konfigurację dla Netlify, lecz sam kod nie potwierdza aktualnie działającego wdrożenia ani dostarczania formularza na żywej stronie.
+`netlify.toml` ustawia polecenie buildu na `npm run build` i katalog publikacji na `dist/`; wygenerowane pliki nie muszą być dodawane do Git. Skrypt kopiuje `netlify/_headers` i `netlify/_redirects` do tego katalogu. Repozytorium zawiera konfigurację dla Netlify, lecz sam kod nie potwierdza aktualnie działającego wdrożenia ani dostarczania formularza na żywej stronie.
 
 ### Dostępność
 
@@ -80,7 +84,7 @@ Strony mają tytuły, opisy, adresy canonical, metadane Open Graph i Twitter ora
 
 ### PWA i obsługa offline
 
-`site.webmanifest` definiuje ikony, skróty i widok aplikacji. `js/script.js` rejestruje `pwa/service-worker.js`; worker buforuje zasoby, zapamiętuje odwiedzone strony HTML i w razie nieudanej nawigacji próbuje wyświetlić stronę z pamięci lub `offline.html`. Generator `dist/` ustala wersję pamięci podręcznej na podstawie stron HTML i wybranych plików statycznych. Zachowanie offline zależy od wcześniejszej instalacji workera i zawartości pamięci przeglądarki.
+`site.webmanifest` definiuje ikony, skróty i widok aplikacji. Rejestracja `pwa/service-worker.js` jest aktywna tylko dla HTML z produkcyjnym znacznikiem `data-vista-build="production"`, także przy lokalnym serwowaniu `dist/`. Produkcyjny worker jest generowany z plików obecnych w pakiecie; buforuje zasoby, zapamiętuje odwiedzone strony HTML i w razie nieudanej nawigacji próbuje wyświetlić stronę z pamięci lub `offline.html`. Wersja pamięci podręcznej zależy od zawartości odpowiednich plików produkcyjnych. Zachowanie offline zależy od wcześniejszej instalacji workera i zawartości pamięci przeglądarki.
 
 ### Wydajność
 
@@ -140,16 +144,20 @@ The project uses npm and includes `package-lock.json`:
 npm ci
 ```
 
+### Local Development
+
+Serve the root HTML files over a local HTTP server. Source pages load readable `css/style.css` and `js/script.js` with JavaScript modules. They do not require generated `.min` files or an earlier build. The production service worker is not registered automatically in this mode. Development code checks for and removes an earlier Vista registration within its intended scope and Vista-owned caches if they remain after serving the production package on the same origin.
+
 ### Production Build
 
-After changing source images, their variants can be regenerated before building assets and the distribution package:
+After changing source images, their variants can be regenerated before building the full distribution package:
 
 ```bash
 npm run img:opt
 npm run build
 ```
 
-`npm run build` creates `css/style.min.css` and `js/script.min.js`, then `scripts/build-dist.mjs` prepares the Git-ignored `dist/` directory. Packaging rewrites source HTML references to minified assets, copies selected files, and generates a `pwa/service-worker.js` version for `dist/`. Running `npm run build:dist` alone uses the existing `.min` files, so a full build is needed after CSS or JavaScript changes. Source HTML pages reference `css/style.css` and `js/script.js`; files in `dist/` should not be edited manually.
+`npm run build` is an alias for `npm run build:dist`. Both commands clean `dist/`, generate `dist/css/style.min.css` and `dist/js/script.min.js` from current sources, package the required public files, rewrite references in copied HTML, and verify the result. Production HTML receives a `data-vista-build="production"` marker that controls service worker registration. The worker is generated after the package assets are prepared. `npm run build:css` and `npm run build:js` create their individual files in `dist/` without cleaning other output; `npm run dist:clean` removes only the generated `dist/` directory. Files in `dist/` should not be edited manually or committed.
 
 ### Testing and Validation
 
@@ -162,7 +170,7 @@ npm run test:a11y
 
 ### Deployment
 
-`scripts/build-dist.mjs` copies `netlify/_headers` and `netlify/_redirects` into `dist/` when they are present. The repository therefore includes Netlify configuration, but the code alone does not confirm an active deployment or live form delivery.
+`netlify.toml` sets the build command to `npm run build` and the publish directory to `dist/`; generated files do not need to be committed. The script copies `netlify/_headers` and `netlify/_redirects` into that directory. The repository includes Netlify configuration, but the code alone does not confirm an active deployment or live form delivery.
 
 ### Accessibility
 
@@ -174,7 +182,7 @@ Pages include titles, descriptions, canonical URLs, Open Graph and Twitter metad
 
 ### PWA and Offline Support
 
-`site.webmanifest` defines icons, shortcuts, and an app display mode. `js/script.js` registers `pwa/service-worker.js`; the worker caches assets, saves visited HTML pages, and attempts to serve a cached page or `offline.html` after a failed navigation. The `dist/` generator derives the cache version from HTML pages and selected static files. Offline behavior depends on prior worker installation and browser cache contents.
+`site.webmanifest` defines icons, shortcuts, and an app display mode. Registration of `pwa/service-worker.js` is active only for HTML with the `data-vista-build="production"` marker, including when `dist/` is served locally. The production worker is generated from files present in the package; it caches assets, saves visited HTML pages, and attempts to serve a cached page or `offline.html` after a failed navigation. Its cache version depends on the relevant production content. Offline behavior depends on prior worker installation and browser cache contents.
 
 ### Performance
 

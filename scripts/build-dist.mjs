@@ -2,19 +2,13 @@ import { createHash } from "node:crypto";
 import { existsSync } from "node:fs";
 import { cp, mkdir, readdir, readFile, rm, stat, writeFile } from "node:fs/promises";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 
-const ROOT_DIR = process.cwd();
+const ROOT_DIR = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const DIST_DIR = path.join(ROOT_DIR, "dist");
 
-const REQUIRED_FILES = [
-  "css/style.min.css",
-  "js/script.min.js",
-  "js/theme-init.js",
-  "site.webmanifest",
-];
-
-const OPTIONAL_ROOT_FILES = ["robots.txt", "sitemap.xml"];
-const OPTIONAL_NETLIFY_FILES = [
+const REQUIRED_FILES = ["js/theme-init.js", "site.webmanifest", "robots.txt", "sitemap.xml", "pwa/service-worker.js"];
+const NETLIFY_FILES = [
   ["netlify/_headers", "_headers"],
   ["netlify/_redirects", "_redirects"],
 ];
@@ -38,6 +32,8 @@ const DIST_STATIC_ASSETS = [
   "site.webmanifest",
 ];
 
+const BUNDLE_FILES = ["css/style.min.css", "js/script.min.js"];
+
 async function pathExists(relativePath) {
   try {
     await stat(path.join(ROOT_DIR, relativePath));
@@ -53,6 +49,17 @@ async function assertExists(relativePath, typeLabel) {
   }
 }
 
+async function assertDistExists(relativePath, typeLabel) {
+  try {
+    const item = await stat(path.join(DIST_DIR, relativePath));
+    if (item.isFile()) return;
+  } catch {
+    // Report the missing distribution input below.
+  }
+
+  throw new Error(`Missing required dist ${typeLabel}: ${relativePath}. Run npm run build:dist.`);
+}
+
 async function cleanDist() {
   await rm(DIST_DIR, { recursive: true, force: true });
 }
@@ -62,7 +69,7 @@ async function listHtmlPages() {
   return entries
     .filter((entry) => entry.isFile() && entry.name.endsWith(".html"))
     .map((entry) => entry.name)
-    .sort((left, right) => left.localeCompare(right));
+    .sort();
 }
 
 async function copyFileIntoDist(sourceRelativePath, destinationRelativePath = sourceRelativePath) {
@@ -74,7 +81,9 @@ async function copyFileIntoDist(sourceRelativePath, destinationRelativePath = so
 
 async function copyDirectoryIntoDist(sourceRelativePath, destinationRelativePath = sourceRelativePath) {
   await assertExists(sourceRelativePath, "directory");
-  await cp(path.join(ROOT_DIR, sourceRelativePath), path.join(DIST_DIR, destinationRelativePath), {
+  const destinationPath = path.join(DIST_DIR, destinationRelativePath);
+  await mkdir(path.dirname(destinationPath), { recursive: true });
+  await cp(path.join(ROOT_DIR, sourceRelativePath), destinationPath, {
     recursive: true,
     force: true,
   });
@@ -84,6 +93,7 @@ async function copyOptimizedImagesIntoDist() {
   const sourceRoot = path.join(ROOT_DIR, "assets", "img", "optimized");
   const destinationRoot = path.join(DIST_DIR, "assets", "img", "optimized");
 
+  await mkdir(path.dirname(destinationRoot), { recursive: true });
   await cp(sourceRoot, destinationRoot, {
     recursive: true,
     force: true,
@@ -103,11 +113,21 @@ async function rewriteHtmlFile(htmlFileName, passthroughImageCopies) {
   const sourcePath = path.join(ROOT_DIR, htmlFileName);
   let html = await readFile(sourcePath, "utf8");
 
-  html = html.replaceAll('href="css/style.css"', 'href="css/style.min.css"');
-  html = html.replace(
-    /<script\b[^>]*src="js\/script\.js"[^>]*><\/script>/g,
-    '<script defer src="js/script.min.js"></script>'
-  );
+  const htmlTag = /<html\b[^>]*>/gi;
+  const sourceCss = /href="css\/style\.css"/g;
+  const sourceScript = /<script\b[^>]*src="js\/script\.js\?vista-dev-1"[^>]*><\/script>/g;
+  if (
+    [...html.matchAll(htmlTag)].length !== 1 ||
+    html.includes('data-vista-build=') ||
+    [...html.matchAll(sourceCss)].length !== 1 ||
+    [...html.matchAll(sourceScript)].length !== 1
+  ) {
+    throw new Error(`Expected one HTML root, source stylesheet, and source script in ${htmlFileName}`);
+  }
+
+  html = html.replace(/<html\b/i, '<html data-vista-build="production"');
+  html = html.replace(sourceCss, 'href="css/style.min.css"');
+  html = html.replace(sourceScript, '<script defer src="js/script.min.js"></script>');
 
   html = html.replace(/(\.?\/)?assets\/img\/src\/([^\s"',)>\]]+)/g, (match, prefix = "", relativePath) => {
     const normalizedPrefix = prefix === "./" ? "./" : "";
@@ -123,7 +143,7 @@ async function rewriteHtmlFile(htmlFileName, passthroughImageCopies) {
     return normalizedPrefix + (pathExistsSync(optimizedFsPath) ? optimizedTarget : copyPassthroughAsset(sourceFsPath, relativePath, passthroughImageCopies, passthroughTarget));
   });
 
-  if (html.includes('href="css/style.css"') || html.includes('src="js/script.js"') || html.includes("assets/img/src/")) {
+  if (html.includes('href="css/style.css"') || html.includes('src="js/script.js') || html.includes("assets/img/src/")) {
     throw new Error(`Production rewrite incomplete for ${htmlFileName}`);
   }
 
@@ -167,31 +187,109 @@ async function copyPassthroughImages(imageRelativePaths) {
   }
 }
 
-function buildCacheVersion(inputs) {
-  const hash = createHash("sha256");
-
-  for (const input of inputs) {
-    hash.update(input);
+async function listDistFiles(directory = DIST_DIR) {
+  const files = [];
+  for (const entry of await readdir(directory, { withFileTypes: true })) {
+    const entryPath = path.join(directory, entry.name);
+    if (entry.isDirectory()) {
+      files.push(...(await listDistFiles(entryPath)));
+    } else if (entry.isFile()) {
+      files.push(path.relative(DIST_DIR, entryPath).split(path.sep).join("/"));
+    }
   }
+  return files.sort();
+}
 
+async function buildCacheVersion(distFiles, sourceServiceWorker) {
+  const hash = createHash("sha256");
+  for (const file of distFiles) {
+    hash.update(file).update("\0").update(await readFile(path.join(DIST_DIR, ...file.split("/")))).update("\0");
+  }
+  hash.update(sourceServiceWorker);
   return hash.digest("hex").slice(0, 12);
 }
 
-async function buildServiceWorker(htmlPages, cacheVersion) {
+function replaceExactlyOnce(source, literal, replacement) {
+  if (source.split(literal).length !== 2) {
+    throw new Error(`Service Worker template must contain exactly one ${literal}`);
+  }
+  return source.replace(literal, replacement);
+}
+
+async function buildServiceWorker(distFiles, htmlPages) {
   const sourceServiceWorkerPath = path.join(ROOT_DIR, "pwa", "service-worker.js");
   const sourceServiceWorker = await readFile(sourceServiceWorkerPath, "utf8");
-  const staticAssets = JSON.stringify([...htmlPages, ...DIST_STATIC_ASSETS], null, 2);
+  const requiredPrecache = [...htmlPages, ...DIST_STATIC_ASSETS];
+  for (const file of requiredPrecache) {
+    if (!distFiles.includes(file)) {
+      throw new Error(`Missing required precache asset in dist: ${file}`);
+    }
+  }
+  const precacheSet = new Set(requiredPrecache);
+  const precachePaths = distFiles.filter((file) => precacheSet.has(file)).map((file) => `/${file}`);
+  const staticAssets = JSON.stringify(precachePaths, null, 2);
+  const cacheVersion = await buildCacheVersion(distFiles, sourceServiceWorker);
 
-  return sourceServiceWorker
-    .replace(/const CACHE_VERSION = ".*?";/, `const CACHE_VERSION = "${cacheVersion}";`)
-    .replace(/const STATIC_ASSETS = \[[\s\S]*?\];/, `const STATIC_ASSETS = ${staticAssets};`);
+  return replaceExactlyOnce(
+    replaceExactlyOnce(sourceServiceWorker, 'const CACHE_VERSION = "SOURCE_ONLY";', `const CACHE_VERSION = "${cacheVersion}";`),
+    "const STATIC_ASSETS = [];",
+    `const STATIC_ASSETS = ${staticAssets};`
+  );
+}
+
+async function verifyDistribution(htmlPages) {
+  const requiredFiles = [
+    ...htmlPages,
+    ...BUNDLE_FILES,
+    "js/theme-init.js",
+    "site.webmanifest",
+    "robots.txt",
+    "sitemap.xml",
+    "_headers",
+    "_redirects",
+    "pwa/service-worker.js",
+  ];
+  for (const file of requiredFiles) {
+    await assertDistExists(file, "file");
+  }
+
+  for (const htmlPage of htmlPages) {
+    const html = await readFile(path.join(DIST_DIR, htmlPage), "utf8");
+    if (
+      !html.includes('data-vista-build="production"') ||
+      !html.includes('href="css/style.min.css"') ||
+      !html.includes('src="js/script.min.js"') ||
+      html.includes('href="css/style.css"') ||
+      html.includes('src="js/script.js') ||
+      html.includes("assets/img/src/")
+    ) {
+      throw new Error(`Invalid production asset references in ${htmlPage}`);
+    }
+  }
+
+  const distFiles = await listDistFiles();
+  if (distFiles.some((file) => file === "css/style.css" || file === "js/script.js" || file.startsWith("js/features/") || file.startsWith("assets/img/src/"))) {
+    throw new Error("Development-only source files were packaged into dist.");
+  }
+
+  const worker = await readFile(path.join(DIST_DIR, "pwa", "service-worker.js"), "utf8");
+  const precacheMatch = worker.match(/const STATIC_ASSETS = (\[[\s\S]*?\]);/);
+  if (!/const CACHE_VERSION = "[a-f0-9]{12}";/.test(worker) || !precacheMatch) {
+    throw new Error("Production Service Worker generation is incomplete.");
+  }
+  const precache = JSON.parse(precacheMatch[1]);
+  const expected = distFiles
+    .filter((file) => htmlPages.includes(file) || DIST_STATIC_ASSETS.includes(file))
+    .map((file) => `/${file}`);
+  if (JSON.stringify(precache) !== JSON.stringify(expected)) {
+    throw new Error("Production Service Worker precache does not match dist assets.");
+  }
 }
 
 async function main() {
   const isCleanOnly = process.argv.includes("--clean");
-  await cleanDist();
-
   if (isCleanOnly) {
+    await cleanDist();
     console.log("Removed dist");
     return;
   }
@@ -200,7 +298,13 @@ async function main() {
     await assertExists(file, "file");
   }
 
-  await assertExists("pwa/service-worker.js", "file");
+  for (const file of BUNDLE_FILES) {
+    await assertDistExists(file, "bundle");
+  }
+
+  for (const [sourcePath] of NETLIFY_FILES) {
+    await assertExists(sourcePath, "Netlify file");
+  }
 
   for (const directory of REQUIRED_DIRS) {
     await assertExists(directory, "directory");
@@ -211,8 +315,6 @@ async function main() {
     throw new Error("No public HTML pages found in project root.");
   }
 
-  await mkdir(DIST_DIR, { recursive: true });
-
   for (const directory of REQUIRED_DIRS) {
     if (directory === "assets/img/optimized") {
       await copyOptimizedImagesIntoDist();
@@ -222,40 +324,26 @@ async function main() {
     await copyDirectoryIntoDist(directory);
   }
 
-  await copyFileIntoDist("css/style.min.css");
-  await copyFileIntoDist("js/script.min.js");
   await copyFileIntoDist("js/theme-init.js");
   await copyFileIntoDist("site.webmanifest");
 
-  for (const file of OPTIONAL_ROOT_FILES) {
-    if (await pathExists(file)) {
-      await copyFileIntoDist(file);
-    }
+  for (const file of ["robots.txt", "sitemap.xml"]) {
+    await copyFileIntoDist(file);
   }
 
-  for (const [sourcePath, targetPath] of OPTIONAL_NETLIFY_FILES) {
-    if (await pathExists(sourcePath)) {
-      await copyFileIntoDist(sourcePath, targetPath);
-    }
+  for (const [sourcePath, targetPath] of NETLIFY_FILES) {
+    await copyFileIntoDist(sourcePath, targetPath);
   }
 
-  const { passthroughImageCopies, rewrittenHtml } = await writeDistHtml(htmlPages);
-  await copyPassthroughImages([...passthroughImageCopies].sort((left, right) => left.localeCompare(right)));
+  const { passthroughImageCopies } = await writeDistHtml(htmlPages);
+  await copyPassthroughImages([...passthroughImageCopies].sort());
 
-  const cacheInputs = [];
-  for (const htmlPage of htmlPages) {
-    cacheInputs.push(htmlPage, rewrittenHtml.get(htmlPage));
-  }
-
-  for (const file of DIST_STATIC_ASSETS) {
-    cacheInputs.push(file, await readFile(path.join(ROOT_DIR, file), "utf8"));
-  }
-
-  const cacheVersion = buildCacheVersion(cacheInputs);
-  const distServiceWorker = await buildServiceWorker(htmlPages, cacheVersion);
+  const distFiles = (await listDistFiles()).filter((file) => file !== "pwa/service-worker.js");
+  const distServiceWorker = await buildServiceWorker(distFiles, htmlPages);
 
   await mkdir(path.join(DIST_DIR, "pwa"), { recursive: true });
   await writeFile(path.join(DIST_DIR, "pwa", "service-worker.js"), distServiceWorker, "utf8");
+  await verifyDistribution(htmlPages);
 
   console.log(`Built dist with ${htmlPages.length} HTML pages.`);
 }

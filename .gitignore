@@ -7,6 +7,8 @@ node_modules/
 
 # Generated production output
 /dist/
+/css/style.min.css
+/js/script.min.js
 
 # Test, coverage and report output
 /reports/

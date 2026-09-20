@@ -4,13 +4,16 @@
 **Project type:** Demonstrational static multi-page hospitality site (HTML, CSS, Vanilla JavaScript)  
 **Plan status:** Active
 
-Root HTML, `css/style.css` and `css/modules/`, and `js/script.js` and `js/features/` are the canonical page, style, and behavior sources. The tracked `.min` files are built assets; `dist/` is generated. Complete an item only after its outcome and focused verification are satisfied. An existing review finding alone does not establish completion.
+Root HTML, `css/style.css` and `css/modules/`, and `js/script.js` and `js/features/` are the canonical page, style, and behavior sources. Production `.min` files and `dist/` are generated output. Complete an item only after its outcome and focused verification are satisfied. An existing review finding alone does not establish completion.
+
+The owner has chosen to establish a clean production build before continuing visitor-facing corrections. This changes the work order, not the completion conditions for those corrections or the final behavior verification in `PH2-01`.
 
 ## Current priorities
 
-1. `PH1-01` — Keep page content visible when JavaScript is unavailable.
-2. `PH1-02` — Restore native validation for contact inquiries without JavaScript.
-3. `PH2-01` — Synchronize production bundles after source corrections and prevent stale distribution packages.
+1. `PH2-01` — Establish a fresh source-to-`dist/` workflow and prevent stale distribution packages; retain final behavior verification after the visitor-facing corrections.
+2. `PH1-01` — Keep page content visible when JavaScript is unavailable.
+3. `PH1-02` — Restore native validation for contact inquiries without JavaScript.
+4. `PH1-03` — Contain focus in open dialogs.
 
 ## Phase 1 — Visitor-facing behavior
 
@@ -42,12 +45,15 @@ Root HTML, `css/style.css` and `css/modules/`, and `js/script.js` and `js/featur
 **Goal:** Make published assets and repository rights metadata agree with their canonical sources.
 
 - [ ] **PH2-01 — Keep production bundles aligned with source**
-  - [ ] Rebuild the tracked CSS and JavaScript bundles from `css/style.css` and `js/script.js` after relevant source changes.
-  - [ ] Make `build:dist` reject stale bundles or generate current bundles before packaging, so it cannot silently copy outdated assets.
+  - [x] Generate CSS and JavaScript bundles directly in `dist/` from `css/style.css` and `js/script.js`, without maintaining tracked source-tree `.min` files.
+  - [x] Make both `build` and direct `build:dist` clean and rebuild the complete production package from current sources, with no stale-bundle path.
+  - [x] Verify production-only Service Worker registration, a generated worker with current distribution paths, and safe cleanup of any prior Vista worker and caches during development.
   - [ ] Verify the packaged room filters, filtered-card hiding, and project notice against the current source behavior.
-  - **Depends on:** `PH1-01` and `PH1-03` for the final bundle synchronization; include any JavaScript changes from `PH1-02`.
-  - **Completion condition:** The tracked bundles and a fresh distribution package include the current room-filter, project-notice, and reveal behavior, with a guard against later stale packaging.
-  - **Evidence:** `js/script.js`, `js/script.min.js`, `css/modules/subpages.css`, `css/style.min.css`, `scripts/build-dist.mjs`; `REVIEW.md` P1-02.
+  - [ ] After `PH1-01`, `PH1-02`, and `PH1-03`, rebuild and verify the final reveal, contact-form, and dialog behavior in the packaged site.
+  - **Build evidence:** Clean `npm run build:dist` and `npm run build` runs passed, each packaging 11 HTML pages; CSS and JavaScript bundle verification and distribution link checking passed. Local Chromium checks confirmed production-only registration, offline navigation, and scoped Vista cleanup while preserving unrelated caches and registration. Browser verification of the visitor-facing requirements remains open; no live Netlify deploy was tested.
+  - **Depends on:** `PH1-01` and `PH1-03` for final reveal and dialog verification; include any JavaScript changes from `PH1-02`.
+  - **Completion condition:** A fresh distribution package contains current source behavior for room filters, filtered-card hiding, project notice, reveal, contact form, and dialogs; direct `build:dist` cannot package stale bundles, and relevant development and production behavior has been verified.
+  - **Evidence:** `js/script.js`, `css/style.css`, `css/modules/subpages.css`, `scripts/build-dist.mjs`, `pwa/service-worker.js`, generated `dist/`; `REVIEW.md` P1-02.
 
 - [ ] **PH2-02 — Align project license declarations**
   - [ ] Replace the root project's MIT declarations in `package.json` and the root package entry of `package-lock.json` with metadata consistent with the proprietary `LICENSE`.

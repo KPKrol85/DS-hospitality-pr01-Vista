@@ -1,5 +1,7 @@
 # Dist Pipeline Notes
 
+`npm run build` and `npm run build:dist` both create a fresh, complete `dist/` from canonical sources. The workflow removes the old package, generates and verifies CSS and JavaScript directly in `dist/`, copies public assets, rewrites packaged HTML, generates the production service worker, and verifies the package. Standalone `build:css` and `build:js` write only their respective bundles without clearing other output. Source HTML remains readable and usable without generated `.min` files; packaged HTML receives `data-vista-build="production"` to enable service worker registration. Root `netlify.toml` runs the full build and publishes `dist/`.
+
 ## Copied HTML pages
 
 - `404.html`
@@ -14,12 +16,15 @@
 - `regulamin.html`
 - `rooms.html`
 
-## Copied asset paths
+## Generated production paths
 
 - `css/style.min.css`
 - `js/script.min.js`
+- `pwa/service-worker.js`, generated from current distribution assets
+
+## Copied asset paths
+
 - `js/theme-init.js`
-- `pwa/service-worker.js` generated for `dist`
 - `site.webmanifest`
 - `robots.txt`
 - `sitemap.xml`
@@ -34,7 +39,6 @@
 - `assets/img/screenshots/`
 - `assets/img/shortcuts/`
 - `assets/img/ui/`
-- `assets/img/contact/map-fallback.svg`
 
 ## Excluded development-only paths
 
@@ -48,19 +52,16 @@
 - `scripts/`
 - `node_modules/`
 - `postcss.config.cjs`
-- `pipeline-notes.md`
+- `doc/`
 - `README.md`
-- `AUDIT.md`
-- `settings.md`
 - `package-lock.json`
 
 ## Final npm scripts related to dist
 
 - `npm run dist:clean`
+- `npm run build:css`
+- `npm run build:js`
 - `npm run build:dist`
+- `npm run build` (alias of `build:dist`)
 
-## Modified file paths only
-
-- `package.json`
-- `scripts/build-dist.mjs`
-- `dist-notes.md`
+The output paths above are relative to `dist/`. Source-tree copies of `css/style.min.css` and `js/script.min.js` are obsolete and ignored. `dist/` is generated and must not be edited or committed.

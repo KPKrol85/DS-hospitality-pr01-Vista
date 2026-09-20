@@ -20,16 +20,44 @@ function setYear() {
   if (el) el.textContent = new Date().getFullYear();
 }
 
-function registerSW() {
-  if ("serviceWorker" in navigator) {
-    navigator.serviceWorker
-      .register("pwa/service-worker.js", { scope: "/" })
-      .then((reg) => {
-        logger.info("[PWA] Service Worker zarejestrowany", reg.scope);
-      })
-      .catch((err) => {
-        logger.error("[PWA] Błąd rejestracji Service Workera", err);
-      });
+async function configureSW() {
+  if (!("serviceWorker" in navigator)) return;
+
+  const workerUrl = new URL("/pwa/service-worker.js", location.origin).href;
+  const rootScope = new URL("/", location.origin).href;
+
+  try {
+    if (document.documentElement.dataset.vistaBuild === "production") {
+      const registration = await navigator.serviceWorker.register(workerUrl, { scope: "/" });
+      logger.info("[PWA] Service Worker zarejestrowany", registration.scope);
+      return;
+    }
+
+    // A prior production visit may leave Vista's worker controlling source pages.
+    const registration = await navigator.serviceWorker.getRegistration(rootScope);
+    if (!registration || registration.scope !== rootScope) return;
+
+    const workers = [registration.active, registration.waiting, registration.installing].filter(Boolean);
+    if (!workers.length || workers.some((worker) => worker.scriptURL !== workerUrl)) return;
+
+    const controlledByVista = navigator.serviceWorker.controller?.scriptURL === workerUrl;
+    await registration.unregister();
+
+    if ("caches" in window) {
+      const cacheNames = await caches.keys();
+      await Promise.all(
+        cacheNames
+          .filter((name) =>
+            /^vista-(?:static|html)-[a-f0-9]{12}$/.test(name) ||
+            /^th-(?:static|html)-(?:v1\.2\.1|[a-f0-9]{12})$/.test(name)
+          )
+          .map((name) => caches.delete(name))
+      );
+    }
+
+    if (controlledByVista) location.reload();
+  } catch (error) {
+    logger.error("[PWA] Błąd konfiguracji Service Workera", error);
   }
 }
 
@@ -52,7 +80,7 @@ function boot() {
     initGalleryFilters();
   }
 
-  registerSW();
+  void configureSW();
 }
 
 window.addEventListener("DOMContentLoaded", boot);
