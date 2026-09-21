@@ -1,3 +1,5 @@
+import { activateModal, isActiveModal, restoreModalFocus, trapModalFocus } from "./modal-focus.js";
+
 export function initLightbox() {
   const lightbox = document.querySelector(".lightbox");
   if (!lightbox) return;
@@ -24,6 +26,8 @@ export function initLightbox() {
   let index = 0;
   let lastFocused = null;
   let lastTapTime = 0;
+  let releaseModal = null;
+  let previousBodyOverflow = "";
 
   function renderFromAnchor(a) {
     const fullSrc = a.getAttribute("href");
@@ -69,6 +73,8 @@ export function initLightbox() {
   }
 
   function open(i, focusOrigin) {
+    if (!lightbox.hidden) return;
+
     const list = items();
     if (!list.length) return;
     index = ((i % list.length) + list.length) % list.length;
@@ -79,16 +85,23 @@ export function initLightbox() {
     setFullscreen(false);
     lightbox.hidden = false;
     lightbox.setAttribute("aria-hidden", "false");
-    (dialogEl || prevBtn || nextBtn || closeBtns[0])?.focus();
+    releaseModal = activateModal(lightbox, dialogEl || prevBtn || nextBtn || closeBtns[0]);
+    (dialogEl || prevBtn || nextBtn || closeBtns[0])?.focus({ preventScroll: true });
+    previousBodyOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
   }
 
   function close() {
+    if (lightbox.hidden) return;
+
     setFullscreen(false);
     lightbox.hidden = true;
     lightbox.setAttribute("aria-hidden", "true");
-    document.body.style.overflow = "";
-    if (lastFocused && lastFocused.focus) lastFocused.focus();
+    document.body.style.overflow = previousBodyOverflow;
+    releaseModal?.();
+    releaseModal = null;
+    restoreModalFocus(lastFocused);
+    lastFocused = null;
   }
 
   function show(delta) {
@@ -125,23 +138,16 @@ export function initLightbox() {
   nextBtn?.addEventListener("click", () => show(1));
 
   document.addEventListener("keydown", (e) => {
-    if (lightbox.hidden) return;
-    if (e.key === "Escape") close();
+    if (lightbox.hidden || !isActiveModal(lightbox)) return;
+    if (e.key === "Escape") {
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      close();
+      return;
+    }
     if (e.key === "ArrowLeft") show(-1);
     if (e.key === "ArrowRight") show(1);
-    if (e.key === "Tab") {
-      const focusables = [...lightbox.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])')].filter((el) => !el.hasAttribute("disabled"));
-      if (!focusables.length) return;
-      const first = focusables[0];
-      const last = focusables[focusables.length - 1];
-      if (e.shiftKey && document.activeElement === first) {
-        e.preventDefault();
-        last.focus();
-      } else if (!e.shiftKey && document.activeElement === last) {
-        e.preventDefault();
-        first.focus();
-      }
-    }
+    trapModalFocus(e, lightbox, dialogEl || lightbox);
   });
 
   if (img) {

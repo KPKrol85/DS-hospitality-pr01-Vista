@@ -33,10 +33,10 @@ The owner has chosen to establish a clean production build before continuing vis
   - **Completion condition:** Empty or malformed inquiries cannot bypass browser validation without JavaScript; valid inquiries retain the existing submission route. Live delivery is outside this local verification.
   - **Evidence:** `contact.html`, `js/features/form.js`; `REVIEW.md` P1-05.
 
-- [ ] **PH1-03 — Contain focus in open dialogs**
-  - [ ] Update the project notice and gallery lightbox so Tab and Shift+Tab stay inside each dialog, including from the initially focused dialog container.
-  - [ ] Prevent background controls from receiving focus while a dialog is open; restore the previous focus target on close.
-  - [ ] Verify forward and reverse keyboard traversal for both dialogs.
+- [x] **PH1-03 — Contain focus in open dialogs**
+  - [x] Update the project notice and gallery lightbox so Tab and Shift+Tab stay inside each dialog, including from the initially focused dialog container.
+  - [x] Prevent background controls from receiving focus while a dialog is open; restore the previous focus target on close.
+  - [x] Verify forward and reverse keyboard traversal for both dialogs.
   - **Completion condition:** Focus cannot reach page controls behind either open `aria-modal` dialog and returns to its origin after closing.
   - **Evidence:** `js/features/project-banner.js`, `js/features/lightbox.js`, dialog markup in `index.html` and `gallery.html`; `REVIEW.md` P1-03.
 

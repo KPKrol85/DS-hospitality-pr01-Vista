@@ -1,3 +1,5 @@
+import { activateModal, isActiveModal, restoreModalFocus, trapModalFocus } from "./modal-focus.js";
+
 const STORAGE_KEY = "vista_project_banner_accepted";
 
 export function initProjectBanner() {
@@ -8,8 +10,8 @@ export function initProjectBanner() {
   const acceptButton = document.getElementById("projectBannerAccept");
   if (!dialog || !acceptButton) return;
 
-  const focusableSelector = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
   let lastFocused = null;
+  let releaseModal = null;
 
   const hasAccepted = (() => {
     try {
@@ -33,10 +35,10 @@ export function initProjectBanner() {
     modal.hidden = true;
     modal.setAttribute("aria-hidden", "true");
     document.body.classList.remove("has-project-modal");
-
-    if (lastFocused instanceof HTMLElement) {
-      lastFocused.focus();
-    }
+    releaseModal?.();
+    releaseModal = null;
+    restoreModalFocus(lastFocused);
+    lastFocused = null;
   }
 
   function acceptBanner() {
@@ -44,40 +46,17 @@ export function initProjectBanner() {
     closeBanner();
   }
 
-  function trapFocus(event) {
-    if (event.key !== "Tab" || modal.hidden) return;
-
-    const focusable = [...modal.querySelectorAll(focusableSelector)].filter((element) => {
-      return !element.hasAttribute("disabled") && !element.hasAttribute("hidden");
-    });
-
-    if (!focusable.length) return;
-
-    const first = focusable[0];
-    const last = focusable[focusable.length - 1];
-
-    if (event.shiftKey && document.activeElement === first) {
-      event.preventDefault();
-      last.focus();
-      return;
-    }
-
-    if (!event.shiftKey && document.activeElement === last) {
-      event.preventDefault();
-      first.focus();
-    }
-  }
-
   lastFocused = document.activeElement;
   modal.hidden = false;
   modal.setAttribute("aria-hidden", "false");
   document.body.classList.add("has-project-modal");
+  releaseModal = activateModal(modal, dialog);
   dialog.focus();
 
   acceptButton.addEventListener("click", acceptBanner);
 
   document.addEventListener("keydown", (event) => {
-    if (modal.hidden) return;
+    if (modal.hidden || !isActiveModal(modal)) return;
 
     if (event.key === "Escape") {
       event.preventDefault();
@@ -85,6 +64,6 @@ export function initProjectBanner() {
       return;
     }
 
-    trapFocus(event);
+    trapModalFocus(event, modal, dialog);
   });
 }
