@@ -44,13 +44,13 @@ The owner has chosen to establish a clean production build before continuing vis
 
 **Goal:** Make published assets and repository rights metadata agree with their canonical sources.
 
-- [ ] **PH2-01 — Keep production bundles aligned with source**
+- [x] **PH2-01 — Keep production bundles aligned with source**
   - [x] Generate CSS and JavaScript bundles directly in `dist/` from `css/style.css` and `js/script.js`, without maintaining tracked source-tree `.min` files.
   - [x] Make both `build` and direct `build:dist` clean and rebuild the complete production package from current sources, with no stale-bundle path.
   - [x] Verify production-only Service Worker registration, a generated worker with current distribution paths, and safe cleanup of any prior Vista worker and caches during development.
-  - [ ] Verify the packaged room filters, filtered-card hiding, and project notice against the current source behavior.
-  - [ ] After `PH1-01`, `PH1-02`, and `PH1-03`, rebuild and verify the final reveal, contact-form, and dialog behavior in the packaged site.
-  - **Build evidence:** Clean `npm run build:dist` and `npm run build` runs passed, each packaging 11 HTML pages; CSS and JavaScript bundle verification and distribution link checking passed. Local Chromium checks confirmed production-only registration, offline navigation, and scoped Vista cleanup while preserving unrelated caches and registration. Browser verification of the visitor-facing requirements remains open; no live Netlify deploy was tested.
+  - [x] Verify the packaged room filters, filtered-card hiding, and project notice against the current source behavior.
+  - [x] After `PH1-01`, `PH1-02`, and `PH1-03`, rebuild and verify the final reveal, contact-form, and dialog behavior in the packaged site.
+  - **Build evidence:** The previously completed pipeline and Service Worker separation remain in place. For final PH2-01 integration, fresh `npm run build:dist` and `npm run build` runs passed, each packaging 11 HTML pages; bundle verification, production-reference inspection, link integrity, syntax checks, and `git diff --check` passed. Isolated local Headless Chromium 147 compared source and production behavior for room filters, computed filtered-card hiding, project-notice persistence, reveal fallbacks, native and enhanced contact validation, and project-notice/lightbox focus management. A dedicated fresh production context confirmed the generated worker controlled `/` with the current static and HTML caches. The valid Netlify Forms POST was intercepted locally; no live Netlify deploy, inquiry, or delivery was tested.
   - **Depends on:** `PH1-01` and `PH1-03` for final reveal and dialog verification; include any JavaScript changes from `PH1-02`.
   - **Completion condition:** A fresh distribution package contains current source behavior for room filters, filtered-card hiding, project notice, reveal, contact form, and dialogs; direct `build:dist` cannot package stale bundles, and relevant development and production behavior has been verified.
   - **Evidence:** `js/script.js`, `css/style.css`, `css/modules/subpages.css`, `scripts/build-dist.mjs`, `pwa/service-worker.js`, generated `dist/`; `REVIEW.md` P1-02.

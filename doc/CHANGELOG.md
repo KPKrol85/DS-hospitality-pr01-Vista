@@ -36,3 +36,4 @@ All significant changes to this project are documented in this file.
 ### Testing
 
 - Included local-link integrity checking and a Playwright/axe accessibility audit script.
+- Verified clean production builds and source-to-dist behavior for room filters, project notice, reveal animations, contact validation, and modal focus management.
