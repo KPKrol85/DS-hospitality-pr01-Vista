@@ -1,4 +1,8 @@
 @media (prefers-reduced-motion: reduce) {
+  :where(.reveal-ready) [data-reveal] {
+    opacity: 1;
+    transform: translateY(0);
+  }
   .benefit {
     transition: none;
     transform: none;

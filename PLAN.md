@@ -19,10 +19,10 @@ The owner has chosen to establish a clean production build before continuing vis
 
 **Goal:** Preserve access to existing content and interactions across JavaScript and keyboard paths.
 
-- [ ] **PH1-01 — Make reveal content visible by default**
-  - [ ] Change the reveal styling so `[data-reveal]` content is visible before JavaScript activates animations, including when initialization fails.
-  - [ ] Preserve the intended reveal transition when JavaScript is active.
-  - [ ] Verify representative homepage and subpage content with JavaScript disabled and enabled.
+- [x] **PH1-01 — Make reveal content visible by default**
+  - [x] Change the reveal styling so `[data-reveal]` content is visible before JavaScript activates animations, including when initialization fails.
+  - [x] Preserve the intended reveal transition when JavaScript is active.
+  - [x] Verify representative homepage and subpage content with JavaScript disabled and enabled.
   - **Completion condition:** The hero and other reveal-marked content remain visible without JavaScript and still reveal with it.
   - **Evidence:** `css/modules/utilities.css`, `js/features/reveal.js`, `index.html`; `REVIEW.md` P1-01.
 

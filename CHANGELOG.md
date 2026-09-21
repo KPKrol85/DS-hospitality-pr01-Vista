@@ -27,6 +27,10 @@ All significant changes to this project are documented in this file.
 - Moved CSS and JavaScript production bundles into disposable `dist/` output; both `build` and `build:dist` now rebuild a clean package from current sources, while standalone bundle commands preserve other distribution files. Set Netlify to run the full build and publish `dist/`.
 - Limited service worker registration to production-marked HTML, added scoped cleanup of prior Vista registrations and caches during development, and generated the production worker from packaged assets.
 
+### Fixed
+
+- Made reveal-marked content visible without JavaScript or when reveal initialization fails, while preserving scroll animations and reduced-motion support.
+
 ### Testing
 
 - Included local-link integrity checking and a Playwright/axe accessibility audit script.
