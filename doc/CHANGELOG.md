@@ -30,6 +30,7 @@ All significant changes to this project are documented in this file.
 ### Fixed
 
 - Made reveal-marked content visible without JavaScript or when reveal initialization fails, while preserving scroll animations and reduced-motion support.
+- Restored native contact-form validation without JavaScript while preserving enhanced error messages and Netlify Forms submission.
 
 ### Testing
 

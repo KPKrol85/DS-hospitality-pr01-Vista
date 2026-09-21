@@ -251,14 +251,14 @@
             <!-- form -->
             <article id="form" class="contact-form">
               <h2 class="contact-info__title">Formularz kontaktowy</h2>
-              <form class="form" name="booking" method="POST" data-netlify="true" netlify-honeypot="website" novalidate data-form aria-describedby="form-note">
+              <form class="form" name="booking" method="POST" data-netlify="true" netlify-honeypot="website" data-form aria-describedby="form-note">
                 <input type="hidden" name="form-name" value="booking" />
                 <input type="text" name="website" class="visually-hidden" aria-hidden="true" tabindex="-1" autocomplete="off" />
                 <p id="form-note" class="form__note">Wypełnij pola oznaczone * i wyślij zapytanie. Odezwiemy się mailowo lub telefonicznie.</p>
                 <!-- imię i nazwisko -->
                 <div class="form__field">
                   <label for="name">Imię i nazwisko *</label>
-                  <input id="name" name="name" type="text" required inputmode="text" autocomplete="name" placeholder="Jan Kowalski" aria-describedby="hint-name err-name" />
+                  <input id="name" name="name" type="text" minlength="2" required inputmode="text" autocomplete="name" placeholder="Jan Kowalski" aria-describedby="hint-name err-name" />
                   <p class="form__hint" id="hint-name">Minimum 2 znaki.</p>
                   <p class="form__error" id="err-name" aria-live="polite" hidden>Podaj imię i nazwisko.</p>
                 </div>
@@ -278,7 +278,7 @@
                     inputmode="tel"
                     autocomplete="tel-national"
                     placeholder="+48 533537091"
-                    pattern="^(\+?\d{1,3})?[\s-]?\d{3}[\s-]?\d{3}[\s-]?\d{3}$"
+                    pattern="^(\+?\d{1,3})?[\s\-]?\d{3}[\s\-]?\d{3}[\s\-]?\d{3}$"
                     aria-describedby="hint-phone err-phone" />
                   <p class="form__hint" id="hint-phone">Tylko do kontaktu w sprawie rezerwacji.</p>
                   <p class="form__error" id="err-phone" aria-live="polite" hidden>Podaj poprawny numer telefonu lub pozostaw to pole puste.</p>

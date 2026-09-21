@@ -142,4 +142,6 @@ export function initForm() {
     const btn = form.querySelector('button[type="submit"]');
     btn?.focus();
   });
+
+  form.noValidate = true;
 }

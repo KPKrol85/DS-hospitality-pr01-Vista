@@ -26,10 +26,10 @@ The owner has chosen to establish a clean production build before continuing vis
   - **Completion condition:** The hero and other reveal-marked content remain visible without JavaScript and still reveal with it.
   - **Evidence:** `css/modules/utilities.css`, `js/features/reveal.js`, `index.html`; `REVIEW.md` P1-01.
 
-- [ ] **PH1-02 — Preserve native contact-form validation**
-  - [ ] Remove or conditionally apply `novalidate` so required fields, email, phone pattern, guest bounds, and consent retain browser constraint validation when JavaScript is unavailable.
-  - [ ] Keep the enhanced messages and valid Netlify Forms submission path in `js/features/form.js`.
-  - [ ] Verify invalid submissions without JavaScript are blocked by the browser and the enhanced path still handles valid and invalid inputs.
+- [x] **PH1-02 — Preserve native contact-form validation**
+  - [x] Remove or conditionally apply `novalidate` so required fields, email, phone pattern, guest bounds, and consent retain browser constraint validation when JavaScript is unavailable.
+  - [x] Keep the enhanced messages and valid Netlify Forms submission path in `js/features/form.js`.
+  - [x] Verify invalid submissions without JavaScript are blocked by the browser and the enhanced path still handles valid and invalid inputs.
   - **Completion condition:** Empty or malformed inquiries cannot bypass browser validation without JavaScript; valid inquiries retain the existing submission route. Live delivery is outside this local verification.
   - **Evidence:** `contact.html`, `js/features/form.js`; `REVIEW.md` P1-05.
 
