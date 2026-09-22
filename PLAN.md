@@ -55,12 +55,14 @@ The owner has chosen to establish a clean production build before continuing vis
   - **Completion condition:** A fresh distribution package contains current source behavior for room filters, filtered-card hiding, project notice, reveal, contact form, and dialogs; direct `build:dist` cannot package stale bundles, and relevant development and production behavior has been verified.
   - **Evidence:** `js/script.js`, `css/style.css`, `css/modules/subpages.css`, `scripts/build-dist.mjs`, `pwa/service-worker.js`, generated `dist/`; `REVIEW.md` P1-02.
 
-- [ ] **PH2-02 — Align project license declarations**
-  - [ ] Replace the root project's MIT declarations in `package.json` and the root package entry of `package-lock.json` with metadata consistent with the proprietary `LICENSE`.
-  - [ ] Correct the Polish and English license statements in `doc/README.md`; retain separate third-party dependency licenses.
-  - [ ] Verify the root package metadata and both README language sections agree with `LICENSE` and the already aligned root `README.md`.
+- [x] **PH2-02 — Align project license declarations**
+  - [x] Align `package.json` and the root `package-lock.json` entry with `LICENSE`.
+  - [x] Verify the existing Polish and English license statements in the root `README.md`.
+  - [x] Preserve third-party dependency licenses.
+  - [x] Confirm consistency across the canonical `LICENSE` and project metadata.
   - **Completion condition:** Repository readers and package consumers receive one consistent statement of rights for Vista's original materials.
-  - **Evidence:** `LICENSE`, `package.json`, `package-lock.json`, `doc/README.md`, `README.md`; `REVIEW.md` P1-04.
+  - **Evidence:** `LICENSE`, `package.json`, `package-lock.json`, `README.md`; `REVIEW.md` P1-04.
+  - **Status:** Completed.
 
 ## Optional future improvements
 

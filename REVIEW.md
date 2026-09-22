@@ -39,6 +39,7 @@ None detected.
 
 ### [P1-04] Repository license metadata contradicts LICENSE
 
+- **Status:** Resolved
 - **Classification:** Contract mismatch
 - **Affected area:** Licensing metadata, project documentation
 - **Evidence:** `LICENSE:15-22`, `package.json:30`, `package-lock.json:10`, `doc/README.md:74`, `doc/README.md:143`
