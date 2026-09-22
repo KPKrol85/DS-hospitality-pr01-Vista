@@ -16,16 +16,16 @@
   Service-Worker-Allowed: /
 
 /assets/img/ui/*
-  Cache-Control: public, max-age=31536000, immutable
+  Cache-Control: public, max-age=0, must-revalidate
 
 /assets/img/ui/safari-pinned-tab.svg
   Content-Type: image/svg+xml
-  Cache-Control: public, max-age=31536000, immutable
+  Cache-Control: public, max-age=0, must-revalidate
 
 /assets/img/ui/favicon.svg
   Content-Type: image/svg+xml
-  Cache-Control: public, max-age=31536000, immutable
+  Cache-Control: public, max-age=0, must-revalidate
 
 /assets/img/ui/favicon.ico
   Content-Type: image/x-icon
-  Cache-Control: public, max-age=31536000, immutable
+  Cache-Control: public, max-age=0, must-revalidate

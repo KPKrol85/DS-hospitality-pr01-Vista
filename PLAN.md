@@ -68,12 +68,13 @@ The owner has chosen to establish a clean production build before continuing vis
 
 These review findings are source-visible risks and do not block the required phases.
 
-- [ ] **O-01 — Refresh cached images after same-URL updates**
-  - [ ] Make a changed published image invalidate its old cache entry or use an update-aware fetch strategy for images.
-  - [ ] Verify that a returning visitor can receive a replacement image at the same URL after an updated distribution is installed.
+- [x] **O-01 — Refresh cached images after same-URL updates**
+  - [x] Make a changed published image invalidate its old cache entry or use an update-aware fetch strategy for images.
+  - [x] Verify that a returning visitor can receive a replacement image at the same URL after an updated distribution is installed.
   - **Completion condition:** A published image replacement reaches returning visitors at its existing URL.
   - **Value:** Avoid persistent stale imagery for returning visitors.
   - **Evidence:** `scripts/build-dist.mjs`, `pwa/service-worker.js`; `REVIEW.md` P2-01.
+  - **Status:** Completed — verified with a same-URL A → B production-package update in persistent Chromium.
 
 - [ ] **O-02 — Reveal the map after a late successful load**
   - [ ] Keep the fallback available for failed or slow map loads while allowing a later successful iframe load to reveal the map.

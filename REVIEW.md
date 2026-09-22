@@ -60,6 +60,7 @@ None detected.
 
 ### [P2-01] Image-only updates do not invalidate service-worker caches
 
+- **Status:** Resolved
 - **Classification:** Source-visible risk
 - **Affected area:** Service worker, asset freshness
 - **Evidence:** `scripts/build-dist.mjs:245-255`, `pwa/service-worker.js:64-74`
