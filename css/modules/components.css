@@ -293,6 +293,14 @@ fieldset.form__field legend {
 .map--embed iframe[hidden] {
   display: none;
 }
+.map--embed iframe {
+  position: absolute;
+  inset: 0;
+}
+.map--embed iframe[aria-hidden="true"] {
+  opacity: 0;
+  pointer-events: none;
+}
 .map__caption {
   margin-block: var(--space-xs);
   font-size: var(--fs-200);

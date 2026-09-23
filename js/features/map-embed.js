@@ -8,29 +8,29 @@ export function initMapEmbed() {
   const fallback = map.querySelector('[data-map-fallback]');
   if (!iframe || !fallback) return;
 
-  let settled = false;
+  let loaded = false;
 
   const showFallback = () => {
-    iframe.hidden = true;
     iframe.setAttribute('aria-hidden', 'true');
+    iframe.inert = true;
     fallback.hidden = false;
   };
 
   const showIframe = () => {
-    iframe.hidden = false;
     iframe.removeAttribute('aria-hidden');
+    iframe.inert = false;
     fallback.hidden = true;
   };
 
   const onLoadSuccess = () => {
-    if (settled) return;
-    settled = true;
+    if (loaded) return;
+    loaded = true;
+    window.clearTimeout(timeoutId);
     showIframe();
   };
 
   const onLoadFailure = () => {
-    if (settled) return;
-    settled = true;
+    if (loaded) return;
     showFallback();
   };
 
@@ -38,5 +38,6 @@ export function initMapEmbed() {
   iframe.addEventListener('load', onLoadSuccess, { once: true });
   iframe.addEventListener('error', onLoadFailure, { once: true });
 
-  window.setTimeout(onLoadFailure, MAP_LOAD_TIMEOUT_MS);
+  const timeoutId = window.setTimeout(onLoadFailure, MAP_LOAD_TIMEOUT_MS);
+  iframe.hidden = false;
 }

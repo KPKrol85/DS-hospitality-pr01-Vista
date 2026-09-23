@@ -34,6 +34,7 @@ All significant changes to this project are documented in this file.
 - Contained keyboard focus within project and gallery dialogs, isolated background interactions, and restored focus after dismissal.
 - Aligned Vista package license metadata with the proprietary `LICENSE` while preserving third-party dependency licenses.
 - Updated image UI cache headers to revalidate same-URL assets and prevent stale images after future deployments.
+- Restored interactive map visibility after delayed iframe loads while preserving the static fallback, accessible loading states, and external Google Maps link.
 
 ### Testing
 

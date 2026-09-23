@@ -76,9 +76,10 @@ These review findings are source-visible risks and do not block the required pha
   - **Evidence:** `scripts/build-dist.mjs`, `pwa/service-worker.js`; `REVIEW.md` P2-01.
   - **Status:** Completed — verified with a same-URL A → B production-package update in persistent Chromium.
 
-- [ ] **O-02 — Reveal the map after a late successful load**
-  - [ ] Keep the fallback available for failed or slow map loads while allowing a later successful iframe load to reveal the map.
-  - [ ] Verify the delayed-load and failed-load paths, including the external map link.
+- [x] **O-02 — Reveal the map after a late successful load**
+  - [x] Keep the fallback available for failed or slow map loads while allowing a later successful iframe load to reveal the map.
+  - [x] Verify the delayed-load and failed-load paths, including the external map link.
   - **Completion condition:** A late iframe load displays the interactive map; failed loads retain a usable fallback and external link.
   - **Value:** Recover the interactive map on slow or deferred loads.
   - **Evidence:** `contact.html`, `js/features/map-embed.js`; `REVIEW.md` P2-02.
+  - **Status:** Completed — local Chromium with mocked iframe responses passed early and post-timeout loads, a synthetic error, a never-completing request, and the no-JavaScript fallback; the link and iframe visibility/accessibility attributes were checked. This does not verify third-party map rendering.
