@@ -12,6 +12,7 @@ None detected.
 
 ### [P1-01] Reveal styles hide primary content without JavaScript
 
+- **Status:** RESOLVED — implemented and verified. Details are recorded in `doc/CHANGELOG.md`.
 - **Classification:** Defect
 - **Affected area:** Progressive enhancement, content visibility
 - **Evidence:** `css/modules/utilities.css:11-21`, `js/features/reveal.js:1-15`, `index.html:182-219`
@@ -21,6 +22,7 @@ None detected.
 
 ### [P1-02] Checked-in production bundles lag behind canonical sources
 
+- **Status:** RESOLVED — implemented and verified. Details are recorded in `doc/CHANGELOG.md`.
 - **Classification:** Contract mismatch
 - **Affected area:** Distribution build, room filters, project disclosure
 - **Evidence:** `js/script.js:9-15`, `js/script.js:44-49`, `js/script.min.js:1`, `css/modules/subpages.css:81-83`, `css/style.min.css:1`, `scripts/build-dist.mjs:225-226`
@@ -30,6 +32,7 @@ None detected.
 
 ### [P1-03] Modal focus can escape to the page behind it
 
+- **Status:** RESOLVED — implemented and verified. Details are recorded in `doc/CHANGELOG.md`.
 - **Classification:** Source-visible risk
 - **Affected area:** Keyboard accessibility, project dialog, lightbox
 - **Evidence:** `js/features/project-banner.js:47-75`, `js/features/lightbox.js:71-83`, `js/features/lightbox.js:132-143`
@@ -39,7 +42,7 @@ None detected.
 
 ### [P1-04] Repository license metadata contradicts LICENSE
 
-- **Status:** Resolved
+- **Status:** RESOLVED — implemented and verified. Details are recorded in `doc/CHANGELOG.md`.
 - **Classification:** Contract mismatch
 - **Affected area:** Licensing metadata, project documentation
 - **Evidence:** `LICENSE:15-22`, `package.json:30`, `package-lock.json:10`, `doc/README.md:74`, `doc/README.md:143`
@@ -49,6 +52,7 @@ None detected.
 
 ### [P1-05] Contact form loses required-field validation without JavaScript
 
+- **Status:** RESOLVED — implemented and verified. Details are recorded in `doc/CHANGELOG.md`.
 - **Classification:** Defect
 - **Affected area:** Contact form, progressive enhancement
 - **Evidence:** `contact.html:254-269`, `contact.html:293-318`, `js/features/form.js:75-143`
@@ -60,7 +64,7 @@ None detected.
 
 ### [P2-01] Image-only updates do not invalidate service-worker caches
 
-- **Status:** Resolved
+- **Status:** RESOLVED — implemented and verified. Details are recorded in `doc/CHANGELOG.md`.
 - **Classification:** Source-visible risk
 - **Affected area:** Service worker, asset freshness
 - **Evidence:** `scripts/build-dist.mjs:245-255`, `pwa/service-worker.js:64-74`
@@ -70,6 +74,7 @@ None detected.
 
 ### [P2-02] Map fallback becomes permanent after a slow or deferred load
 
+- **Status:** RESOLVED — implemented and verified. Details are recorded in `doc/CHANGELOG.md`.
 - **Classification:** Source-visible risk
 - **Affected area:** Contact map
 - **Evidence:** `contact.html:223-234`, `js/features/map-embed.js:25-41`
