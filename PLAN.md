@@ -2,13 +2,13 @@
 
 **Source:** `AUDIT.md` — Final Technical Front-End Audit, 2026-09-23  
 **Project:** Demonstrational static multi-page site (HTML, CSS, Vanilla JavaScript)  
-**Status:** Active; all four objectives open
+**Status:** Active; PH1-01 complete, three objectives open
 
 Root HTML, `css/`, `js/`, and `assets/seo/` are canonical sources. Production bundles and `dist/` are generated. Complete an objective only after its implementation and focused verification meet the stated condition. The archived plan and review document completed work; they do not add work to this cycle.
 
 ## Current priorities
 
-1. `PH1-01` — Fix closed mobile navigation keyboard access.
+1. `PH1-01` — Fix closed mobile navigation keyboard access (complete).
 2. `PH1-02` — Enforce arrival-date validity; resolve the no-JavaScript submission mechanism before claiming full completion.
 3. `PH1-03` — Align indexable hotel claims with the demonstrational project, after the owner identifies which contact details should remain public and how.
 4. `PH2-01` — Update both README accessibility descriptions after `PH1-02`, so the form statement reflects the implemented behavior.
@@ -19,10 +19,11 @@ The three Phase 1 objectives have no code dependency on one another. The owner d
 
 **Goal:** Resolve the three current P1 findings without changing the source-to-`dist/` workflow.
 
-- [ ] **PH1-01 — Remove closed mobile navigation from keyboard order**
-  - [ ] Make the JavaScript-controlled mobile menu non-rendered and non-focusable when closed, including on initial load; keep its open state and desktop menu visible.
-  - [ ] Preserve toggle, Escape, link-selection and focus-return behavior, plus the visible no-JavaScript navigation.
-  - [ ] In a browser at mobile width, traverse with Tab and Shift+Tab before opening, while open, and after closing with the toggle and Escape; check first-link focus, focus return, desktop navigation, and navigation with JavaScript disabled. Repeat the relevant checks in a fresh package built from source.
+- [x] **PH1-01 — Remove closed mobile navigation from keyboard order**
+  - [x] Make the JavaScript-controlled mobile menu non-rendered and non-focusable when closed, including on initial load; keep its open state and desktop menu visible.
+  - [x] Preserve toggle, Escape, link-selection and focus-return behavior, plus the visible no-JavaScript navigation.
+  - [x] In a browser at mobile width, traverse with Tab and Shift+Tab before opening, while open, and after closing with the toggle and Escape; check first-link focus, focus return, desktop navigation, and navigation with JavaScript disabled. Repeat the relevant checks in a fresh package built from source.
+  - **Verification:** Local Chromium at 390 px passed initial closed display and keyboard traversal, open first-link focus and seven-link traversal, toggle/Escape/link closing with focus return, and no-JavaScript visibility and keyboard access. At 1280 px the desktop navigation remained visible and focusable; resizing back to mobile restored the closed state. The same checks passed on root source and freshly built `dist/` (`npm run build:dist`, 11 HTML pages).
   - **Completion condition:** Closed mobile links never enter sequential keyboard focus; opening exposes and focuses the menu, closing restores usable focus, and desktop and no-JavaScript navigation remain usable.
   - **Sources:** `css/modules/layout.css`, `js/features/nav.js`, root-page header markup (for example `index.html`). **Audit:** `AUDIT.md` P1-01.
 

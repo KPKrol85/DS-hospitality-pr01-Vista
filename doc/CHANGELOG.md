@@ -35,6 +35,7 @@ All significant changes to this project are documented in this file.
 - Aligned Vista package license metadata with the proprietary `LICENSE` while preserving third-party dependency licenses.
 - Updated image UI cache headers to revalidate same-URL assets and prevent stale images after future deployments.
 - Restored interactive map visibility after delayed iframe loads while preserving the static fallback, accessible loading states, and external Google Maps link.
+- Removed closed mobile navigation links from keyboard focus order while preserving menu interactions, desktop navigation, and the no-JavaScript fallback.
 
 ### Testing
 

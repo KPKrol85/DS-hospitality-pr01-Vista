@@ -167,6 +167,9 @@
   opacity: 1;
   pointer-events: auto;
 }
+.js .site-nav[hidden] {
+  display: none;
+}
 body.is-nav-open {
   overflow: hidden;
 }
