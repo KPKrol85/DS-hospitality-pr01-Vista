@@ -37,6 +37,7 @@ All significant changes to this project are documented in this file.
 - Restored interactive map visibility after delayed iframe loads while preserving the static fallback, accessible loading states, and external Google Maps link.
 - Removed closed mobile navigation links from keyboard focus order while preserving menu interactions, desktop navigation, and the no-JavaScript fallback.
 - Fixed past-arrival date validation and Netlify Forms submission; verified Edge Function rejection of past dates and collection of valid inquiries.
+- Aligned Vista's structured data, metadata, and legal disclosures with its demonstrational scope while preserving real author contact details and adding discreet contact attribution.
 
 ### Testing
 

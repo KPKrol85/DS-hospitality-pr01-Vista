@@ -394,6 +394,14 @@
   text-align: center;
   margin: 0;
 }
+.contact-info__attribution {
+  margin: var(--space-xs) auto 0;
+  max-width: 40ch;
+  font-size: var(--fs-200);
+  line-height: var(--lh-relaxed);
+  color: var(--muted);
+  text-align: center;
+}
 .contact-address {
   display: grid;
   max-width: 22ch;

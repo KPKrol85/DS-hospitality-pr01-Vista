@@ -335,6 +335,14 @@ body.is-nav-open {
   background: color-mix(in oklab, var(--border) 70%, transparent);
   margin-top: var(--space-2xl);
 }
+.footer__attribution {
+  margin: 0 auto var(--space-xs);
+  max-width: 28ch;
+  font-size: var(--fs-200);
+  line-height: var(--lh-relaxed);
+  color: var(--muted);
+  text-align: inherit;
+}
 .footer__contact .footer__text {
   font-style: normal;
   line-height: var(--lh-relaxed);
