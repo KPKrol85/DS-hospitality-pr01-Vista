@@ -29,16 +29,23 @@ export function initForm() {
   function parseLocalISO(iso) {
     const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso || "");
     if (!m) return null;
-    const d = new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]));
-    return Number.isNaN(d.getTime()) ? null : d;
+    const year = Number(m[1]);
+    const month = Number(m[2]);
+    const day = Number(m[3]);
+    if (year === 0) return null;
+    const d = new Date(0);
+    d.setFullYear(year, month - 1, day);
+    d.setHours(0, 0, 0, 0);
+    return d.getFullYear() === year && d.getMonth() === month - 1 && d.getDate() === day ? d : null;
   }
 
-  const today = new Date();
-  const tomorrow = new Date(today);
-  tomorrow.setDate(today.getDate() + 1);
-  const todayISO = formatLocalISO(today);
-  const nextDayISO = formatLocalISO(tomorrow);
-  if (checkin) checkin.min = todayISO;
+  function refreshCheckinMin() {
+    const todayISO = formatLocalISO(new Date());
+    if (checkin) checkin.min = todayISO;
+    return todayISO;
+  }
+
+  refreshCheckinMin();
 
   function nextDay(iso) {
     const d = parseLocalISO(iso);
@@ -50,7 +57,7 @@ export function initForm() {
   function syncCheckoutMin() {
     if (!checkout) return;
     if (checkin?.value) {
-      const minOut = nextDay(checkin.value) || nextDayISO;
+      const minOut = nextDay(checkin.value) || nextDay(formatLocalISO(new Date()));
       checkout.min = minOut;
       if (checkout.value && checkout.value < minOut) checkout.value = minOut;
     } else {
@@ -58,7 +65,30 @@ export function initForm() {
     }
   }
 
-  checkin?.addEventListener("change", syncCheckoutMin);
+  function validateCheckin() {
+    const todayISO = refreshCheckinMin();
+    const value = checkin?.value || "";
+    const date = parseLocalISO(value);
+    const valid = !!date && formatLocalISO(date) >= todayISO;
+    const message = $("err-checkin");
+    if (message) {
+      message.textContent = !value
+        ? "Wybierz datę przyjazdu."
+        : !date
+          ? "Podaj poprawną datę przyjazdu."
+          : "Wybierz datę przyjazdu: dziś lub później.";
+    }
+    setError(checkin, "err-checkin", !valid);
+    return valid;
+  }
+
+  checkin?.addEventListener("change", () => {
+    syncCheckoutMin();
+    if (checkin.getAttribute("aria-invalid") === "true") validateCheckin();
+  });
+  checkin?.addEventListener("input", () => {
+    if (checkin.getAttribute("aria-invalid") === "true") validateCheckin();
+  });
   syncCheckoutMin();
 
   guests?.addEventListener("input", () => {
@@ -99,12 +129,13 @@ export function initForm() {
     }
 
     if (checkin) {
-      const v = !!checkin.value;
-      setError(checkin, "err-checkin", !v);
+      const v = validateCheckin();
       ok = ok && v;
     }
     if (checkout) {
-      const v = !!checkout.value && (!checkin?.value || checkout.value >= nextDay(checkin.value));
+      const date = parseLocalISO(checkout.value);
+      const minOut = nextDay(checkin?.value);
+      const v = !!date && (!checkin?.value || (!!minOut && formatLocalISO(date) >= minOut));
       setError(checkout, "err-checkout", !v);
       ok = ok && v;
     }
@@ -122,7 +153,8 @@ export function initForm() {
       ok = ok && v;
     }
 
-    const pot = new FormData(form).get("website");
+    const formData = new FormData(form);
+    const pot = formData.get("website");
     if ((pot || "").toString().trim() !== "") return;
 
     if (!ok) {
@@ -130,7 +162,7 @@ export function initForm() {
       return;
     }
 
-    if (form.hasAttribute("data-netlify")) {
+    if (form.getAttribute("name") === "booking" && formData.get("form-name") === "booking") {
       form.querySelectorAll('[aria-invalid="true"]').forEach((el) => el.setAttribute("aria-invalid", "false"));
       form.submit();
       return;
