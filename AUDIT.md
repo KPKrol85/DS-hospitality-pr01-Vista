@@ -48,6 +48,8 @@ None detected.
 
 ### [P1-01] Closed mobile navigation leaves invisible links in keyboard order
 
+- **Status:** RESOLVED — implemented and verified. Details are recorded in `doc/CHANGELOG.md`.
+- **Closure evidence (2026-09-24):** `.js .site-nav[hidden]` now sets `display: none`; current navigation handlers preserve opening, focus return and breakpoint behavior. Recorded source/fresh-package Chromium checks cover closed-menu Tab/Shift+Tab exclusion, open-menu focus, desktop and no-JavaScript navigation.
 - **Classification:** Defect
 - **Affected area:** Mobile navigation, keyboard accessibility
 - **Evidence:** `css/modules/layout.css:99-102`, `css/modules/layout.css:152-165`, `js/features/nav.js:34-42`
@@ -58,6 +60,8 @@ None detected.
 
 ### [P1-02] Inquiry form accepts arrival dates in the past
 
+- **Status:** RESOLVED — implemented and verified. Details are recorded in `doc/CHANGELOG.md`.
+- **Closure evidence (2026-09-24):** In addition to the recorded local validation checks, the project owner confirmed the deployed Edge Function, HTTP 422 for a contact-form POST with arrival `2025-01-01`, and Netlify's response to a valid inquiry: "Thank you! Your form submission has been received." Separate inspection of the inquiry in the Netlify Forms dashboard was not documented.
 - **Classification:** Defect
 - **Affected area:** Contact form, date validation, progressive enhancement
 - **Evidence:** `contact.html:292-299`, `js/features/form.js:36-61`, `js/features/form.js:101-109`, `js/features/form.js:133-146`
@@ -68,6 +72,8 @@ None detected.
 
 ### [P1-03] Indexable structured data presents the fictional brand as a real hotel
 
+- **Status:** RESOLVED — implemented and verified. Details are recorded in `doc/CHANGELOG.md`.
+- **Closure evidence (2026-09-24):** All six indexable pages have matching embedded/fetched JSON-LD without `Hotel`, `#hotel` or structured hotel contact/location claims. Current metadata, contact/map attribution and `regulamin.html` distinguish the fictional brand from real KP_Code author contacts; recorded local browser checks cover fetched, fallback and no-JavaScript presentation. This establishes source consistency, not search-engine treatment.
 - **Classification:** Content integrity risk
 - **Affected area:** Structured data, public metadata, project disclosure
 - **Evidence:** `index.html:87-116`, `assets/seo/ld-index.json:37-66`, `contact.html:87-113`, `regulamin.html:204-214`, `robots.txt:1-2`
@@ -80,6 +86,8 @@ None detected.
 
 ### [P2-01] README accessibility description contradicts the current no-JavaScript baseline
 
+- **Status:** RESOLVED — implemented and verified. Details are recorded in `doc/CHANGELOG.md`.
+- **Closure evidence (2026-09-24):** Both README languages match the current reveal CSS/initialization, native HTML constraints and `noValidate` assignment after enhanced handlers install. They distinguish the static date limitation, browser-local validation and Europe/Warsaw Edge rule, retain the WCAG disclaimer and make no Forms collection claim; the original no-JavaScript observations remain consistent with the source.
 - **Classification:** Documentation mismatch
 - **Affected area:** Public project documentation, progressive enhancement
 - **Evidence:** `README.md:79`, `README.md:177`, `css/modules/utilities.css:10-26`, `contact.html:254`, `js/features/form.js:146`
