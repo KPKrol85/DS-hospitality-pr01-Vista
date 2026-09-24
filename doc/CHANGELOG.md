@@ -18,6 +18,7 @@ All significant changes to this project are documented in this file.
 
 - Aligned the terms, privacy policy, and cookies policy with the site's demonstrational scope and the implemented contact form, browser storage, offline caching, and embedded map.
 - Replaced the root `LICENSE` with project-specific Polish and English KP_Code proprietary terms.
+- Aligned Polish and English README accessibility descriptions with the implemented reveal behavior and form validation.
 
 ### Build and Tooling
 

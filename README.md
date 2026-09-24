@@ -76,7 +76,11 @@ npm run test:a11y
 
 ### Dostępność
 
-Strony zawierają link pomijający nawigację, widoczne style `:focus-visible`, reguły `prefers-reduced-motion` oraz obsługę klawiatury w menu, kartach i lightboksie. Walidacja formularza aktualizuje `aria-invalid` i komunikaty `aria-live`. Aktualne style ukrywają elementy `data-reveal` do czasu ich odsłonięcia przez JavaScript, a `novalidate` w formularzu wyłącza natywną walidację przeglądarki. Te mechanizmy nie stanowią deklaracji zgodności z WCAG.
+Strony zawierają link pomijający nawigację, widoczne style `:focus-visible`, reguły `prefers-reduced-motion` oraz obsługę klawiatury w menu, kartach i lightboksie. Treści oznaczone `data-reveal` są domyślnie widoczne i pozostają widoczne bez JavaScript lub przy nieudanej inicjalizacji reveal; animacje są włączane dopiero po pomyślnym uruchomieniu tego rozszerzenia.
+
+Natywne ograniczenia HTML formularza zapytania pozostają aktywne bez JavaScript lub przy nieudanej inicjalizacji rozszerzonej walidacji; sam statyczny HTML nie wyznacza zmieniającej się wraz z bieżącą datą minimalnej daty przyjazdu. Po pomyślnej inicjalizacji JavaScript przejmuje walidację, aktualizuje `aria-invalid` i komunikaty błędów `aria-live` oraz sprawdza datę przyjazdu względem bieżącej daty lokalnej przeglądarki, odświeżanej przy wysyłaniu. Netlify Edge Function odrzuca na ścieżce wysyłania zapytań `booking` nieprawidłowe i przeszłe daty przyjazdu, także w żądaniach bez JavaScript. Używa daty w strefie `Europe/Warsaw`, która może różnić się od daty lokalnej przeglądarki. Wysłanie zapytania nie rezerwuje noclegu.
+
+Te mechanizmy nie stanowią deklaracji zgodności z WCAG.
 
 ### SEO
 
@@ -174,7 +178,11 @@ npm run test:a11y
 
 ### Accessibility
 
-Pages include a skip link, visible `:focus-visible` styles, `prefers-reduced-motion` rules, and keyboard handling for the menu, tabs, and lightbox. Form validation updates `aria-invalid` and `aria-live` messages. Current styles hide `data-reveal` elements until JavaScript reveals them, and the form's `novalidate` attribute disables native browser validation. These mechanisms are not a claim of WCAG conformance.
+Pages include a skip link, visible `:focus-visible` styles, `prefers-reduced-motion` rules, and keyboard handling for the menu, tabs, and lightbox. Content marked with `data-reveal` is visible by default and remains visible without JavaScript or if reveal initialization fails; animations are enabled only after successful enhancement.
+
+The inquiry form's native HTML constraints remain active without JavaScript or if enhanced validation initialization fails; static HTML alone does not provide a minimum arrival date that advances with the current date. After successful initialization, JavaScript takes over validation, updates `aria-invalid` and `aria-live` error messages, and checks the arrival date against the current browser-local date, refreshed on submission. The Netlify Edge Function rejects invalid and past arrival dates on the `booking` inquiry submission path, including requests made without JavaScript. It uses the date in `Europe/Warsaw`, which may differ from the browser-local date. Submitting an inquiry does not reserve accommodation.
+
+These mechanisms are not a claim of WCAG conformance.
 
 ### SEO
 

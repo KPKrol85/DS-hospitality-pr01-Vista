@@ -49,9 +49,11 @@ The three Phase 1 objectives have no code dependency on one another. The owner d
 
 **Goal:** Make the public accessibility description match the corrected behavior.
 
-- [ ] **PH2-01 — Correct bilingual README accessibility statements**
-  - [ ] Update only the Polish and English accessibility descriptions of reveal content and form validation: content is visible before successful reveal enhancement, and native constraints remain active without JavaScript while the enhanced handler controls validation after initialization.
-  - [ ] After `PH1-02`, describe the verified arrival-date behavior and any remaining no-JavaScript limit accurately, with Polish and English factual parity; preserve unrelated README content.
-  - [ ] Compare both descriptions against `css/modules/utilities.css`, `js/features/reveal.js`, `contact.html`, `js/features/form.js`, and the focused form verification from `PH1-02`.
+- [x] **PH2-01 — Correct bilingual README accessibility statements**
+  - [x] Update only the Polish and English accessibility descriptions of reveal content and form validation: content is visible before successful reveal enhancement, and native constraints remain active without JavaScript while the enhanced handler controls validation after initialization.
+  - [x] After `PH1-02`, describe the verified arrival-date behavior and any remaining no-JavaScript limit accurately, with Polish and English factual parity; preserve unrelated README content.
+  - [x] Compare both descriptions against `css/modules/utilities.css`, `js/features/reveal.js`, `contact.html`, `js/features/form.js`, and the focused form verification from `PH1-02`.
+  - **Verification (2026-09-24):** Focused source inspection, including `netlify/edge-functions/validate-booking-date.js`, and comparison with the recorded `PH1-02` checks confirmed Polish/English factual parity: visible reveal fallback, enhancement-only animations, native constraints before successful form initialization, accessible enhanced validation against the refreshed browser-local date, and Edge rejection of invalid/past arrival dates using Europe/Warsaw, including no-JavaScript requests. Both descriptions distinguish inquiries from reservations and preserve the WCAG disclaimer. Unrelated README content and all other plan sections are unchanged.
+  - **Limits:** Static HTML has no moving arrival minimum; the browser-local and Europe/Warsaw dates can differ. The existing `PH1-02` record documents local verification and still marks live Netlify processing/collection as unverified; this documentation update adds no delivery claim. No tests, build or deployment were run.
   - **Completion condition:** Both language sections accurately state the current reveal and form-validation behavior, including any verified limit, without claiming accessibility conformance or unverified form delivery.
   - **Depends on:** `PH1-02` final behavior. **Sources:** `README.md` and the cited source files. **Audit:** `AUDIT.md` P2-01.
