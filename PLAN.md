@@ -27,7 +27,7 @@ The three Phase 1 objectives have no code dependency on one another. The owner d
   - **Completion condition:** Closed mobile links never enter sequential keyboard focus; opening exposes and focuses the menu, closing restores usable focus, and desktop and no-JavaScript navigation remain usable.
   - **Sources:** `css/modules/layout.css`, `js/features/nav.js`, root-page header markup (for example `index.html`). **Audit:** `AUDIT.md` P1-01.
 
-- [ ] **PH1-02 — Reject past arrival dates on inquiry submission**
+- [x] **PH1-02 — Reject past arrival dates on inquiry submission**
   - [x] Validate arrival against the refreshed current local date in the enhanced submit path before `form.submit()`, including dates entered directly; retain the date-field relationship, accessible errors, and Netlify Forms identity and submission path.
   - [x] Preserve native form constraints when JavaScript is absent or initialization fails. Static HTML has no moving arrival minimum; the submission-side gate must cover this path.
   - [x] Verify the new Edge Function on a Netlify deploy: reject malformed and past `booking` POSTs before Forms collection, and confirm valid future submissions are collected. The gate follows Netlify's documented Edge request chain and a Netlify staff Forms validation example, but its Vista platform path has not been tested. The gate uses the Europe/Warsaw date; this can differ from the visitor's local date used by enhanced validation.
