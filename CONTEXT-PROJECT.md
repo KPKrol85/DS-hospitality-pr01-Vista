@@ -23,7 +23,7 @@ The project is released under proprietary KP_Code terms (`LICENSE`), not an open
 - PostCSS with `postcss-import`, Autoprefixer, and cssnano (`postcss.config.cjs`) for CSS bundling.
 - esbuild for the JavaScript bundle (IIFE, `es2018` target).
 - Sharp and chokidar for the image pipeline; chokidar also drives live reload in the development server.
-- Playwright and axe-core for the accessibility check script.
+- Playwright (the `playwright` library) and axe-core, both locked devDependencies, for the accessibility check script.
 - Netlify: `netlify.toml`, `_headers`, `_redirects`, Netlify Forms, and one Edge Function (Deno runtime; `deno.lock` records its Netlify bootstrap imports).
 - Browser APIs used materially: Service Worker and Cache Storage, `localStorage`, `IntersectionObserver`, `matchMedia`, and `inert`.
 
@@ -76,7 +76,7 @@ The project is released under proprietary KP_Code terms (`LICENSE`), not an open
 │   ├── img/optimized/      # generated responsive variants (tracked)
 │   └── fonts/, img/{icons,logo,og,ui,screenshots,shortcuts}/
 ├── netlify/                # _headers, _redirects, edge-functions/
-├── scripts/                # dev server, build, image, link-check, and a11y scripts
+├── scripts/                # dev server, build, image, link-check, syntax-check, and a11y scripts
 ├── doc/                    # CHANGELOG, pipeline notes, archive/
 └── netlify.toml, site.webmanifest, robots.txt, sitemap.xml
 ```
@@ -111,7 +111,7 @@ The project is released under proprietary KP_Code terms (`LICENSE`), not an open
 - Semantic landmarks, a skip link to `#main`, and visible `:focus-visible` styles on every page.
 - **Keyboard support:**
   - The closed mobile menu is out of the focus order. Escape closes it, and focus returns to the element that was focused before it opened.
-  - Tabs use `role="tab"` and `role="tablist"`, and the URL hash can select the initial panel.
+  - Room categories on `rooms.html` use filter buttons (`data-room-filter`), not ARIA tabs. The active filter has `aria-pressed="true"`, and selecting a category hides room cards whose `data-room-type` does not match (`all` shows every card). The buttons stay in the Tab order and activate with Enter or Space; Arrow keys (wrapping), Home, and End only move focus between them.
   - The lightbox and project-notice dialogs contain focus and restore it on close.
 - `prefers-reduced-motion` is respected (`motion.css`). `[data-reveal]` content is visible by default and animates only after `reveal` initialization succeeds (`reveal-ready`, `reveal-animated`).
 - **Contact form:**
@@ -128,7 +128,7 @@ The project is released under proprietary KP_Code terms (`LICENSE`), not an open
 
 - All content is static HTML. There is no application data store.
 - **`localStorage`:** `theme-pref` stores the theme preference, and `vista_project_banner_accepted` stores dismissal of the project-notice modal.
-- **URL hash:** selects the initial tab panel and the gallery filter.
+- **URL hash:** selects the initial gallery filter.
 - **Cache Storage (production worker only):** caches are named `vista-static-<hash>` and `vista-html-<hash>`.
   - Navigations are network-first with fallback to a cached page, then `index.html` for `/`, then `offline.html`.
   - Other same-origin GET requests are cache-first.
@@ -158,11 +158,18 @@ The project is released under proprietary KP_Code terms (`LICENSE`), not an open
 ## Testing and verification
 
 - **No unit or integration test suite.** `npm test` is a placeholder that exits with an error.
+- **`npm run qa:fast`:** the everyday static gate. Runs `check:links`, then `check:syntax`, and stops at the first failure. It launches no browser and runs no build.
 - **`npm run check:links`:** static check of local `href`, `src`, and `srcset` references in root HTML, plus `sitemap.xml` `<loc>` paths mapped to root files.
-- **`npm run test:a11y`:** serves the repository root (source pages, not `dist/`) and runs axe-core rules (`wcag2a`, `wcag2aa`, `best-practice`) in headless Chromium. It covers 8 scenarios: index baseline and open mobile menu, rooms baseline and Deluxe tab, gallery baseline and open lightbox, contact, and regulamin. It uses `npm exec --yes` with pinned Playwright and axe-core versions, so it may download packages.
+- **`npm run check:syntax`:** `scripts/qa-syntax.mjs` parses files without executing them:
+  - ES module goal (`node --check --input-type=module`): `js/script.js`, `js/features/*.js`, `netlify/edge-functions/*.js`, `scripts/*.mjs`, and root `*.mjs`;
+  - classic script goal (`vm.Script`): `js/theme-init.js` and `pwa/service-worker.js`, listed in `CLASSIC_SCRIPTS`. A new non-module browser script must be added there;
+  - CommonJS (`vm.compileFunction`): root `*.cjs` (`postcss.config.cjs`);
+  - `JSON.parse`: `assets/seo/*.json`. Syntax only; JSON-LD semantics are not checked.
+  - Only those directories are read, and `*.min.js` is skipped. Failures list the file, check, and line.
+- **`npm run test:a11y`:** runs `node scripts/a11y-axe.mjs`, which resolves `playwright` and `axe-core` from the project's locked devDependencies (install with `npm ci`) and downloads nothing at run time. It needs a Playwright Chromium browser (`npx playwright install chromium`). It serves the repository root (source pages, not `dist/`) and runs axe-core rules (`wcag2a`, `wcag2aa`, `best-practice`) in headless Chromium. It covers 8 scenarios: index baseline and open mobile menu, rooms baseline and active Deluxe room filter (only Deluxe cards visible), gallery baseline and open lightbox, contact, and regulamin.
 - `npm run build` also checks the integrity of the production package.
 - **Verification model:**
-  - Prefer fast static checks and focused verification tied to the change.
+  - Prefer fast static checks (`npm run qa:fast`) and focused verification tied to the change. `test:a11y` is the slower browser-based check.
   - When behavior can differ between modes (asset references, service worker, bundling), check both source pages and a freshly built `dist/`.
   - Run broad regression only when the task requires it.
 

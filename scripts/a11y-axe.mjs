@@ -6,36 +6,14 @@ import { pathToFileURL } from 'node:url';
 
 const host = '127.0.0.1';
 const rootDir = process.cwd();
-
-function getModuleBaseCandidates() {
-  const candidates = new Set([rootDir]);
-  const pathEntries = (process.env.PATH || '').split(path.delimiter).filter(Boolean);
-
-  for (const entry of pathEntries) {
-    const normalized = path.normalize(entry);
-    const suffix = `${path.sep}node_modules${path.sep}.bin`;
-    if (normalized.endsWith(suffix)) {
-      candidates.add(normalized.slice(0, -suffix.length));
-    }
-  }
-
-  return [...candidates];
-}
+const projectRequire = createRequire(path.join(rootDir, 'package.json'));
 
 function resolveModule(specifier) {
-  const candidates = getModuleBaseCandidates();
-
-  for (const base of candidates) {
-    try {
-      const req = createRequire(path.join(base, 'package.json'));
-      return req.resolve(specifier);
-    } catch {
-      // try next base
-    }
+  try {
+    return projectRequire.resolve(specifier);
+  } catch {
+    throw new Error(`Cannot resolve "${specifier}" from project devDependencies. Run "npm ci" to install them.`);
   }
-
-  const bases = candidates.join(', ');
-  throw new Error(`Cannot resolve module "${specifier}" from candidates: ${bases}`);
 }
 
 const playwrightModulePath = resolveModule('playwright');
@@ -135,17 +113,23 @@ const scenarios = [
     path: 'index.html',
     setup: async (page) => {
       await page.setViewportSize({ width: 390, height: 844 });
+      await page.getByRole('button', { name: 'Akceptuję' }).click();
+      await page.locator('#projectBanner').waitFor({ state: 'hidden' });
       await page.getByRole('button', { name: 'Otwórz menu' }).click();
       await page.locator('#site-nav.is-open').waitFor({ state: 'visible' });
     }
   },
   { label: 'rooms.html (baseline)', path: 'rooms.html' },
   {
-    label: 'rooms.html (non-default tab)',
+    label: 'rooms.html (Deluxe filter active)',
     path: 'rooms.html',
     setup: async (page) => {
-      await page.getByRole('tab', { name: 'Deluxe' }).click();
-      await page.locator('#rooms-panel-deluxe:not([hidden])').waitFor({ state: 'visible' });
+      await page.locator('#rooms-filter-deluxe').click();
+      await page.locator('#rooms-filter-deluxe[aria-pressed="true"]').waitFor();
+      await page.locator('.room-card[data-room-type="deluxe"]').waitFor({ state: 'visible' });
+      for (const card of await page.locator('.room-card[data-room-type]:not([data-room-type="deluxe"])').all()) {
+        await card.waitFor({ state: 'hidden' });
+      }
     }
   },
   { label: 'gallery.html (baseline)', path: 'gallery.html' },

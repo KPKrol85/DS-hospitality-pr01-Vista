@@ -28,6 +28,8 @@ All significant changes to this project are documented in this file.
 - Moved CSS and JavaScript production bundles into disposable `dist/` output; both `build` and `build:dist` now rebuild a clean package from current sources, while standalone bundle commands preserve other distribution files. Set Netlify to run the full build and publish `dist/`.
 - Limited service worker registration to production-marked HTML, added scoped cleanup of prior Vista registrations and caches during development, and generated the production worker from packaged assets.
 - Added a lightweight `npm run dev` server with live reload, secure source-file serving, and no changes to the production build.
+- Added `qa:fast` with link-integrity, JavaScript syntax, and JSON syntax checks for everyday verification.
+- Moved accessibility checks to project-managed Playwright and axe-core dependencies and synchronized npm and Deno lockfiles.
 
 ### Fixed
 
@@ -40,8 +42,11 @@ All significant changes to this project are documented in this file.
 - Removed closed mobile navigation links from keyboard focus order while preserving menu interactions, desktop navigation, and the no-JavaScript fallback.
 - Fixed past-arrival date validation and Netlify Forms submission; verified Edge Function rejection of past dates and collection of valid inquiries.
 - Aligned Vista's structured data, metadata, and legal disclosures with its demonstrational scope while preserving real author contact details and adding discreet contact attribution.
+- Gave the main contact section a distinct accessible landmark name while preserving its visible heading and form behavior.
+- Updated accessibility scenarios to handle the project notice and test the current Deluxe room filter.
 
 ### Testing
 
 - Included local-link integrity checking and a Playwright/axe accessibility audit script.
 - Verified clean production builds and source-to-dist behavior for room filters, project notice, reveal animations, contact validation, and modal focus management.
+- Verified all eight Playwright/axe accessibility scenarios with no reported violations.

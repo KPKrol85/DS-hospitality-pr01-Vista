@@ -70,11 +70,13 @@ npm run build
 ### Testy i walidacja
 
 ```bash
-npm run check:links
+npm run qa:fast
 npm run test:a11y
 ```
 
-`check:links` sprawdza lokalne odwołania w głównych stronach HTML i ścieżki z `sitemap.xml`. `test:a11y` konfiguruje scenariusze Playwright z axe-core i może pobrać wymagane pakiety przez `npm exec --yes`. Skrypt `npm test` jest placeholderem, który kończy się błędem.
+`qa:fast` to szybka kontrola statyczna do codziennej pracy. Uruchamia kolejno `check:links` i `check:syntax`, bez przeglądarki i bez buildu produkcyjnego, i zatrzymuje się na pierwszej nieudanej kontroli; obie komendy można też uruchomić osobno. `check:links` sprawdza lokalne odwołania w głównych stronach HTML i ścieżki z `sitemap.xml`. `check:syntax` sprawdza wyłącznie składnię, bez uruchamiania kodu: moduły ES (`js/script.js`, `js/features/`, `netlify/edge-functions/`, `scripts/*.mjs`), klasyczne skrypty `js/theme-init.js` i `pwa/service-worker.js`, `postcss.config.cjs` jako CommonJS oraz pliki JSON w `assets/seo/`. Nie ocenia treści danych strukturalnych.
+
+`test:a11y` to osobna, wolniejsza kontrola w przeglądarce. Serwuje strony źródłowe i uruchamia reguły axe-core w Chromium przez Playwright dla skonfigurowanych scenariuszy. Korzysta z wersji `playwright` i `axe-core` zapisanych w `package-lock.json` i zainstalowanych przez `npm ci`; nie pobiera pakietów podczas uruchomienia. Wymaga przeglądarki Chromium dla Playwright, którą można zainstalować poleceniem `npx playwright install chromium`. Skrypt `npm test` jest placeholderem, który kończy się błędem.
 
 ### Wdrożenie
 
@@ -178,11 +180,13 @@ npm run build
 ### Testing and Validation
 
 ```bash
-npm run check:links
+npm run qa:fast
 npm run test:a11y
 ```
 
-`check:links` checks local references in root HTML pages and paths in `sitemap.xml`. `test:a11y` configures Playwright scenarios with axe-core and may download required packages through `npm exec --yes`. The `npm test` script is a placeholder that exits with an error.
+`qa:fast` is the fast static check for everyday work. It runs `check:links` and then `check:syntax`, without a browser or a production build, and stops at the first failing check; both commands can also be run separately. `check:links` checks local references in root HTML pages and paths in `sitemap.xml`. `check:syntax` checks syntax only, without executing code: ES modules (`js/script.js`, `js/features/`, `netlify/edge-functions/`, `scripts/*.mjs`), the classic scripts `js/theme-init.js` and `pwa/service-worker.js`, `postcss.config.cjs` as CommonJS, and JSON files in `assets/seo/`. It does not assess structured-data content.
+
+`test:a11y` is a separate, slower browser check. It serves the source pages and runs axe-core rules in Chromium through Playwright for the configured scenarios. It uses the `playwright` and `axe-core` versions recorded in `package-lock.json` and installed by `npm ci`; it does not download packages at run time. It requires a Playwright Chromium browser, which can be installed with `npx playwright install chromium`. The `npm test` script is a placeholder that exits with an error.
 
 ### Deployment
 

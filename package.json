@@ -14,7 +14,9 @@
     "img:watch": "node scripts/optimize-images.mjs --watch",
     "test": "echo \"Error: no test specified\" && exit 1",
     "check:links": "node scripts/check-link-integrity.mjs",
-    "test:a11y": "npm exec --yes --package=playwright@1.54.2 --package=axe-core@4.10.3 node scripts/a11y-axe.mjs"
+    "check:syntax": "node scripts/qa-syntax.mjs",
+    "qa:fast": "npm run check:links && npm run check:syntax",
+    "test:a11y": "node scripts/a11y-axe.mjs"
   },
   "keywords": [
     "frontend",
@@ -28,11 +30,12 @@
   "author": "Kamil Król",
   "license": "SEE LICENSE IN LICENSE",
   "devDependencies": {
-    "@playwright/test": "^1.58.2",
     "autoprefixer": "^10.4.27",
+    "axe-core": "^4.10.3",
     "chokidar": "^4.0.3",
     "cssnano": "^7.1.2",
     "esbuild": "^0.25.10",
+    "playwright": "^1.58.2",
     "postcss": "^8.5.6",
     "postcss-cli": "^11.0.1",
     "postcss-import": "^16.1.1",
