@@ -44,6 +44,7 @@ All significant changes to this project are documented in this file.
 - Aligned Vista's structured data, metadata, and legal disclosures with its demonstrational scope while preserving real author contact details and adding discreet contact attribution.
 - Gave the main contact section a distinct accessible landmark name while preserving its visible heading and form behavior.
 - Updated accessibility scenarios to handle the project notice and test the current Deluxe room filter.
+- Refined heading typography across subpages and cards using existing type-scale tokens, corrected responsive offer titles, and aligned offer metadata with the defined muted colour.
 
 ### Testing
 

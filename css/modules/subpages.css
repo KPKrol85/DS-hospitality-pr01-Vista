@@ -6,7 +6,7 @@
 }
 .gallery-section__title {
   margin: var(--space-2xl) auto var(--space-lg);
-  font-size: var(--fs-300);
+  font-size: var(--fs-500);
   text-align: center;
 }
 .gallery-section__title::after {
@@ -34,7 +34,7 @@
   margin-bottom: var(--space-md);
   font-size: var(--fs-300);
   line-height: var(--lh-snug);
-  color: var(--text-muted);
+  color: var(--muted);
   letter-spacing: var(--ls-wide);
   text-transform: uppercase;
 }
@@ -286,7 +286,7 @@
 }
 .brand__subtitle {
   margin: 0 0 var(--space-xs);
-  font-size: var(--fs-400);
+  font-size: var(--fs-500);
   line-height: var(--lh-snug);
   text-align: center;
 }
@@ -325,7 +325,7 @@
 }
 .brand__card-title {
   margin: 0;
-  font-size: var(--fs-300);
+  font-size: var(--fs-400);
   line-height: var(--lh-snug);
 }
 .brand__text {
@@ -486,7 +486,6 @@
 .page--404 .section-title,
 .page--offline .section-title {
   margin-bottom: var(--space-md);
-  font-size: var(--fs-700);
 }
 .page--404 .not-found__text,
 .page--offline .not-found__text {

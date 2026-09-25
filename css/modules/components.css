@@ -777,11 +777,6 @@ body.has-project-modal {
   justify-self: center;
   font-weight: 500;
 }
-@media (min-width: 480px) {
-  .offer-card__title {
-    font-size: var(--fs-400);
-  }
-}
 @media (min-width: 760px) {
   .offer-card__title {
     text-align: left;
@@ -958,7 +953,7 @@ body.has-project-modal {
 }
 .room-card__title {
   margin: 0;
-  font-size: var(--fs-300);
+  font-size: var(--fs-400);
   font-weight: 600;
   color: var(--text);
 }

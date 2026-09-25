@@ -171,7 +171,7 @@
 }
 .benefit__title {
   margin: 0 0 var(--space-md);
-  font-size: var(--fs-300);
+  font-size: var(--fs-400);
   font-weight: 600;
   display: flex;
   align-items: center;
@@ -302,6 +302,9 @@
   font-size: var(--fs-500);
   margin: 0 0 var(--space-2xs);
   text-align: center;
+}
+h1.section-title {
+  font-size: var(--fs-800);
 }
 .section-title::after {
   content: "";
