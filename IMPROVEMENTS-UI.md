@@ -36,6 +36,7 @@ Vista has a coherent visual language: a token file with a fluid type scale, spac
   - The hero and the heading semantics are unchanged.
 - **Impact:** High
 - **Effort:** Medium
+- **Status:** COMPLETED — Established distinct heading type-scale tiers across Vista pages using existing tokens, improved card-title hierarchy, preserved responsive offer-title sizing, and corrected the offer metadata colour token.
 
 ### IMP-UI-02 — Make the button base own the border and minimum size for every variant
 
