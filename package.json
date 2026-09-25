@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Profesjonalna, dostępna i responsywna wersja projektu „Vista — Hotels & Travel” w czystym HTML/CSS/JS. Projekt zawiera tryby Light/Dark/Auto, PWA, lekkie animacje, modularny JS oraz konfigurację Netlify z nagłówkami bezpieczeństwa.",
   "scripts": {
+    "dev": "node scripts/dev-server.mjs",
     "build:css": "postcss ./css/style.css -o ./dist/css/style.min.css && node ./scripts/verify-build.mjs css ./dist/css/style.min.css",
     "build:js": "esbuild ./js/script.js --bundle --minify --target=es2018 --format=iife --outfile=./dist/js/script.min.js && node ./scripts/verify-build.mjs js ./dist/js/script.min.js",
     "build": "npm run build:dist",

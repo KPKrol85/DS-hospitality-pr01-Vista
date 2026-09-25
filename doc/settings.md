@@ -6,6 +6,7 @@ Root HTML, `css/style.css` with `css/modules/`, and `js/script.js` with `js/feat
 
 | Script | Command | What it does | When to use |
 |---|---|---|---|
+| `dev` | `node scripts/dev-server.mjs` | Serves canonical sources at `http://127.0.0.1:8181` and reloads the browser when root pages, `css/`, `js/`, or `assets/` change. Requires no build and never reads or writes `dist/`. | For day-to-day local development in source mode. |
 | `build:css` | `postcss ./css/style.css -o ./dist/css/style.min.css && node ./scripts/verify-build.mjs css ./dist/css/style.min.css` | Builds and verifies `dist/css/style.min.css` from canonical CSS without clearing other distribution files. | For a focused CSS build; the full build also runs it. |
 | `build:js` | `esbuild ./js/script.js --bundle --minify --target=es2018 --format=iife --outfile=./dist/js/script.min.js && node ./scripts/verify-build.mjs js ./dist/js/script.min.js` | Bundles and verifies `dist/js/script.min.js` from canonical JavaScript without clearing other distribution files. | For a focused JavaScript build; the full build also runs it. |
 | `build` | `npm run build:dist` | Alias for the complete, clean production build. | To prepare the deployable package. |

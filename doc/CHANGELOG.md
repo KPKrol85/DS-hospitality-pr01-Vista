@@ -27,6 +27,7 @@ All significant changes to this project are documented in this file.
 - Included a Sharp-based image pipeline and responsive image assets in AVIF, WebP, and fallback formats.
 - Moved CSS and JavaScript production bundles into disposable `dist/` output; both `build` and `build:dist` now rebuild a clean package from current sources, while standalone bundle commands preserve other distribution files. Set Netlify to run the full build and publish `dist/`.
 - Limited service worker registration to production-marked HTML, added scoped cleanup of prior Vista registrations and caches during development, and generated the production worker from packaged assets.
+- Added a lightweight `npm run dev` server with live reload, secure source-file serving, and no changes to the production build.
 
 ### Fixed
 

@@ -48,7 +48,13 @@ npm ci
 
 ### Praca lokalna
 
-Uruchom pliki HTML z katalogu głównego przez lokalny serwer HTTP. Strony źródłowe ładują czytelne `css/style.css` i `js/script.js` wraz z modułami JavaScript. Nie wymagają wygenerowanych plików `.min` ani wcześniejszego buildu. W tym trybie nie jest automatycznie rejestrowany produkcyjny Service Worker. Kod deweloperski sprawdza i usuwa wcześniejszą rejestrację Vista dla jej właściwego zakresu oraz pamięci podręczne należące do Vista, jeśli pozostały po uruchomieniu produkcyjnego pakietu na tym samym originie.
+Uruchom serwer deweloperski:
+
+```bash
+npm run dev
+```
+
+Serwer działa pod adresem `http://127.0.0.1:8181` i udostępnia bezpośrednio kanoniczne źródła: strony HTML z katalogu głównego, czytelne `css/style.css` i `js/script.js` wraz z modułami JavaScript oraz zasoby publiczne. Po zapisaniu zmian w tych plikach przeglądarka automatycznie przeładowuje stronę. Skrypt przeładowania jest dodawany tylko do odpowiedzi serwera i nie zmienia plików źródłowych. Praca lokalna nie wymaga wygenerowanych plików `.min` ani wcześniejszego buildu produkcyjnego, a serwer nie tworzy ani nie zmienia `dist/`. Nie odtwarza funkcji platformy Netlify, takich jak Netlify Forms, Edge Functions, nagłówki czy przekierowania. Strony źródłowe można też serwować dowolnym statycznym serwerem HTTP, bez automatycznego przeładowania. W tym trybie nie jest automatycznie rejestrowany produkcyjny Service Worker. Kod deweloperski sprawdza i usuwa wcześniejszą rejestrację Vista dla jej właściwego zakresu oraz pamięci podręczne należące do Vista, jeśli pozostały po uruchomieniu produkcyjnego pakietu na tym samym originie.
 
 ### Build produkcyjny
 
@@ -150,7 +156,13 @@ npm ci
 
 ### Local Development
 
-Serve the root HTML files over a local HTTP server. Source pages load readable `css/style.css` and `js/script.js` with JavaScript modules. They do not require generated `.min` files or an earlier build. The production service worker is not registered automatically in this mode. Development code checks for and removes an earlier Vista registration within its intended scope and Vista-owned caches if they remain after serving the production package on the same origin.
+Start the development server:
+
+```bash
+npm run dev
+```
+
+The server runs at `http://127.0.0.1:8181` and serves canonical sources directly: root HTML pages, readable `css/style.css` and `js/script.js` with JavaScript modules, and public assets. Saving changes to these files reloads the browser automatically. The reload script is added only to server responses and does not modify source files. Local development does not require generated `.min` files or a prior production build, and the server does not create or modify `dist/`. It does not emulate Netlify platform features such as Netlify Forms, Edge Functions, headers, or redirects. Source pages can also be served by any static HTTP server, without automatic reload. The production service worker is not registered automatically in this mode. Development code checks for and removes an earlier Vista registration within its intended scope and Vista-owned caches if they remain after serving the production package on the same origin.
 
 ### Production Build
 

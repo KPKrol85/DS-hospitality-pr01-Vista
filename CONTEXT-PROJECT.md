@@ -22,7 +22,7 @@ The project is released under proprietary KP_Code terms (`LICENSE`), not an open
 - Node.js and npm (`package-lock.json`) for tooling only.
 - PostCSS with `postcss-import`, Autoprefixer, and cssnano (`postcss.config.cjs`) for CSS bundling.
 - esbuild for the JavaScript bundle (IIFE, `es2018` target).
-- Sharp and chokidar for the image pipeline.
+- Sharp and chokidar for the image pipeline; chokidar also drives live reload in the development server.
 - Playwright and axe-core for the accessibility check script.
 - Netlify: `netlify.toml`, `_headers`, `_redirects`, Netlify Forms, and one Edge Function (Deno runtime; `deno.lock` records its Netlify bootstrap imports).
 - Browser APIs used materially: Service Worker and Cache Storage, `localStorage`, `IntersectionObserver`, `matchMedia`, and `inert`.
@@ -33,7 +33,7 @@ The project is released under proprietary KP_Code terms (`LICENSE`), not an open
 - **No templating.** The shared shell (head metadata pattern, header and navigation, theme toggle, project-notice modal, footer with author contact details) is duplicated in every page.
 - **Progressive enhancement.** `<html class="no-js">` becomes `js` when `js/script.js` runs. Content and navigation are usable without JavaScript. Menu, tabs, filters, lightbox, reveal animation, enhanced form validation, and the map embed activate only after successful initialization.
 - **Two runtime modes:**
-  - *Source mode*: the repository root is served directly by any static HTTP server. Pages load `css/style.css` (with `@import`s) and `js/script.js` as an ES module. No service worker is registered. On load, source mode unregisters a leftover Vista production worker for the root scope and deletes Vista-owned caches.
+  - *Source mode*: the repository root is served directly by `npm run dev` or any static HTTP server. Pages load `css/style.css` (with `@import`s) and `js/script.js` as an ES module. No service worker is registered. On load, source mode unregisters a leftover Vista production worker for the root scope and deletes Vista-owned caches.
   - *Production mode*: the `dist/` package uses minified bundles, and `<html data-vista-build="production">` enables service worker registration.
 - **Root-scope deployment.** The worker is registered from `/pwa/service-worker.js` with scope `/`. The manifest uses `start_url` and `scope` `/`, and `_headers` sets `Service-Worker-Allowed: /`. The site expects to be served from a domain root.
 - **Server-side scope.** Limited to Netlify platform features: Netlify Forms (form `booking`) and `netlify/edge-functions/validate-booking-date.js`. The Edge Function handles POST on `/*`. For `form-name=booking` it rejects a missing, malformed, or past `checkin` (Europe/Warsaw date) with HTTP 422. The project has no backend, database, or API of its own.
@@ -76,7 +76,7 @@ The project is released under proprietary KP_Code terms (`LICENSE`), not an open
 │   ├── img/optimized/      # generated responsive variants (tracked)
 │   └── fonts/, img/{icons,logo,og,ui,screenshots,shortcuts}/
 ├── netlify/                # _headers, _redirects, edge-functions/
-├── scripts/                # build, image, link-check, and a11y scripts
+├── scripts/                # dev server, build, image, link-check, and a11y scripts
 ├── doc/                    # CHANGELOG, pipeline notes, archive/
 └── netlify.toml, site.webmanifest, robots.txt, sitemap.xml
 ```
@@ -138,7 +138,11 @@ The project is released under proprietary KP_Code terms (`LICENSE`), not an open
 ## Build and generated output
 
 - **Install:** `npm ci`.
-- **Source-mode development:** serve the repository root with any static HTTP server. No build or dev-server script is required or configured.
+- **Source-mode development:** `npm run dev` runs `scripts/dev-server.mjs`, a Node.js HTTP server at `http://127.0.0.1:8181` (fixed host and port; an occupied port fails with a clear error).
+  - Serves canonical sources only: root `*.html` (`/` serves `index.html`), `robots.txt`, `site.webmanifest`, `sitemap.xml`, and files with known public extensions under `css/`, `js/`, and `assets/`. Everything else, including dotfiles, `node_modules/`, `dist/`, `pwa/`, tooling, and documentation, returns 404. Directories are never listed.
+  - Live reload: chokidar watches the same public surface, and changes are debounced into one full-page reload sent over Server-Sent Events (`/__vista-dev/reload`). The client (`/__vista-dev/reload.js`) is injected into HTML responses in memory; source files are never modified.
+  - Separate from the production build: it needs no build or `.min` files, never reads or writes `dist/`, never adds `data-vista-build`, and registers no service worker. It does not emulate Netlify Forms, Edge Functions, `_headers`, or `_redirects`; non-GET/HEAD requests return 405.
+  - Any static HTTP server can still serve the repository root in source mode, without live reload.
 - **`npm run build`** (alias of `build:dist`) runs:
   1. `dist:clean`: removes `dist/`.
   2. `build:css`: PostCSS writes `dist/css/style.min.css`, and `scripts/verify-build.mjs` rejects any remaining `@import`.
