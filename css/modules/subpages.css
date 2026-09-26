@@ -204,11 +204,6 @@
 .legal-card a:hover {
   text-decoration-thickness: 2px;
 }
-.legal-card a:focus-visible,
-.legal-table-scroll:focus-visible {
-  outline: 2px solid var(--focus);
-  outline-offset: 3px;
-}
 .legal-card .legal-anchor {
   text-decoration: none;
 }

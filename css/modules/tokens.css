@@ -22,6 +22,11 @@
   --border-dark: #1b2433;
   --primary-dark: #34d1b2;
 
+  /* Focus ring */
+  --focus-ring-color: var(--primary);
+  --focus-ring-width: 2px;
+  --focus-ring-offset: 2px;
+
   /* Decorations */
   --shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
   --elev: var(--shadow);

@@ -68,10 +68,6 @@
 .btn:active {
   transform: translateY(0);
 }
-.btn:focus-visible {
-  outline: 3px solid color-mix(in oklab, var(--focus) 55%, transparent);
-  outline-offset: 3px;
-}
 
 /* btn--primary */
 
@@ -167,9 +163,7 @@
     outline-color 120ms ease;
 }
 .form__field :is(input, textarea, select):focus-visible {
-  outline: 2px solid var(--focus, var(--focus));
-  outline-offset: 2px;
-  border-color: var(--focus, var(--focus));
+  border-color: var(--focus-ring-color);
 }
 .form__field :is(input, textarea)::placeholder {
   opacity: 0.7;
@@ -402,10 +396,6 @@ fieldset.form__field legend {
 .lightbox__close:active {
   transform: scale(0.96);
 }
-.lightbox__close:focus-visible {
-  outline: 2px solid color-mix(in oklab, var(--focus) 60%, transparent);
-  outline-offset: 2px;
-}
 .lightbox__close svg {
   inline-size: clamp(16px, 1.6vw, 22px);
   block-size: clamp(16px, 1.6vw, 22px);
@@ -436,9 +426,8 @@ fieldset.form__field legend {
 .lightbox__control:active {
   transform: scale(0.96);
 }
+.lightbox__close:focus-visible,
 .lightbox__control:focus-visible {
-  outline: 2px solid color-mix(in oklab, var(--primary) 60%, transparent);
-  outline-offset: 2px;
   opacity: 1;
 }
 .lightbox__control svg {
@@ -685,10 +674,6 @@ body.has-project-modal {
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
   border-color: color-mix(in oklab, var(--border) 60%, var(--focus) 40%);
 }
-.gallery-grid__item:focus-within {
-  border-color: color-mix(in oklab, var(--border) 60%, var(--primary) 40%);
-  box-shadow: 0 0 0 2px color-mix(in oklab, var(--primary) 35%, transparent);
-}
 .gallery-grid__item img {
   width: 100%;
   height: auto;
@@ -734,8 +719,8 @@ body.has-project-modal {
   border-color: color-mix(in oklab, var(--border) 60%, var(--focus) 40%);
 }
 .offer-card:focus-within {
-  outline: 2px solid var(--focus);
-  outline-offset: 4px;
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: calc(var(--focus-ring-offset) * 2);
 }
 .offer-card__badge {
   display: inline-grid;
@@ -877,10 +862,6 @@ body.has-project-modal {
   border-color: color-mix(in oklab, var(--focus) 25%, var(--border));
   background: color-mix(in oklab, var(--bg-elev) 95%, var(--focus) 3%);
 }
-.gallery-cats__link:focus-visible {
-  outline: 2px solid var(--primary);
-  outline-offset: 2px;
-}
 .gallery-cats__link:active {
   transform: translateY(0);
   filter: brightness(0.98);
@@ -926,12 +907,8 @@ body.has-project-modal {
   border-color: color-mix(in oklab, var(--border) 60%, var(--focus) 40%);
 }
 .room-card:focus-within {
-  outline: 2px solid var(--focus);
-  outline-offset: 4px;
-}
-.btn:focus-visible {
-  outline: 2px solid var(--focus);
-  outline-offset: 2px;
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: calc(var(--focus-ring-offset) * 2);
 }
 .room-card__img {
   width: 100%;

@@ -136,6 +136,7 @@ Vista has a coherent visual language: a token file with a fluid type scale, spac
   - `npm run test:a11y` reports no new violations when run.
 - **Impact:** Medium
 - **Effort:** Medium
+- **Status:** COMPLETED — Centralized focus-ring color, width, and offset across interactive controls, removed duplicate and unreachable focus rules, and preserved required card and invalid-field exceptions.
 
 ## Selection summary
 

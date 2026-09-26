@@ -162,10 +162,6 @@
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
   border-color: color-mix(in oklab, var(--border) 60%, var(--focus) 40%);
 }
-.benefit:focus-visible {
-  outline: 2px solid var(--focus);
-  outline-offset: 2px;
-}
 .benefit__title {
   margin: 0 0 var(--space-md);
   font-size: var(--fs-400);
@@ -279,10 +275,6 @@
   margin: 0;
   color: var(--muted);
   font-size: var(--fs-200);
-}
-.testimonial:focus-within {
-  outline: 2px solid var(--focus);
-  outline-offset: 4px;
 }
 
 /* Sections */
