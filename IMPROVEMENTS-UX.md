@@ -36,6 +36,7 @@ Each proposal refines an existing journey. None adds a booking capability or cha
   - With JavaScript disabled, native browser validation behaves as before.
 - **Impact:** High
 - **Effort:** Small
+- **Status:** COMPLETED — Improved invalid-field focus and live error recovery in the contact form.
 
 ### IMP-UX-02 — Keep the visitor inside Vista after a successful inquiry
 

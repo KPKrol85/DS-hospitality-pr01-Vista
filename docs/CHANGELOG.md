@@ -49,6 +49,7 @@ All significant changes to this project are documented in this file.
 - Standardized native control font inheritance so contact form fields and room filter buttons use the project's Inter typeface without changing component sizing or interaction behavior.
 - Unified room and gallery filter selected-state styling through existing ARIA attributes, distinguished selected controls from hover, and removed obsolete room-filter tab presentation rules.
 - Consolidated keyboard focus indicators through shared theme-aware ring tokens, removed redundant focus declarations, and preserved card focus geometry and invalid-field styling.
+- Improved contact-form error recovery with first-invalid-field focus and live validation feedback.
 
 ### Testing
 

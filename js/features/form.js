@@ -65,6 +65,18 @@ export function initForm() {
     }
   }
 
+  function validateName() {
+    const valid = (name?.value || "").trim().length > 1;
+    setError(name, "err-name", !valid);
+    return valid;
+  }
+
+  function validateEmail() {
+    const valid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email?.value || "");
+    setError(email, "err-email", !valid);
+    return valid;
+  }
+
   function validateCheckin() {
     const todayISO = refreshCheckinMin();
     const value = checkin?.value || "";
@@ -82,14 +94,48 @@ export function initForm() {
     return valid;
   }
 
+  function validateCheckout() {
+    const date = parseLocalISO(checkout?.value);
+    const minOut = nextDay(checkin?.value);
+    const valid = !!date && (!checkin?.value || (!!minOut && formatLocalISO(date) >= minOut));
+    setError(checkout, "err-checkout", !valid);
+    return valid;
+  }
+
+  function validateConsent() {
+    const valid = consent?.checked === true;
+    setError(consent, "err-consent", !valid);
+    return valid;
+  }
+
+  name?.addEventListener("input", () => {
+    if (name.getAttribute("aria-invalid") === "true") validateName();
+  });
+  email?.addEventListener("input", () => {
+    if (email.getAttribute("aria-invalid") === "true") validateEmail();
+  });
+
   checkin?.addEventListener("change", () => {
     syncCheckoutMin();
     if (checkin.getAttribute("aria-invalid") === "true") validateCheckin();
+    // Departure validity depends on arrival, and syncCheckoutMin() may adjust its value.
+    if (checkout?.getAttribute("aria-invalid") === "true") validateCheckout();
   });
   checkin?.addEventListener("input", () => {
     if (checkin.getAttribute("aria-invalid") === "true") validateCheckin();
   });
   syncCheckoutMin();
+
+  checkout?.addEventListener("change", () => {
+    if (checkout.getAttribute("aria-invalid") === "true") validateCheckout();
+  });
+  checkout?.addEventListener("input", () => {
+    if (checkout.getAttribute("aria-invalid") === "true") validateCheckout();
+  });
+
+  consent?.addEventListener("change", () => {
+    if (consent.getAttribute("aria-invalid") === "true") validateConsent();
+  });
 
   guests?.addEventListener("input", () => {
     const n = parseInt(guests.value || "0", 10);
@@ -109,15 +155,12 @@ export function initForm() {
     let ok = true;
 
     if (name) {
-      const v = (name.value || "").trim().length > 1;
-      setError(name, "err-name", !v);
+      const v = validateName();
       ok = ok && v;
     }
 
     if (email) {
-      const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      const v = re.test(email.value || "");
-      setError(email, "err-email", !v);
+      const v = validateEmail();
       ok = ok && v;
     }
     if (phone) {
@@ -133,10 +176,7 @@ export function initForm() {
       ok = ok && v;
     }
     if (checkout) {
-      const date = parseLocalISO(checkout.value);
-      const minOut = nextDay(checkin?.value);
-      const v = !!date && (!checkin?.value || (!!minOut && formatLocalISO(date) >= minOut));
-      setError(checkout, "err-checkout", !v);
+      const v = validateCheckout();
       ok = ok && v;
     }
 
@@ -148,8 +188,7 @@ export function initForm() {
     }
 
     if (consent) {
-      const v = consent.checked === true;
-      setError(consent, "err-consent", !v);
+      const v = validateConsent();
       ok = ok && v;
     }
 
@@ -159,6 +198,7 @@ export function initForm() {
 
     if (!ok) {
       if (success) success.hidden = true;
+      form.querySelector('[aria-invalid="true"]')?.focus();
       return;
     }
 
