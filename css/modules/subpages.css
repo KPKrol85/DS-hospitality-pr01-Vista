@@ -447,32 +447,37 @@
   }
 }
 
-/* 404 & offlie */
+/* 404, offline & thank-you */
 
 .page--404 main,
-.page--offline main {
+.page--offline main,
+.page--thank-you main {
   display: grid;
   align-items: start;
 }
 .page--404 .content,
-.page--offline .content {
+.page--offline .content,
+.page--thank-you .content {
   min-height: 45vh;
   display: grid;
   align-content: center;
   text-align: center;
 }
 .page--404 .section-title,
-.page--offline .section-title {
+.page--offline .section-title,
+.page--thank-you .section-title {
   margin-bottom: var(--space-md);
 }
 .page--404 .not-found__text,
-.page--offline .not-found__text {
+.page--offline .not-found__text,
+.page--thank-you .not-found__text {
   max-width: 38ch;
   margin: 0 auto;
   font-size: var(--fs-300);
 }
 .page--404 .not-found__actions,
-.page--offline .not-found__actions {
+.page--offline .not-found__actions,
+.page--thank-you .not-found__actions {
   display: grid;
   gap: var(--space-md);
   justify-content: center;

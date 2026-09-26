@@ -13,6 +13,7 @@ All significant changes to this project are documented in this file.
 - Included a web app manifest and service worker with cached assets, cached HTML, and an offline page fallback.
 - Included per-page metadata, sitemap and robots files, and embedded JSON-LD fallbacks with optional page-specific payloads.
 - Included Netlify redirect and response-header configuration, including a custom 404 route.
+- Added a branded confirmation page for contact inquiries.
 
 ### Documentation
 
