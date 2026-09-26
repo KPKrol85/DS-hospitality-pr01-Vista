@@ -49,6 +49,13 @@ h4 {
   font-family: var(--font-heading);
 }
 
+button,
+input,
+textarea,
+select {
+  font-family: inherit;
+}
+
 p {
   margin: 0;
   line-height: var(--lh-relaxed);

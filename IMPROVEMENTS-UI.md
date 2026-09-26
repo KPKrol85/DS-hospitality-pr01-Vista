@@ -84,6 +84,7 @@ Vista has a coherent visual language: a token file with a fluid type scale, spac
   - Native and enhanced form validation behave as before.
 - **Impact:** Medium
 - **Effort:** Small
+- **Status:** COMPLETED — Native form controls and room filter buttons now inherit the project typeface. Existing room/gallery filter line-height differences remain outside this task's scope.
 
 ### IMP-UI-04 — Give the filter controls a selected state that differs from hover
 

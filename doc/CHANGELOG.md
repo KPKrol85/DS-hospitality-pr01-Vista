@@ -46,6 +46,7 @@ All significant changes to this project are documented in this file.
 - Updated accessibility scenarios to handle the project notice and test the current Deluxe room filter.
 - Refined heading typography across subpages and cards using existing type-scale tokens, corrected responsive offer titles, and aligned offer metadata with the defined muted colour.
 - Unified button border and minimum-size handling across variants, preserved responsive CTA layouts, corrected section-header link sizing, and removed unused button typography tokens.
+- Standardized native control font inheritance so contact form fields and room filter buttons use the project's Inter typeface without changing component sizing or interaction behavior.
 
 ### Testing
 
