@@ -53,9 +53,6 @@
   gap: var(--space-md);
   margin: var(--space-2xl) auto;
 }
-.hero__cta .btn {
-  width: 180px;
-}
 .hero__media {
   overflow: hidden;
   border-radius: var(--radius-md);
@@ -233,7 +230,6 @@
 }
 .highlight__body .btn {
   justify-self: start;
-  width: 180px;
   margin-left: var(--space-lg);
 }
 @media (min-width: 760px) {

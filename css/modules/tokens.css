@@ -45,9 +45,7 @@
   --fs-1000: clamp(2.4rem, 2.6vw + 1.4rem, 3.8rem);
 
   /* Buttons */
-  --fs-btn-sm: 0.4rem;
   --fs-btn: 0.8rem;
-  --fs-btn-lg: 1.05rem;
 
   /* Spacing */
   --space-2xs: clamp(0.25rem, 0.2vw, 0.375rem);

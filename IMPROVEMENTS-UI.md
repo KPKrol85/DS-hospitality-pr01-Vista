@@ -67,6 +67,7 @@ Vista has a coherent visual language: a token file with a fluid type scale, spac
   - No button label wraps or overflows.
 - **Impact:** High
 - **Effort:** Medium
+- **Status:** COMPLETED — Centralized button border and minimum-size handling, preserved existing variant and responsive layouts, corrected section-header link alignment, and removed unused button typography tokens.
 
 ### IMP-UI-03 — Make native form controls and filter buttons inherit the project typeface
 
