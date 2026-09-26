@@ -54,25 +54,8 @@
 
 /* Subpage Rooms */
 
-.tabs {
-  display: flex;
-  gap: var(--space-xs);
-  margin: var(--space-xs) auto var(--space-xl);
-  flex-wrap: wrap;
-}
-.tabs__tab {
-  padding: var(--space-xs) var(--space-sm);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-full);
-  background: var(--bg-elev);
-  cursor: pointer;
-}
-.tabs__tab.is-active {
-  border-color: color-mix(in oklab, var(--focus) 35%, var(--border));
-  background: color-mix(in oklab, var(--bg-elev) 95%, var(--focus) 3%);
-  color: var(--text);
-  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05);
-  transform: none;
+.rooms-filters {
+  margin-block: var(--space-xs) var(--space-xl);
 }
 .page--rooms .room-card {
   display: flex;

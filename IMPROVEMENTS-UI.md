@@ -106,6 +106,7 @@ Vista has a coherent visual language: a token file with a fluid type scale, spac
   - Room filtering still hides non-matching cards.
 - **Impact:** Medium
 - **Effort:** Small
+- **Status:** COMPLETED — Unified selected-state styling for room and gallery filters using `aria-pressed` and `aria-current`, introduced a distinct selected appearance, and removed legacy tab presentation dependencies while preserving filter behavior and layout.
 
 ### IMP-UI-05 — Consolidate focus-visible styling into shared focus-ring tokens
 

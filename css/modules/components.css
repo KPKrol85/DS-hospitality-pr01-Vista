@@ -864,6 +864,7 @@ body.has-project-modal {
   text-align: center;
   text-decoration: none;
   font-size: var(--fs-100);
+  cursor: pointer;
   transition:
     transform 0.2s ease,
     box-shadow 0.2s ease,
@@ -884,11 +885,12 @@ body.has-project-modal {
   transform: translateY(0);
   filter: brightness(0.98);
 }
-.gallery-cats__link[aria-current="true"],
-.gallery-cats__link[aria-selected="true"] {
-  border-color: color-mix(in oklab, var(--focus) 35%, var(--border));
-  background: color-mix(in oklab, var(--bg-elev) 95%, var(--focus) 3%);
+.gallery-cats__link[aria-pressed="true"],
+.gallery-cats__link[aria-current="true"] {
+  border-color: color-mix(in oklab, var(--primary) 55%, var(--border));
+  background: color-mix(in oklab, var(--primary) 12%, var(--bg-elev));
   color: var(--text);
+  font-weight: 500;
   box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05);
   transform: none;
 }

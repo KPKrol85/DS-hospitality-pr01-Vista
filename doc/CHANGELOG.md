@@ -47,6 +47,7 @@ All significant changes to this project are documented in this file.
 - Refined heading typography across subpages and cards using existing type-scale tokens, corrected responsive offer titles, and aligned offer metadata with the defined muted colour.
 - Unified button border and minimum-size handling across variants, preserved responsive CTA layouts, corrected section-header link sizing, and removed unused button typography tokens.
 - Standardized native control font inheritance so contact form fields and room filter buttons use the project's Inter typeface without changing component sizing or interaction behavior.
+- Unified room and gallery filter selected-state styling through existing ARIA attributes, distinguished selected controls from hover, and removed obsolete room-filter tab presentation rules.
 
 ### Testing
 
