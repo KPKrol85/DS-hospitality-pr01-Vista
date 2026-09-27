@@ -249,6 +249,38 @@ const scenarios = [
     }
   },
   { label: 'contact.html (baseline)', path: 'contact.html' },
+  {
+    label: 'contact.html (validation errors visible)',
+    path: 'contact.html',
+    setup: async (page) => {
+      const banner = page.locator('#projectBanner');
+      if (await banner.isVisible()) {
+        await page.locator('#projectBannerAccept').click();
+        await banner.waitFor({ state: 'hidden' });
+      }
+
+      const form = page.locator('form[data-form]');
+      await page.waitForFunction(() => document.querySelector('form[data-form]')?.noValidate === true);
+      assert.equal(await form.evaluate((element) => element.noValidate), true,
+        'Enhanced JavaScript validation must be initialized before submission');
+
+      const contactUrl = page.url();
+      const posts = [];
+      page.on('request', (request) => {
+        if (request.method() === 'POST') posts.push(request.url());
+      });
+      await form.getByRole('button', { name: 'Wyślij zapytanie', exact: true }).click();
+      await page.locator('#name[aria-invalid="true"]').waitFor({ state: 'visible' });
+      await page.locator('#err-name').waitFor({ state: 'visible' });
+      assert.ok((await page.locator('#name').getAttribute('aria-describedby') || '').split(/\s+/).includes('err-name'),
+        'The invalid name field must reference its error message');
+      await page.waitForFunction(() => document.activeElement === document.querySelector('#name'));
+      assert.equal(page.url(), contactUrl, 'Invalid submission must remain on contact.html');
+      assert.equal(await form.locator('.form__success').isVisible(), false, 'Invalid submission must not show success');
+      assert.deepEqual(posts, [], 'Invalid submission must not send a POST request');
+      console.log('Contact validation error-state assertions passed.');
+    }
+  },
   { label: 'regulamin.html (baseline)', path: 'regulamin.html' }
 ];
 

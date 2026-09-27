@@ -48,6 +48,7 @@ Vista's verification stack is intentionally layered: `check:links` and `check:sy
 - **Acceptance criteria:** `npm run test:a11y`, when run with the required Chromium browser installed, includes a contact-form error-state scenario in its output and reports its result (pass, or any newly surfaced violation) alongside the existing eight scenarios.
 - **Impact:** Medium
 - **Effort:** Small
+- **Status:** COMPLETED — Added real contact-form validation-error assertions and axe coverage, corrected error-text contrast across Light, Dark, and Auto, and verified all 15 accessibility scenarios and `qa:fast`.
 
 ### IMP-QUALITY-04 — Verify embedded and external JSON-LD payloads stay identical
 

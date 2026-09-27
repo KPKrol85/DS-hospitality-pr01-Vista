@@ -179,8 +179,11 @@
   outline-offset: 2px;
 }
 .form__error {
-  color: var(--danger, #b91c1c);
+  color: #b91c1c;
   margin: 0;
+}
+fieldset.form__field .form__error {
+  color: var(--form-error-text-elevated, #b91c1c);
 }
 .form__success {
   color: var(--success);
