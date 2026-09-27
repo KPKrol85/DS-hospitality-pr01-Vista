@@ -73,6 +73,7 @@ Each proposal refines an existing journey. None adds a booking capability or cha
   - With JavaScript disabled, every "Skorzystaj" link still reaches the form.
 - **Impact:** Medium
 - **Effort:** Small
+- **Status:** COMPLETED — Offer selection is preserved in the contact form through validated URL identifiers and editable message prefill.
 
 ### IMP-UX-04 — Make room and gallery filter selections linkable and restorable
 

@@ -1,3 +1,13 @@
+// Keys are the offer card IDs in offers.html; only these values can pre-fill the message.
+const OFFER_NAMES = new Map([
+  ["weekend", "Weekend dla dwojga"],
+  ["biz", "Biznes w mieście"],
+  ["long-stay", "Zostań dłużej"],
+  ["family", "Rodzinny city break"],
+  ["wellness", "Relaks w rytmie slow"],
+  ["premium", "Premium z widokiem"],
+]);
+
 export function initForm() {
   const form = document.querySelector("[data-form]");
   if (!form) return;
@@ -215,5 +225,15 @@ export function initForm() {
     btn?.focus();
   });
 
+  // Fills only an empty message, once at load; the visitor owns the text afterwards.
+  function prefillOfferMessage() {
+    const message = form.querySelector("#message");
+    if (!message || message.value !== "") return;
+    const offerIds = new URLSearchParams(window.location.search).getAll("oferta");
+    const offerName = offerIds.length === 1 ? OFFER_NAMES.get(offerIds[0]) : undefined;
+    if (offerName) message.value = `Zapytanie dotyczy oferty: ${offerName}.`;
+  }
+
   form.noValidate = true;
+  prefillOfferMessage();
 }
