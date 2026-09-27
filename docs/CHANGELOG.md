@@ -51,6 +51,7 @@ All significant changes to this project are documented in this file.
 - Unified room and gallery filter selected-state styling through existing ARIA attributes, distinguished selected controls from hover, and removed obsolete room-filter tab presentation rules.
 - Consolidated keyboard focus indicators through shared theme-aware ring tokens, removed redundant focus declarations, and preserved card focus geometry and invalid-field styling.
 - Improved contact-form error recovery with first-invalid-field focus and live validation feedback.
+- Refined the shared confirmation, 404, and offline message layout with a restrained heading scale, a common centered measure, a subordinate non-reservation note, and equal-width actions that stack on narrow screens.
 
 ### Testing
 

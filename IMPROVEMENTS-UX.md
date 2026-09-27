@@ -55,7 +55,7 @@ Each proposal refines an existing journey. None adds a booking capability or cha
   - Netlify still records the submission under the `booking` form.
 - **Impact:** High
 - **Effort:** Medium
-- **Status:** IMPLEMENTED — Added a Vista inquiry confirmation page; live Netlify submission verification pending.
+- **Status:** IMPLEMENTED — Added a Vista inquiry confirmation page; the deployed page renders, and a live form submission (redirect after POST and a `booking` record in Netlify Forms) remains the only outstanding acceptance check.
 
 ### IMP-UX-03 — Carry the chosen offer into the inquiry form
 
