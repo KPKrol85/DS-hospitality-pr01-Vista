@@ -15,7 +15,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "check:links": "node scripts/check-link-integrity.mjs",
     "check:syntax": "node scripts/qa-syntax.mjs",
-    "qa:fast": "npm run check:links && npm run check:syntax",
+    "check:booking-date": "node scripts/check-booking-date.mjs",
+    "qa:fast": "npm run check:links && npm run check:syntax && npm run check:booking-date",
     "test:a11y": "node scripts/a11y-axe.mjs"
   },
   "keywords": [

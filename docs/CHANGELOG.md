@@ -59,6 +59,7 @@ All significant changes to this project are documented in this file.
 
 ### Testing
 
+- Added an executable, dependency-free booking-date Edge Function regression check with Warsaw-relative dates and strict HTTP 422/pass-through assertions to `qa:fast`.
 - Included local-link integrity checking and a Playwright/axe accessibility audit script.
 - Verified clean production builds and source-to-dist behavior for room filters, project notice, reveal animations, contact validation, and modal focus management.
 - Verified all eight Playwright/axe accessibility scenarios with no reported violations.

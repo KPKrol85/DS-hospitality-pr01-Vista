@@ -36,6 +36,7 @@ Vista's verification stack is intentionally layered: `check:links` and `check:sy
 - **Acceptance criteria:** The new check passes against the current implementation and covers at least the six cases above; it fails if the past-date comparison or date-format validation is broken. It runs with plain `node`, without `npx playwright install` or network access.
 - **Impact:** High
 - **Effort:** Small
+- **Status:** COMPLETED — Added a dependency-free check executing the unchanged Edge Function across 11 Warsaw-relative date and pass-through scenarios, integrated it into `qa:fast`, and verified detection of past-date, format, and calendar regressions on isolated copies.
 
 ### IMP-QUALITY-03 — Cover the contact form's live validation-error state in the accessibility check
 
