@@ -440,6 +440,18 @@ fieldset.form__field legend {
   opacity: 0.28;
   pointer-events: none;
 }
+/* Dialog-coloured backing keeps the text legible where short viewports let the image run under the nav. */
+.lightbox__counter {
+  margin: 0;
+  padding: var(--space-2xs) var(--space-xs);
+  border-radius: var(--radius-full);
+  background: var(--bg-elev);
+  color: var(--muted);
+  font-size: var(--fs-200);
+  line-height: var(--lh-tight);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
 .lightbox.lightbox--fullscreen {
   padding: 0;
 }
@@ -499,6 +511,15 @@ fieldset.form__field legend {
 }
 .lightbox.lightbox--fullscreen .lightbox__nav button:last-child {
   margin-right: var(--space-sm);
+}
+/* Top-left corner, vertically centred on the 44px close button opposite. */
+.lightbox.lightbox--fullscreen .lightbox__counter {
+  position: absolute;
+  top: calc(0.6rem + 22px);
+  left: 0.8rem;
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0.55);
+  color: #fff;
 }
 @media (max-height: 420px) {
   .lightbox__dialog {

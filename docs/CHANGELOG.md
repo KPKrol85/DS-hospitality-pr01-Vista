@@ -16,6 +16,7 @@ All significant changes to this project are documented in this file.
 - Added a branded confirmation page for contact inquiries.
 - Added offer-aware contact message prefill and corrected homepage offer destinations.
 - Added shareable and restorable URL-based room and gallery filters and corrected homepage room links.
+- Added accessible photo position indicators to the gallery and homepage lightboxes.
 
 ### Documentation
 

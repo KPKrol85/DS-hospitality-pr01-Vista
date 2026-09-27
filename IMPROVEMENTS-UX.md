@@ -109,6 +109,7 @@ Each proposal refines an existing journey. None adds a booking capability or cha
   - The open-lightbox scenario in `npm run test:a11y` reports no new violations when run.
 - **Impact:** Medium
 - **Effort:** Small
+- **Status:** COMPLETED — Both Vista lightboxes display an accessible position indicator based on the current navigable photo set.
 
 ## Selection summary
 

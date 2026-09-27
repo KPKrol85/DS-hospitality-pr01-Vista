@@ -10,6 +10,8 @@ export function initLightbox() {
   const prevBtn = lightbox.querySelector("[data-lightbox-prev]");
   const nextBtn = lightbox.querySelector("[data-lightbox-next]");
   const dialogEl = lightbox.querySelector(".lightbox__dialog");
+  const counter = lightbox.querySelector("[data-lightbox-counter]");
+  const counterStatus = lightbox.querySelector("[data-lightbox-status]");
 
   const isVisible = (el) => !!(el.offsetParent || el.getClientRects().length);
 
@@ -59,6 +61,19 @@ export function initLightbox() {
     if (caption) caption.textContent = text;
   }
 
+  // The visible counter is aria-hidden; the polite status carries the spoken form of the same position.
+  function renderPosition(total) {
+    if (!total) return;
+    const position = index + 1;
+    if (counter) counter.textContent = `${position} / ${total}`;
+    if (counterStatus) counterStatus.textContent = `Zdjęcie ${position} z ${total}`;
+  }
+
+  function render(list) {
+    renderFromAnchor(list[index]);
+    renderPosition(list.length);
+  }
+
   function setFullscreen(on) {
     if (on) {
       lightbox.classList.add("lightbox--fullscreen");
@@ -79,7 +94,7 @@ export function initLightbox() {
     if (!list.length) return;
     index = ((i % list.length) + list.length) % list.length;
 
-    renderFromAnchor(list[index]);
+    render(list);
     lastFocused = focusOrigin || document.activeElement;
 
     setFullscreen(false);
@@ -108,7 +123,7 @@ export function initLightbox() {
     const list = items();
     if (!list.length) return;
     index = (index + delta + list.length) % list.length;
-    renderFromAnchor(list[index]);
+    render(list);
   }
 
   document.addEventListener("click", (e) => {
@@ -128,7 +143,7 @@ export function initLightbox() {
     if (lightbox.hidden) return;
     if (!list.length) return close();
     if (index >= list.length) index = 0;
-    renderFromAnchor(list[index]);
+    render(list);
   });
   observer.observe(document.body, { attributes: true, attributeFilter: ["data-gallery-filter"] });
 
