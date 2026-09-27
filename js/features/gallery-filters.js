@@ -1,5 +1,5 @@
 export function initGalleryFilters() {
-  const filters = document.querySelectorAll("#gallery-filters .gallery-cats__link");
+  const filters = [...document.querySelectorAll("#gallery-filters .gallery-cats__link")];
   const items = document.querySelectorAll(".gallery-grid [data-cat-item]");
   const sections = document.querySelectorAll(".gallery-section");
   if (!filters.length || !items.length) return;
@@ -39,7 +39,7 @@ export function initGalleryFilters() {
     window.history.replaceState(window.history.state, "", url);
   }
 
-  const hasFilter = (value) => document.querySelector('#gallery-filters .gallery-cats__link[data-filter="' + value + '"]');
+  const hasFilter = (value) => filters.some((link) => link.dataset.filter === value);
   const getHashFilter = () => {
     const hash = window.location.hash.replace("#", "");
     return hash === "wszystkie" ? "all" : hasFilter(hash) ? hash : null;

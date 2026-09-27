@@ -1,4 +1,5 @@
 import http from 'node:http';
+import assert from 'node:assert/strict';
 import path from 'node:path';
 import { readFile } from 'node:fs/promises';
 import { createRequire } from 'node:module';
@@ -95,6 +96,9 @@ async function runAxe(page) {
 
 async function runScenario(page, baseUrl, spec) {
   const targetUrl = `${baseUrl}/${spec.path}`;
+  if (spec.beforeLoad) {
+    await spec.beforeLoad(page);
+  }
   await page.goto(targetUrl, { waitUntil: 'networkidle' });
   await page.waitForLoadState('domcontentloaded');
 
@@ -104,6 +108,103 @@ async function runScenario(page, baseUrl, spec) {
 
   const result = await runAxe(page);
   return { ...spec, result };
+}
+
+async function assertGalleryFilter(page, filter) {
+  const state = await page.evaluate((expected) => {
+    const items = [...document.querySelectorAll('.gallery-grid [data-cat-item]')];
+    const sections = [...document.querySelectorAll('.gallery-section')];
+    return {
+      filter: document.body.dataset.galleryFilter,
+      selected: [...document.querySelectorAll('#gallery-filters [aria-current]')]
+        .map((link) => [link.dataset.filter, link.getAttribute('aria-current')]),
+      itemCount: items.length,
+      sectionCount: sections.length,
+      itemsMatch: items.every((item) => {
+        const visible = expected === 'all' || item.dataset.catItem === expected;
+        return Boolean(item.getClientRects().length) === visible &&
+          Boolean(item.querySelector('img')?.getClientRects().length) === visible;
+      }),
+      sectionsMatch: sections.every((section) =>
+        Boolean(section.getClientRects().length) === (expected === 'all' || section.id === expected))
+    };
+  }, filter);
+  assert.equal(state.filter, filter, 'Lightbox category must match the selected filter');
+  assert.deepEqual(state.selected, [[filter, 'true']], 'Exactly one category must have aria-current="true"');
+  assert.ok(state.itemCount > 0 && state.sectionCount > 0, 'Gallery content must exist');
+  assert.ok(state.itemsMatch && state.sectionsMatch, 'Only matching sections, items and images must be visible');
+}
+
+function galleryFragmentScenario(fragment, filter, exerciseControls = false) {
+  const errors = [];
+  return {
+    label: `gallery.html${fragment} (fragment restoration)`,
+    path: `gallery.html${fragment}`,
+    beforeLoad: async (page) => {
+      page.on('pageerror', (error) => errors.push(error.message));
+      await page.addInitScript(() => {
+        // Observe the real DEV branch after initGalleryFilters(), without registering a production worker.
+        window.gallerySwScopes = [];
+        const getRegistration = navigator.serviceWorker.getRegistration;
+        navigator.serviceWorker.getRegistration = function (...args) {
+          window.gallerySwScopes.push(args[0]);
+          return getRegistration.apply(this, args);
+        };
+        window.galleryScrollCalls = [];
+        const scrollIntoView = Element.prototype.scrollIntoView;
+        Element.prototype.scrollIntoView = function (options) {
+          window.galleryScrollCalls.push({ id: this.id, options });
+          return scrollIntoView.call(this, options);
+        };
+      });
+    },
+    setup: async (page) => {
+      await assertGalleryFilter(page, filter);
+      assert.deepEqual(await page.evaluate(() => window.gallerySwScopes),
+        [new URL('/', page.url()).href], 'Initialization must reach configureSW() in source mode');
+
+      if (exerciseControls) {
+        assert.equal(new URL(page.url()).hash, '#foo%22bar', 'Chromium percent-encodes the literal quote');
+        const historyLength = await page.evaluate(() => history.length);
+        await page.locator('#gallery-filters [data-filter="wellness"]').click();
+        await assertGalleryFilter(page, 'wellness');
+        assert.equal(new URL(page.url()).hash, '#wellness');
+        assert.equal(await page.evaluate(() => history.length), historyLength, 'Category clicks must replace history');
+
+        const wellnessItems = page.locator('.gallery-grid [data-lightbox-item][data-cat-item="wellness"]');
+        const total = await wellnessItems.count();
+        await wellnessItems.first().click();
+        await page.locator('.lightbox:not([hidden])').waitFor({ state: 'visible' });
+        assert.equal(await page.locator('[data-lightbox-counter]').textContent(), `1 / ${total}`);
+        await page.locator('[data-lightbox-next]').click();
+        assert.equal(await page.locator('[data-lightbox-counter]').textContent(), `2 / ${total}`);
+        assert.equal(await page.locator('.lightbox__img').getAttribute('src'), await wellnessItems.nth(1).getAttribute('href'));
+        await page.keyboard.press('Escape');
+        await page.locator('.lightbox').waitFor({ state: 'hidden' });
+
+        for (const [hash, expected] of [['#main', 'wellness'], ['#lobby', 'lobby'], ['#\\wellness', 'lobby']]) {
+          await page.evaluate((value) => new Promise((resolve) => {
+            window.addEventListener('hashchange', () => resolve(), { once: true });
+            location.hash = value;
+          }), hash);
+          await assertGalleryFilter(page, expected);
+        }
+
+        const historyBeforeAll = await page.evaluate(() => history.length);
+        await page.locator('#gallery-filters [data-filter="all"]').click();
+        await assertGalleryFilter(page, 'all');
+        assert.equal(new URL(page.url()).hash, '#wszystkie');
+        assert.equal(await page.evaluate(() => history.length), historyBeforeAll);
+        assert.deepEqual(await page.evaluate(() => window.galleryScrollCalls), [
+          { id: 'wellness-heading', options: { behavior: 'smooth', block: 'start' } },
+          { id: 'gallery-heading', options: { behavior: 'smooth', block: 'start' } }
+        ], 'Category clicks must retain their scroll targets; hashchange must not add scripted scrolling');
+      }
+
+      assert.deepEqual(errors, [], 'Gallery fragments must not cause uncaught initialization or interaction errors');
+      console.log(`Gallery fragment behavior passed: ${JSON.stringify(fragment)}`);
+    }
+  };
 }
 
 const scenarios = [
@@ -132,7 +233,13 @@ const scenarios = [
       }
     }
   },
-  { label: 'gallery.html (baseline)', path: 'gallery.html' },
+  { label: 'gallery.html (baseline)', path: 'gallery.html', setup: (page) => assertGalleryFilter(page, 'all') },
+  galleryFragmentScenario('#wellness', 'wellness'),
+  galleryFragmentScenario('#foo"bar', 'all', true),
+  galleryFragmentScenario('#\\wellness', 'all'),
+  galleryFragmentScenario('#%E0%A4%A', 'all'),
+  galleryFragmentScenario('#main', 'all'),
+  galleryFragmentScenario('#wszystkie', 'all'),
   {
     label: 'gallery.html (lightbox open)',
     path: 'gallery.html',
