@@ -14,7 +14,7 @@
       "@id": "https://hospitality-pr01-vista.netlify.app/regulamin.html#webpage",
       "url": "https://hospitality-pr01-vista.netlify.app/regulamin.html",
       "name": "Vista | Regulamin serwisu — Hotels & Travel",
-      "description": "Regulamin korzystania z serwisu Vista — Hotels & Travel — zasady rezerwacji, odpowiedzialność oraz prawa użytkowników.",
+      "description": "Regulamin korzystania z demonstracyjnego serwisu Vista — Hotels & Travel oraz zasady działania formularza zapytania.",
       "isPartOf": {
         "@id": "https://hospitality-pr01-vista.netlify.app/#website"
       },

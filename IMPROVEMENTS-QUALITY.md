@@ -61,6 +61,7 @@ Vista's verification stack is intentionally layered: `check:links` and `check:sy
 - **Acceptance criteria:** The check passes today against all 12 current pairs. Temporarily editing either half of one pair causes it to fail and name the affected page.
 - **Impact:** Medium
 - **Effort:** Small
+- **Status:** COMPLETED — Added a mismatch-detecting JSON-LD equivalence check to `qa:fast`, verified all 12 pairs, and corrected the existing regulamin JSON-LD description inconsistency.
 
 ### IMP-QUALITY-05 — Make the image pipeline's exit code reflect per-file failures
 

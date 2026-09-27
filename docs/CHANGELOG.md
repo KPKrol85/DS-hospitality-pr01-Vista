@@ -59,6 +59,7 @@ All significant changes to this project are documented in this file.
 
 ### Testing
 
+- Added a dependency-free JSON-LD pair equivalence check to `qa:fast`, comparing each root page's embedded fallback with its referenced external JSON file, and corrected the mismatched regulamin JSON-LD description.
 - Added contact-form validation-error regression coverage and corrected error-text contrast across Light, Dark, and Auto themes.
 - Added an executable, dependency-free booking-date Edge Function regression check with Warsaw-relative dates and strict HTTP 422/pass-through assertions to `qa:fast`.
 - Included local-link integrity checking and a Playwright/axe accessibility audit script.
