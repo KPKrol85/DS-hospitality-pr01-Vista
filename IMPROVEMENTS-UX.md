@@ -91,6 +91,7 @@ Each proposal refines an existing journey. None adds a booking capability or cha
   - With JavaScript disabled, the homepage room links open `rooms.html` with all cards visible.
 - **Impact:** Medium
 - **Effort:** Medium
+- **Status:** COMPLETED — Room and gallery filters support shareable URL fragments and restore the selected category on reload.
 
 ### IMP-UX-05 — Show the visitor's position while browsing the lightbox
 

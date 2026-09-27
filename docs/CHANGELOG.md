@@ -15,6 +15,7 @@ All significant changes to this project are documented in this file.
 - Included Netlify redirect and response-header configuration, including a custom 404 route.
 - Added a branded confirmation page for contact inquiries.
 - Added offer-aware contact message prefill and corrected homepage offer destinations.
+- Added shareable and restorable URL-based room and gallery filters and corrected homepage room links.
 
 ### Documentation
 

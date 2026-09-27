@@ -60,6 +60,7 @@
 .page--rooms .room-card {
   display: flex;
   flex-direction: column;
+  scroll-margin-top: 8rem;
 }
 .page--rooms .room-card[hidden] {
   display: none;

@@ -30,10 +30,27 @@ export function initGalleryFilters() {
     active && active.setAttribute("aria-current", "true");
   }
 
-  const hash = window.location.hash.replace("#", "");
+  // Records the link's own fragment (#wszystkie for "all") without a history entry or a native anchor jump.
+  function syncUrl(hash) {
+    if (!hash || window.location.hash === hash) return;
+
+    const url = new URL(window.location.href);
+    url.hash = hash;
+    window.history.replaceState(window.history.state, "", url);
+  }
+
   const hasFilter = (value) => document.querySelector('#gallery-filters .gallery-cats__link[data-filter="' + value + '"]');
-  const initialFilter = hash === "wszystkie" ? "all" : hasFilter(hash) ? hash : "all";
-  applyFilter(initialFilter);
+  const getHashFilter = () => {
+    const hash = window.location.hash.replace("#", "");
+    return hash === "wszystkie" ? "all" : hasFilter(hash) ? hash : null;
+  };
+  applyFilter(getHashFilter() ?? "all");
+
+  // Same-document fragment changes (edited URL, Back/Forward) re-apply a known category; others such as #main are ignored.
+  window.addEventListener("hashchange", () => {
+    const filter = getHashFilter();
+    if (filter) applyFilter(filter);
+  });
 
   filters.forEach((a) => {
     a.addEventListener("click", (event) => {
@@ -41,6 +58,7 @@ export function initGalleryFilters() {
 
       const filter = a.getAttribute("data-filter");
       applyFilter(filter);
+      syncUrl(a.hash);
 
       if (filter === "all") {
         const galleryHeading = document.getElementById("gallery-heading");

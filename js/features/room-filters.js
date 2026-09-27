@@ -22,13 +22,27 @@ export function initRoomFilters(root = document) {
     });
   };
 
+  const isKnownFilter = (value) => buttons.some((button) => button.dataset.roomFilter === value);
+
+  // The fragment mirrors the selected filter ("#all" for "Wszystkie") without adding history entries.
+  const syncUrl = (filter) => {
+    const hash = `#${filter}`;
+    if (window.location.hash === hash) return;
+
+    const url = new URL(window.location.href);
+    url.hash = hash;
+    window.history.replaceState(window.history.state, "", url);
+  };
+
   const focusButton = (index) => {
     buttons[index]?.focus();
   };
 
   buttons.forEach((button, index) => {
     button.addEventListener("click", () => {
-      applyFilter(button.dataset.roomFilter);
+      const filter = button.dataset.roomFilter;
+      applyFilter(filter);
+      syncUrl(filter);
     });
 
     button.addEventListener("keydown", (event) => {
@@ -52,6 +66,18 @@ export function initRoomFilters(root = document) {
     });
   });
 
+  const getHashFilter = () => {
+    const value = window.location.hash.slice(1);
+    return isKnownFilter(value) ? value : null;
+  };
+
+  // A missing or unknown fragment keeps the markup default ("Wszystkie").
   const activeButton = buttons.find((button) => button.getAttribute("aria-pressed") === "true") ?? buttons[0];
-  applyFilter(activeButton.dataset.roomFilter);
+  applyFilter(getHashFilter() ?? activeButton.dataset.roomFilter);
+
+  // Same-document fragment changes (edited URL, Back/Forward) re-apply a known filter; others such as #main are ignored.
+  window.addEventListener("hashchange", () => {
+    const filter = getHashFilter();
+    if (filter) applyFilter(filter);
+  });
 }
