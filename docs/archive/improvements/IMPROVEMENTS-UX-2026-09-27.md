@@ -5,9 +5,16 @@
 **Analysis mode:** Evidence-based UX improvement review
 **Focus:** Project-wide UX
 
+## Implementation closure
+
+**Implementation review date:** 2026-09-27
+**Status:** COMPLETED — All five UX improvements have been implemented and accepted.
+**Live acceptance:** IMP-UX-02 verified on 2026-09-27 — A successful form POST redirected to the Vista confirmation page, and Netlify Forms recorded the `booking` submission. The test submission was classified as spam.
+**Archive note:** This report records the original UX findings and their implementation. Remaining unrelated defects and lower-priority opportunities will be handled separately.
+
 ## Improvement overview
 
-Vista supports a short, clear set of journeys. Visitors browse rooms, offers and the gallery, then send a project inquiry through the contact form. The core interactions are in place: native form constraints with enhanced validation, filters with ARIA state, a focus-managed lightbox, and a no-JavaScript baseline. The archived audits, plans and UI report are closed. No active plan or UX report exists. The main opportunities lie in the transitions between these interactions:
+Vista supports a short, clear set of journeys. Visitors browse rooms, offers and the gallery, then send a project inquiry through the contact form. The core interactions are in place: native form constraints with enhanced validation, filters with ARIA state, a focus-managed lightbox, and a no-JavaScript baseline. The archived audits, plans and UI report are closed. At the time of analysis, no active plan or UX report existed. The main opportunities lie in the transitions between these interactions:
 
 - recovery after a failed form submission;
 - what the visitor sees after a successful one;
@@ -55,7 +62,7 @@ Each proposal refines an existing journey. None adds a booking capability or cha
   - Netlify still records the submission under the `booking` form.
 - **Impact:** High
 - **Effort:** Medium
-- **Status:** IMPLEMENTED — Added a Vista inquiry confirmation page; the deployed page renders, and a live form submission (redirect after POST and a `booking` record in Netlify Forms) remains the only outstanding acceptance check.
+- **Status:** COMPLETED — Vista confirmation page and live form submission verified on Netlify; the `booking` submission was recorded in spam.
 
 ### IMP-UX-03 — Carry the chosen offer into the inquiry form
 
@@ -133,7 +140,7 @@ Three further source-backed opportunities were ranked lower and not included:
 
 - **Static analysis only:** no browser session, screen reader or Netlify deployment was used. Statements about screen-reader output, scroll position and the Netlify post-submission page are source-based or rely on Netlify's documented default behavior.
 - **Checks run:** `npm run check:links` passed. It checks file references and does not validate `#fragment` targets. No other checks were run.
-- **Candidate defects outside this report:** these observations point to defects rather than optional improvements. They belong in an audit and are not proposals here:
-  - The homepage "Dla całej rodziny" card links to `offers.html#biz` instead of `#family` (`index.html:485`).
+- **Candidate defects outside this report (at analysis time):** these observations point to defects rather than optional improvements. They belong in an audit and are not proposals here:
+  - The homepage "Dla całej rodziny" card links to `offers.html#biz` instead of `#family` (`index.html:485`). **Resolved in IMP-UX-03.**
   - Gallery filter scrolling uses `behavior: "smooth"` regardless of `prefers-reduced-motion` (`js/features/gallery-filters.js:48-62`).
   - The header CTA on every page and the homepage/offers CTA panels use "Rezerwuj" / "Zarezerwuj swój pobyt", while the legal pages and the form note state that no reservation is possible.
