@@ -22,7 +22,7 @@ Vista's verification stack is intentionally layered: `check:links` and `check:sy
 - **Acceptance criteria:** Loading `gallery.html#wellness` still pre-selects the Wellness filter. Loading a fragment containing a quote character no longer throws; the page initializes normally with every category visible, and `configureSW()` still runs. A new focused check covers both cases.
 - **Impact:** High
 - **Effort:** Small
-- **Status (2026-09-27): Completed.** Fragment restoration now compares known `data-filter` values strictly, without URL decoding. Chromium encoded the reported literal quote as `%22` and did not reproduce an initialization exception; `#\wellness` did reproduce an incorrect selection with no visible images and now falls back to all. Six fragment regression scenarios passed alongside the eight existing axe scenarios, including post-malformed-URL controls, hashchange, history, scrolling, lightbox filtering, and DEV `configureSW()` continuation. `qa:fast`, `test:a11y`, `build`, and `git diff --check` passed locally.
+- **Status** COMPLETED — Fragment restoration now compares known `data-filter` values strictly, without URL decoding. Chromium encoded the reported literal quote as `%22` and did not reproduce an initialization exception; `#\wellness` did reproduce an incorrect selection with no visible images and now falls back to all. Six fragment regression scenarios passed alongside the eight existing axe scenarios, including post-malformed-URL controls, hashchange, history, scrolling, lightbox filtering, and DEV `configureSW()` continuation. `qa:fast`, `test:a11y`, `build`, and `git diff --check` passed locally.
 
 ### IMP-QUALITY-02 — Add an executable regression test for the booking-date Edge Function
 
@@ -85,6 +85,15 @@ These five proposals were selected because each protects a specific, currently w
 - IMP-QUALITY-05 is fully independent and the smallest of the five.
 
 None depends on another being implemented first. All five are Small effort and stay within the current architecture: no new test framework, no new runtime dependency, and no change to supported functionality or page content. This is an appropriately scoped set for a single focused development session.
+
+## Completion summary
+
+- **Status:** COMPLETED
+- **Completion date:** 2026-09-28
+- All five selected quality improvements were implemented and verified.
+- The completed work strengthened gallery fragment handling, booking-date regression coverage, contact-form accessibility testing, JSON-LD equivalence verification, and image-pipeline failure reporting.
+- No new runtime dependencies or architectural changes were introduced.
+- This report is archived as the completed record of the quality-improvement cycle.
 
 ## Analysis limitations
 
