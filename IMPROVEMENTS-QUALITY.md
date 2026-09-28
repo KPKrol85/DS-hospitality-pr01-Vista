@@ -74,6 +74,7 @@ Vista's verification stack is intentionally layered: `check:links` and `check:sy
 - **Acceptance criteria:** Running `img:opt` over a source set containing one file the pipeline cannot process still generates output for the valid files, still logs the same summary line, and now exits non-zero. Running it over an all-valid source set still exits 0.
 - **Impact:** Low
 - **Effort:** Small
+- **Status:** COMPLETED — One-shot image optimization now exits non-zero on per-file failures while continuing valid processing; isolated fixtures verified valid output generation and exit codes 1 on failure and 0 on success.
 
 ## Selection summary
 

@@ -143,7 +143,10 @@ async function runOptimization({ watch }) {
     `[img] Generated: ${stats.generated}, skipped: ${stats.skipped}, errors: ${stats.errors}`
   );
 
-  if (!watch) return;
+  if (!watch) {
+    if (stats.errors > 0) process.exitCode = 1;
+    return;
+  }
 
   console.log(`[img] Watching ${SRC_ROOT} for changes...`);
 

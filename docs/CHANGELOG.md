@@ -37,6 +37,7 @@ All significant changes to this project are documented in this file.
 
 ### Fixed
 
+- Made one-shot `img:opt` exit non-zero after per-file failures while preserving continued processing, summary output, successful exit code 0, and watch behavior.
 - Hardened gallery URL-fragment matching with strict known-filter comparisons and regression coverage for valid and malformed fragments.
 - Made reveal-marked content visible without JavaScript or when reveal initialization fails, while preserving scroll animations and reduced-motion support.
 - Restored native contact-form validation without JavaScript while preserving enhanced error messages and Netlify Forms submission.
