@@ -7,15 +7,18 @@
 
 ## Improvement overview
 
-The project has a source-mode development server, a clean source-to-`dist/` build, a dependency-free static verification gate, and a separate browser accessibility check. Two distinct workflow opportunities qualify: make the generated package straightforward to inspect locally, and reduce manual synchronization of repeated workflow documentation. These are proposals only; neither is implemented here.
+The project has a source-mode development server, a clean source-to-`dist/` build, a dependency-free static verification gate, and a separate browser accessibility check. Two distinct workflow opportunities qualified: make the generated package straightforward to inspect locally, and reduce manual synchronization of repeated workflow documentation. IMP-WORKFLOW-01 has since been completed; IMP-WORKFLOW-02 remains a proposal.
 
 ## Proposed improvements
 
 ### IMP-WORKFLOW-01 — Provide a local preview for the generated package
 
+- **Status:** COMPLETED (2026-09-28).
+- **Completion summary:** `npm run preview` serves an existing `dist/` package at `http://127.0.0.1:8182/` without rebuilding or live reload. It limits GET and HEAD requests to package files, rejects unsafe paths, and supplies `Service-Worker-Allowed: /` for `/pwa/service-worker.js`. A missing package exits non-zero with a `npm run build` instruction.
+- **Completion verification:** Missing-package exit, clean production build, generated HTML and asset responses, worker header, HEAD without a body, inaccessible repository files, malformed paths, unchanged package contents, port-in-use error, and Chromium registration at scope `/` passed. `npm run qa:fast` and `git diff --check` passed. Netlify platform features were not tested or emulated.
 - **Affected workflow:** Production-build inspection before deployment.
 - **Evidence:** `package.json:6-11,21`; `scripts/dev-server.mjs:7-9,18-21,66-69,128-168`; `scripts/build-dist.mjs:67-73,219-238,313-348`; `docs/CONTEXT-PROJECT.md:35-38,141-155,169`; `netlify.toml:1-3`.
-- **Current workflow:** `npm run dev` serves canonical source files and excludes `dist/`. `npm run build` creates a separate production package whose HTML references bundled assets and registers a generated service worker. The project has no npm command dedicated to serving that package locally; the configured `test:a11y` check serves source pages.
+- **Workflow before implementation:** `npm run dev` serves canonical source files and excludes `dist/`. `npm run build` creates a separate production package whose HTML references bundled assets and registers a generated service worker. The project had no npm command dedicated to serving that package locally; the configured `test:a11y` check serves source pages.
 - **Proposed improvement:** Add one explicit, read-only local preview command for an already built `dist/` package. Reuse the existing HTTP-serving conventions where practical. Keep source development and Netlify-specific behavior clearly separate.
 - **Expected practical value:** A repeatable way to inspect the exact packaged HTML, bundles, asset paths, and service-worker registration before handing the package to Netlify, without an ad hoc server setup.
 - **Implementation scope:** A focused npm script and the minimum server code needed to serve `dist/` at a local root origin with correct content types and a clear error when the package is absent. Do not rebuild on preview, expose repository sources, emulate Netlify Forms/Edge Functions, or change deployment configuration.

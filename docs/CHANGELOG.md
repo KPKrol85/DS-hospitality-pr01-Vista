@@ -32,6 +32,7 @@ All significant changes to this project are documented in this file.
 - Moved CSS and JavaScript production bundles into disposable `dist/` output; both `build` and `build:dist` now rebuild a clean package from current sources, while standalone bundle commands preserve other distribution files. Set Netlify to run the full build and publish `dist/`.
 - Limited service worker registration to production-marked HTML, added scoped cleanup of prior Vista registrations and caches during development, and generated the production worker from packaged assets.
 - Added a lightweight `npm run dev` server with live reload, secure source-file serving, and no changes to the production build.
+- Added `npm run preview` to serve an existing `dist/` package locally at `127.0.0.1:8182`, with safe GET/HEAD access, a clear missing-build error, and the root-scope service-worker header.
 - Added `qa:fast` with link-integrity, JavaScript syntax, and JSON syntax checks for everyday verification.
 - Moved accessibility checks to project-managed Playwright and axe-core dependencies and synchronized npm and Deno lockfiles.
 
