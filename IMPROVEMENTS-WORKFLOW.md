@@ -7,7 +7,7 @@
 
 ## Improvement overview
 
-The project has a source-mode development server, a clean source-to-`dist/` build, a dependency-free static verification gate, and a separate browser accessibility check. Two distinct workflow opportunities qualified: make the generated package straightforward to inspect locally, and reduce manual synchronization of repeated workflow documentation. IMP-WORKFLOW-01 has since been completed; IMP-WORKFLOW-02 remains a proposal.
+The project has a source-mode development server, a clean source-to-`dist/` build, a dependency-free verification gate, and a separate browser accessibility check. Two distinct workflow opportunities qualified: make the generated package straightforward to inspect locally, and reduce manual synchronization of repeated workflow documentation. IMP-WORKFLOW-01 and IMP-WORKFLOW-02 have since been completed.
 
 ## Proposed improvements
 
@@ -28,9 +28,12 @@ The project has a source-mode development server, a clean source-to-`dist/` buil
 
 ### IMP-WORKFLOW-02 — Give workflow documentation one maintenance path
 
+- **Status:** COMPLETED (2026-09-29).
+- **Completion summary:** Established `package.json` as command authority and `docs/settings.md` as the detailed workflow guide, with concise PL/EN README usage, stable project-context maintenance rules, and distribution-specific dist notes. Documented all four `qa:fast` checks and the existing production preview, replaced fixed page inventories with automatic root HTML discovery, and corrected active documentation paths. Historical records remain unchanged.
+- **Completion verification:** Compared all 17 command-table entries with `package.json`; reviewed preview and page discovery against their source scripts; checked README PL/EN factual parity, matching code spans and links, and absence of stale paths/page counts in maintained guides. `git diff --check` passed. No QA suite, build, browser check, or deployment was run for these documentation-only changes.
 - **Affected workflow:** Updating developer command and generated-page guidance when scripts or public pages change.
 - **Evidence:** `package.json:16-21`; `README.md:73-79,183-189`; `docs/settings.md:5-22`; `docs/CONTEXT-PROJECT.md:32,158-170,202-214`; `docs/dist-notes.md:5-16`; `scripts/build-dist.mjs:67-73,313-315`.
-- **Current workflow:** `package.json` defines the commands, while the README, project context, and settings guide repeat details of `qa:fast`. The README and context describe its earlier two-check sequence, although the current script also runs booking-date and JSON-LD checks. The context and dist notes enumerate 11 pages, while the build discovers root HTML files automatically and the repository now contains 12. The project context also uses historical `doc/` paths where the current folder is `docs/`. These factual discrepancies are documentation defects; the workflow opportunity is the repeated maintenance that allows them to recur.
+- **Workflow before implementation:** `package.json` defines the commands, while the README, project context, and settings guide repeat details of `qa:fast`. The README and context describe its earlier two-check sequence, although the current script also runs booking-date and JSON-LD checks. The context and dist notes enumerate 11 pages, while the build discovers root HTML files automatically and the repository now contains 12. The project context also uses historical `doc/` paths where the current folder is `docs/`. These factual discrepancies are documentation defects; the workflow opportunity is the repeated maintenance that allows them to recur.
 - **Proposed improvement:** Define a compact ownership rule for command and page-inventory descriptions: `package.json` remains the command authority, one maintained guide carries command details, and other documents link to it or state only stable use cases. Describe automatic page discovery instead of maintaining independent page lists where an exact list is unnecessary. State which documentation is checked when scripts or root pages change.
 - **Expected practical value:** Fewer manually synchronized descriptions and a clearer update path for future build or verification changes.
 - **Implementation scope:** Narrow edits to the relevant README and `docs/` workflow sections only. Correct the identified stale claims as factual maintenance while establishing ownership; retain Polish/English README parity and the existing build, QA, Git, and Netlify contracts. No new generator, dependency, or broad documentation rewrite.

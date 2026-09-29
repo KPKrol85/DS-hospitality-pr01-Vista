@@ -1,5 +1,7 @@
 # settings.md
 
+This is the maintained detailed developer workflow guide. [`package.json`](../package.json) is authoritative for available npm scripts and their exact command chains. See the [project context maintenance rules](CONTEXT-PROJECT.md#maintenance-rules) for documentation ownership and the update path when scripts or root HTML pages change.
+
 Root HTML, `css/style.css` with `css/modules/`, and `js/script.js` with `js/features/` are the editable development sources. A local HTTP server can serve these files directly. Production bundles are generated only in `dist/`; the full build marks packaged HTML with `data-vista-build="production"` for service worker registration. Root `netlify.toml` runs `npm run build` and publishes `dist/`.
 
 ## npm scripts (from `package.json`)
@@ -7,6 +9,7 @@ Root HTML, `css/style.css` with `css/modules/`, and `js/script.js` with `js/feat
 | Script | Command | What it does | When to use |
 |---|---|---|---|
 | `dev` | `node scripts/dev-server.mjs` | Serves canonical sources at `http://127.0.0.1:8181` and reloads the browser when root pages, `css/`, `js/`, or `assets/` change. Requires no build and never reads or writes `dist/`. | For day-to-day local development in source mode. |
+| `preview` | `node scripts/preview-dist.mjs` | Serves an already built `dist/` at `http://127.0.0.1:8182/` without rebuilding, live reload, or file changes. A missing package fails with an instruction to run `npm run build`. | After a production build, to inspect packaged pages, assets, and service worker behavior locally. |
 | `build:css` | `postcss ./css/style.css -o ./dist/css/style.min.css && node ./scripts/verify-build.mjs css ./dist/css/style.min.css` | Builds and verifies `dist/css/style.min.css` from canonical CSS without clearing other distribution files. | For a focused CSS build; the full build also runs it. |
 | `build:js` | `esbuild ./js/script.js --bundle --minify --target=es2018 --format=iife --outfile=./dist/js/script.min.js && node ./scripts/verify-build.mjs js ./dist/js/script.min.js` | Bundles and verifies `dist/js/script.min.js` from canonical JavaScript without clearing other distribution files. | For a focused JavaScript build; the full build also runs it. |
 | `build` | `npm run build:dist` | Alias for the complete, clean production build. | To prepare the deployable package. |
@@ -18,5 +21,11 @@ Root HTML, `css/style.css` with `css/modules/`, and `js/script.js` with `js/feat
 | `test` | `echo "Error: no test specified" && exit 1` | Placeholder script that intentionally fails. | Not for normal use; replace when adding real automated tests. |
 | `check:links` | `node scripts/check-link-integrity.mjs` | Verifies local links/assets across HTML files and `sitemap.xml`. | As a QA gate before publishing or merging. |
 | `check:syntax` | `node scripts/qa-syntax.mjs` | Read-only syntax check that never executes code: ES modules (`js/script.js`, `js/features/`, `netlify/edge-functions/`, `scripts/*.mjs`), classic scripts (`js/theme-init.js`, `pwa/service-worker.js`), CommonJS (`postcss.config.cjs`), and JSON (`assets/seo/*.json`). Reports the file, check, and line. | As part of `qa:fast`, or alone after editing JavaScript or JSON-LD payloads. |
-| `qa:fast` | `npm run check:links && npm run check:syntax` | Fast static gate: link integrity, then JavaScript and JSON syntax. Stops at the first failing check; launches no browser and runs no build. | For everyday verification before committing or merging. |
+| `check:booking-date` | `node scripts/check-booking-date.mjs` | Executes the booking-date Edge Function locally with Warsaw-relative dates, asserting HTTP 422 for invalid arrivals and pass-through for allowed requests. Sends no network requests. | As part of `qa:fast`, or alone after changing arrival-date validation. |
+| `check:jsonld` | `node scripts/check-jsonld-pairs.mjs` | Checks each root HTML page's embedded JSON-LD fallback against its referenced JSON file under `assets/seo/` for parsed-data equivalence. Does not validate schema.org semantics. | As part of `qa:fast`, or alone after changing pages or their JSON-LD pairs. |
+| `qa:fast` | `npm run check:links && npm run check:syntax && npm run check:booking-date && npm run check:jsonld` | Fast gate: link integrity, JavaScript and JSON syntax, booking-date regression, then JSON-LD pair equivalence. Stops at the first failing check; launches no browser and runs no build. | For everyday verification before committing or merging. |
 | `test:a11y` | `node scripts/a11y-axe.mjs` | Runs axe-core accessibility checks for the configured scenarios in headless Chromium through Playwright, using the locked `playwright` and `axe-core` devDependencies; downloads nothing at run time. Requires `npm ci` and a Playwright Chromium browser (`npx playwright install chromium`). | For browser-based accessibility regression checks before release; slower than `qa:fast`. |
+
+## Local production preview
+
+Run `npm run build`, then `npm run preview`, and open `http://127.0.0.1:8182/`. Rebuild after source changes to refresh the package; stop preview with Ctrl+C. Preview serves only package files through GET/HEAD and supplies `Service-Worker-Allowed: /` for the production worker. It does not emulate Netlify Forms, Edge Functions, or the full Netlify header and redirect behavior. Use `npm run dev` for source editing with live reload. See [dist notes](dist-notes.md) for packaging behavior.

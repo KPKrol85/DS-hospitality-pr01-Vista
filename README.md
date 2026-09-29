@@ -67,6 +67,14 @@ npm run build
 
 `npm run build` jest aliasem `npm run build:dist`. Obie komendy czyszczą `dist/`, generują z aktualnych źródeł `dist/css/style.min.css` i `dist/js/script.min.js`, pakują wymagane pliki publiczne, przepisują odwołania w kopiach HTML i weryfikują wynik. Produkcyjny HTML otrzymuje znacznik `data-vista-build="production"`, który steruje rejestracją Service Workera. Worker powstaje po przygotowaniu zasobów pakietu. `npm run build:css` i `npm run build:js` tworzą osobne pliki w `dist/` bez czyszczenia pozostałej zawartości; `npm run dist:clean` usuwa tylko wygenerowany katalog `dist/`. Plików w `dist/` nie należy edytować ręcznie ani dodawać do repozytorium.
 
+Build automatycznie wykrywa wszystkie pliki `*.html` w katalogu głównym; nie wymaga ręcznego wykazu stron. Gotowy `dist/` można obejrzeć lokalnie:
+
+```bash
+npm run preview
+```
+
+Podgląd wymaga wcześniejszego buildu i działa pod `http://127.0.0.1:8182/`. Nie przebudowuje pakietu ani nie przeładowuje stron automatycznie; po zmianach źródeł ponownie uruchom build. Umożliwia sprawdzenie pakietu i produkcyjnego Service Workera, ale nie odtwarza Netlify Forms, Edge Functions ani pełnego zachowania nagłówków i przekierowań Netlify. Szczegóły: [przewodnik workflow](docs/settings.md#local-production-preview).
+
 ### Testy i walidacja
 
 ```bash
@@ -74,7 +82,7 @@ npm run qa:fast
 npm run test:a11y
 ```
 
-`qa:fast` to szybka kontrola statyczna do codziennej pracy. Uruchamia kolejno `check:links` i `check:syntax`, bez przeglądarki i bez buildu produkcyjnego, i zatrzymuje się na pierwszej nieudanej kontroli; obie komendy można też uruchomić osobno. `check:links` sprawdza lokalne odwołania w głównych stronach HTML i ścieżki z `sitemap.xml`. `check:syntax` sprawdza wyłącznie składnię, bez uruchamiania kodu: moduły ES (`js/script.js`, `js/features/`, `netlify/edge-functions/`, `scripts/*.mjs`), klasyczne skrypty `js/theme-init.js` i `pwa/service-worker.js`, `postcss.config.cjs` jako CommonJS oraz pliki JSON w `assets/seo/`. Nie ocenia treści danych strukturalnych.
+`qa:fast` to szybka kontrola do codziennej pracy. Uruchamia kolejno `check:links`, `check:syntax`, `check:booking-date` i `check:jsonld`: sprawdza lokalne odwołania, składnię JavaScript i JSON, walidację daty przez lokalne wykonanie Edge Function oraz zgodność par JSON-LD. Nie uruchamia przeglądarki ani buildu i zatrzymuje się na pierwszym błędzie. Każdą kontrolę można uruchomić osobno. Źródłem prawdy dla komend i ich kolejności jest `package.json`; szczegóły opisuje utrzymywany [przewodnik workflow](docs/settings.md).
 
 `test:a11y` to osobna, wolniejsza kontrola w przeglądarce. Serwuje strony źródłowe i uruchamia reguły axe-core w Chromium przez Playwright dla skonfigurowanych scenariuszy. Korzysta z wersji `playwright` i `axe-core` zapisanych w `package-lock.json` i zainstalowanych przez `npm ci`; nie pobiera pakietów podczas uruchomienia. Wymaga przeglądarki Chromium dla Playwright, którą można zainstalować poleceniem `npx playwright install chromium`. Skrypt `npm test` jest placeholderem, który kończy się błędem.
 
@@ -177,6 +185,14 @@ npm run build
 
 `npm run build` is an alias for `npm run build:dist`. Both commands clean `dist/`, generate `dist/css/style.min.css` and `dist/js/script.min.js` from current sources, package the required public files, rewrite references in copied HTML, and verify the result. Production HTML receives a `data-vista-build="production"` marker that controls service worker registration. The worker is generated after the package assets are prepared. `npm run build:css` and `npm run build:js` create their individual files in `dist/` without cleaning other output; `npm run dist:clean` removes only the generated `dist/` directory. Files in `dist/` should not be edited manually or committed.
 
+The build automatically discovers all root `*.html` files; no manual page list is required. Preview the completed `dist/` locally:
+
+```bash
+npm run preview
+```
+
+Preview requires a prior build and runs at `http://127.0.0.1:8182/`. It does not rebuild the package or reload pages automatically; rerun the build after source changes. It lets you inspect the package and production service worker, but does not emulate Netlify Forms, Edge Functions, or the full Netlify header and redirect behavior. Details: [workflow guide](docs/settings.md#local-production-preview).
+
 ### Testing and Validation
 
 ```bash
@@ -184,7 +200,7 @@ npm run qa:fast
 npm run test:a11y
 ```
 
-`qa:fast` is the fast static check for everyday work. It runs `check:links` and then `check:syntax`, without a browser or a production build, and stops at the first failing check; both commands can also be run separately. `check:links` checks local references in root HTML pages and paths in `sitemap.xml`. `check:syntax` checks syntax only, without executing code: ES modules (`js/script.js`, `js/features/`, `netlify/edge-functions/`, `scripts/*.mjs`), the classic scripts `js/theme-init.js` and `pwa/service-worker.js`, `postcss.config.cjs` as CommonJS, and JSON files in `assets/seo/`. It does not assess structured-data content.
+`qa:fast` is the fast check for everyday work. It runs `check:links`, `check:syntax`, `check:booking-date`, and `check:jsonld` in order: local references, JavaScript and JSON syntax, date validation by executing the Edge Function locally, and JSON-LD pair equivalence. It launches no browser or build and stops at the first failure. Each check can also be run separately. `package.json` is authoritative for commands and their order; details are in the maintained [workflow guide](docs/settings.md).
 
 `test:a11y` is a separate, slower browser check. It serves the source pages and runs axe-core rules in Chromium through Playwright for the configured scenarios. It uses the `playwright` and `axe-core` versions recorded in `package-lock.json` and installed by `npm ci`; it does not download packages at run time. It requires a Playwright Chromium browser, which can be installed with `npx playwright install chromium`. The `npm test` script is a placeholder that exits with an error.
 

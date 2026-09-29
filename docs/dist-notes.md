@@ -4,17 +4,7 @@
 
 ## Copied HTML pages
 
-- `404.html`
-- `contact.html`
-- `cookies.html`
-- `gallery.html`
-- `index.html`
-- `offers.html`
-- `offline.html`
-- `onas.html`
-- `polityka-prywatnosci.html`
-- `regulamin.html`
-- `rooms.html`
+`scripts/build-dist.mjs` automatically discovers all regular root `*.html` files. It packages them according to the source asset-tag contract, rewrites their production references, and includes them in the generated worker's precache. No separate page list or fixed package page count is maintained here; see the [project context](CONTEXT-PROJECT.md#maintenance-rules) for page-maintenance requirements.
 
 ## Generated production paths
 
@@ -52,7 +42,7 @@
 - `scripts/`
 - `node_modules/`
 - `postcss.config.cjs`
-- `doc/`
+- `docs/`
 - `README.md`
 - `package-lock.json`
 
@@ -63,5 +53,8 @@
 - `npm run build:js`
 - `npm run build:dist`
 - `npm run build` (alias of `build:dist`)
+- `npm run preview` (inspects an already built `dist/`; does not rebuild)
+
+[`package.json`](../package.json) is authoritative for these scripts; the maintained [workflow guide](settings.md) covers command usage and local preview.
 
 The output paths above are relative to `dist/`. Source-tree copies of `css/style.min.css` and `js/script.min.js` are obsolete and ignored. `dist/` is generated and must not be edited or committed.

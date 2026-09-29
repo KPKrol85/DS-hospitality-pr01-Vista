@@ -20,6 +20,7 @@ All significant changes to this project are documented in this file.
 
 ### Documentation
 
+- Established workflow documentation ownership around `package.json` and `docs/settings.md`, aligned PL/EN README guidance with all four `qa:fast` checks and production preview, and replaced stale page inventories and documentation paths with automatic-discovery guidance and current paths.
 - Aligned the terms, privacy policy, and cookies policy with the site's demonstrational scope and the implemented contact form, browser storage, offline caching, and embedded map.
 - Replaced the root `LICENSE` with project-specific Polish and English KP_Code proprietary terms.
 - Aligned Polish and English README accessibility descriptions with the implemented reveal behavior and form validation.

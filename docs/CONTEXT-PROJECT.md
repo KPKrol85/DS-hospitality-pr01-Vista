@@ -29,7 +29,7 @@ The project is released under proprietary KP_Code terms (`LICENSE`), not an open
 
 ## Architecture
 
-- **Static MPA.** 11 root-level HTML files, each a complete document: `index.html`, `rooms.html`, `offers.html`, `gallery.html`, `onas.html`, `contact.html`, `regulamin.html`, `polityka-prywatnosci.html`, `cookies.html`, `404.html`, `offline.html`.
+- **Static MPA.** Root `*.html` files are complete documents. The distribution build automatically discovers these pages; there is no separate package page list.
 - **No templating.** The shared shell (head metadata pattern, header and navigation, theme toggle, project-notice modal, footer with author contact details) is duplicated in every page.
 - **Progressive enhancement.** `<html class="no-js">` becomes `js` when `js/script.js` runs. Content and navigation are usable without JavaScript. Menu, tabs, filters, lightbox, reveal animation, enhanced form validation, and the map embed activate only after successful initialization.
 - **Two runtime modes:**
@@ -60,7 +60,7 @@ The project is released under proprietary KP_Code terms (`LICENSE`), not an open
 
 ```text
 .
-├── *.html                  # 11 canonical pages (complete documents)
+├── *.html                  # canonical pages (complete documents; auto-discovered)
 ├── css/
 │   ├── style.css           # CSS entry; @imports modules in cascade order
 │   └── modules/            # tokens, base, layout, components, sections,
@@ -77,7 +77,7 @@ The project is released under proprietary KP_Code terms (`LICENSE`), not an open
 │   └── fonts/, img/{icons,logo,og,ui,screenshots,shortcuts}/
 ├── netlify/                # _headers, _redirects, edge-functions/
 ├── scripts/                # dev server, build, image, link-check, syntax-check, and a11y scripts
-├── doc/                    # CHANGELOG, pipeline notes, archive/
+├── docs/                   # workflow guide, project context, dist notes, CHANGELOG, archive/
 └── netlify.toml, site.webmanifest, robots.txt, sitemap.xml
 ```
 
@@ -104,7 +104,7 @@ The project is released under proprietary KP_Code terms (`LICENSE`), not an open
 
   The build fails otherwise.
 - **Content Security Policy** (`netlify/_headers`): `script-src 'self'`, `style-src 'self'`, and `frame-src` limited to Google Maps. Do not use inline scripts (JSON-LD data blocks excepted), `<style>` blocks, `style` attributes, inline event handlers, or third-party scripts, styles, or fonts without updating the CSP.
-- **Language:** site content is Polish. `README.md` is bilingual PL/EN, and its two sections must stay factually equivalent. `doc/` files and commit messages are in English.
+- **Language:** site content is Polish. `README.md` is bilingual PL/EN, and its two sections must stay factually equivalent. `docs/` files and commit messages are in English.
 
 ## Quality contracts
 
@@ -143,33 +143,20 @@ The project is released under proprietary KP_Code terms (`LICENSE`), not an open
   - Live reload: chokidar watches the same public surface, and changes are debounced into one full-page reload sent over Server-Sent Events (`/__vista-dev/reload`). The client (`/__vista-dev/reload.js`) is injected into HTML responses in memory; source files are never modified.
   - Separate from the production build: it needs no build or `.min` files, never reads or writes `dist/`, never adds `data-vista-build`, and registers no service worker. It does not emulate Netlify Forms, Edge Functions, `_headers`, or `_redirects`; non-GET/HEAD requests return 405.
   - Any static HTTP server can still serve the repository root in source mode, without live reload.
-- **`npm run build`** (alias of `build:dist`) runs:
-  1. `dist:clean`: removes `dist/`.
-  2. `build:css`: PostCSS writes `dist/css/style.min.css`, and `scripts/verify-build.mjs` rejects any remaining `@import`.
-  3. `build:js`: esbuild writes `dist/js/script.min.js`, and the verifier rejects any remaining `import`/`export`.
-  4. `scripts/build-dist.mjs`:
-     - copies the listed asset directories (`REQUIRED_DIRS`), `js/theme-init.js`, the manifest, `robots.txt`, `sitemap.xml`, and `netlify/_headers` and `netlify/_redirects` into the `dist/` root;
-     - auto-discovers every root `*.html`, adds `data-vista-build="production"`, points CSS and JS at the bundles, and rewrites any `assets/img/src/` reference;
-     - generates `dist/pwa/service-worker.js` with a precache list (all HTML pages, both bundles, `js/theme-init.js`, the manifest) and a 12-hex content-hash cache version;
-     - verifies the package: required files, rewritten references, no development sources, and precache consistency.
+- **Production build:** `npm run build` creates a clean `dist/` from canonical sources, including bundles, public assets, and automatically discovered root `*.html` pages. Packaged HTML receives production references and `data-vista-build="production"`; the generated worker precaches the pages and core assets with a content-based cache version. Package integrity is checked by the build. See [dist notes](dist-notes.md) for distribution-specific behavior and [settings](settings.md) for command details.
+- **Production preview:** `npm run preview` serves an already built `dist/` locally without rebuilding it. It allows production-mode inspection but does not emulate Netlify platform behavior; usage and origin are maintained in [settings](settings.md#local-production-preview).
 - `build:css` and `build:js` on their own write into `dist/` without cleaning it.
 - **Image pipeline:** `img:opt` mirrors `assets/img/src/` (JPEG/PNG) into `assets/img/optimized/` as a copy of the original plus WebP and AVIF, max width 2000px. It is incremental by modification time. `img:watch` runs the same process continuously. `img:clean` deletes all of `assets/img/optimized/`, which includes tracked files.
 
 ## Testing and verification
 
-- **No unit or integration test suite.** `npm test` is a placeholder that exits with an error.
-- **`npm run qa:fast`:** the everyday static gate. Runs `check:links`, then `check:syntax`, and stops at the first failure. It launches no browser and runs no build.
-- **`npm run check:links`:** static check of local `href`, `src`, and `srcset` references in root HTML, plus `sitemap.xml` `<loc>` paths mapped to root files.
-- **`npm run check:syntax`:** `scripts/qa-syntax.mjs` parses files without executing them:
-  - ES module goal (`node --check --input-type=module`): `js/script.js`, `js/features/*.js`, `netlify/edge-functions/*.js`, `scripts/*.mjs`, and root `*.mjs`;
-  - classic script goal (`vm.Script`): `js/theme-init.js` and `pwa/service-worker.js`, listed in `CLASSIC_SCRIPTS`. A new non-module browser script must be added there;
-  - CommonJS (`vm.compileFunction`): root `*.cjs` (`postcss.config.cjs`);
-  - `JSON.parse`: `assets/seo/*.json`. Syntax only; JSON-LD semantics are not checked.
-  - Only those directories are read, and `*.min.js` is skipped. Failures list the file, check, and line.
-- **`npm run test:a11y`:** runs `node scripts/a11y-axe.mjs`, which resolves `playwright` and `axe-core` from the project's locked devDependencies (install with `npm ci`) and downloads nothing at run time. It needs a Playwright Chromium browser (`npx playwright install chromium`). It serves the repository root (source pages, not `dist/`) and runs axe-core rules (`wcag2a`, `wcag2aa`, `best-practice`) in headless Chromium. It covers 8 scenarios: index baseline and open mobile menu, rooms baseline and active Deluxe room filter (only Deluxe cards visible), gallery baseline and open lightbox, contact, and regulamin.
+- **`npm test`:** a placeholder that exits with an error; use the focused verification commands documented in [settings](settings.md).
+- **`npm run qa:fast`:** the everyday gate for local links, JavaScript/JSON syntax, executable booking-date regression, and JSON-LD pair equivalence. It stops at the first failure, launches no browser, and runs no build. The exact chain belongs to `package.json`; individual check usage is maintained in [settings](settings.md).
+- **Syntax coverage:** a new non-module browser script must be added to `CLASSIC_SCRIPTS` in `scripts/qa-syntax.mjs`.
+- **`npm run test:a11y`:** the separate browser check runs configured regression scenarios and axe-core rules on source pages, not `dist/`. Dependencies and setup are documented in [settings](settings.md).
 - `npm run build` also checks the integrity of the production package.
 - **Verification model:**
-  - Prefer fast static checks (`npm run qa:fast`) and focused verification tied to the change. `test:a11y` is the slower browser-based check.
+  - Prefer fast checks (`npm run qa:fast`) and focused verification tied to the change. `test:a11y` is the slower browser-based check.
   - When behavior can differ between modes (asset references, service worker, bundling), check both source pages and a freshly built `dist/`.
   - Run broad regression only when the task requires it.
 
@@ -200,15 +187,19 @@ The project is released under proprietary KP_Code terms (`LICENSE`), not an open
   - Do not hand-edit `assets/img/optimized/`. Change `assets/img/src/`, run `npm run img:opt`, and commit the regenerated variants.
   - After `img:clean`, regenerate before building.
 - **Shell and page changes:**
-  - Apply shared shell changes (header, navigation, footer, project notice, head patterns) to all 11 root pages.
+  - Apply shared shell changes (header, navigation, footer, project notice, head patterns) to all root pages.
   - A new root page is packaged and precached automatically. It must meet the asset-tag contract, replicate the shell, and add a JSON-LD fallback with a matching `assets/seo/ld-<page>.json`. Add it to `sitemap.xml` when it is indexable.
+  - When adding or removing a root page, review page-specific metadata, JSON-LD pairs, sitemap entries, and links against these contracts. Rely on build discovery rather than maintaining package page counts. Review README usage and dist notes only if the public workflow or packaging contract changes.
 - **Coordinated edits:**
   - Update each embedded JSON-LD fallback and its `assets/seo/` file together.
   - Change the public origin in every canonical URL, Open Graph and Twitter tag, both JSON-LD copies, `sitemap.xml`, and `robots.txt` at once.
 - **Build script and headers:**
   - Keep the service worker template placeholders intact. Precache scope is set in `scripts/build-dist.mjs` (`DIST_STATIC_ASSETS`), and packaged asset directories in `REQUIRED_DIRS`. A new public asset directory not listed there will be missing from `dist/`.
   - Any new external resource or embed requires a matching CSP change in `netlify/_headers`.
-- **Script references:** `package.json` is authoritative for available scripts. `doc/settings.md` and `doc/dist-notes.md` describe the current pipeline. `doc/pipeline-notes.md` is a historical record.
+- **Workflow documentation ownership:**
+  - `package.json` is authoritative for available npm scripts and their exact command chains. [Settings](settings.md) is the maintained detailed developer workflow guide; README keeps concise usage in equivalent PL/EN sections. This context owns stable architecture, source ownership, and maintenance contracts. [Dist notes](dist-notes.md) covers distribution-specific behavior only.
+  - When adding or changing an npm script, update `package.json` and review `docs/settings.md`. Review README when user-facing workflow changes; update this context only when a stable workflow or architecture contract changes, and dist notes when packaging behavior changes.
+  - `docs/pipeline-notes.md` and completed audits, plans, reviews, and improvement reports are historical records; do not synchronize them to current commands or page counts.
 - **Project documents:**
-  - Active `PLAN.md` and `AUDIT.md` live at the repository root while in use. Completed ones move to `doc/archive/plans/PLAN-YYYY-MM-DD.md` and `doc/archive/audits/{AUDIT,REVIEW}-YYYY-MM-DD.md`.
-  - Significant completed changes go in `doc/CHANGELOG.md`.
+  - Active `PLAN.md` and `AUDIT.md` live at the repository root while in use. Completed ones move to `docs/archive/plans/PLAN-YYYY-MM-DD.md` and `docs/archive/audits/{AUDIT,REVIEW}-YYYY-MM-DD.md`.
+  - Significant completed changes go in `docs/CHANGELOG.md`.
