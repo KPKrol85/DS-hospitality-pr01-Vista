@@ -179,7 +179,7 @@
 }
 .benefit__text {
   margin: 0;
-  font-size: var(--fs-200);
+  font-size: var(--fs-supporting);
   color: var(--muted);
 }
 @media (min-width: 480px) {
@@ -211,10 +211,10 @@
 .highlight p {
   max-width: 34ch;
   margin-inline: var(--space-lg);
-  font-size: var(--fs-300);
+  font-size: var(--fs-supporting);
 }
 .list {
-  font-size: var(--fs-200);
+  font-size: var(--fs-supporting);
 }
 .highlight__media img {
   border-radius: var(--radius-md);
@@ -268,13 +268,13 @@
 }
 .testimonial__quote {
   margin: 0 0 var(--space-xs);
-  font-size: var(--fs-300);
+  font-size: var(--fs-supporting);
   line-height: var(--lh-relaxed);
 }
 .testimonial__author {
   margin: 0;
   color: var(--muted);
-  font-size: var(--fs-200);
+  font-size: var(--fs-meta);
 }
 
 /* Sections */

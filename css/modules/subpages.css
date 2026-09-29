@@ -32,7 +32,7 @@
 .offer-card__meta {
   display: inline-block;
   margin-bottom: var(--space-md);
-  font-size: var(--fs-300);
+  font-size: var(--fs-meta);
   line-height: var(--lh-snug);
   color: var(--muted);
   letter-spacing: var(--ls-wide);
@@ -42,7 +42,7 @@
   margin: var(--space-sm) 0 var(--space-md);
   padding-left: var(--space-lg);
   color: var(--muted);
-  font-size: var(--fs-300);
+  font-size: var(--fs-supporting);
   line-height: var(--lh-relaxed);
 }
 .offer-card__list li + li {
@@ -310,7 +310,7 @@
 .brand__text {
   margin: 0;
   max-width: 56ch;
-  font-size: var(--fs-200);
+  font-size: var(--fs-supporting);
   line-height: var(--lh-relaxed);
   color: var(--muted);
 }
@@ -329,7 +329,7 @@
 }
 .brand__stat-label {
   margin-top: var(--space-xs);
-  font-size: var(--fs-200);
+  font-size: var(--fs-meta);
   color: var(--muted);
 }
 @media (min-width: 760px) {

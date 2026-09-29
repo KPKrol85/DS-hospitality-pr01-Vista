@@ -771,7 +771,7 @@ body.has-project-modal {
 .offer-card__text {
   margin: var(--space-xs) 0;
   color: var(--muted);
-  font-size: var(--fs-200);
+  font-size: var(--fs-supporting);
   text-align: center;
   letter-spacing: var(--ls-subtle);
 }
@@ -822,7 +822,7 @@ body.has-project-modal {
 .section--cta .cta-text {
   margin: 0 auto;
   color: var(--muted);
-  font-size: var(--fs-200);
+  font-size: var(--fs-supporting);
   max-width: 42ch;
 }
 .section--cta .btn {
@@ -956,10 +956,10 @@ body.has-project-modal {
 }
 .room-card__meta {
   color: var(--muted);
-  font-size: var(--fs-200);
+  font-size: var(--fs-meta);
 }
 .room-card__text {
-  font-size: var(--fs-200);
+  font-size: var(--fs-supporting);
 }
 
 @media (min-width: 760px) {

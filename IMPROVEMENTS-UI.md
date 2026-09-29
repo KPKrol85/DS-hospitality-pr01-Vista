@@ -23,13 +23,14 @@ Each proposal applies existing tokens and patterns more consistently and keeps t
 
 ### IMP-UI-01 — Map descriptive card and section copy to one supporting-text step
 
+- **Status:** COMPLETED (2026-09-29)
 - **Affected area:** Descriptive paragraphs, lists and metadata in these places:
   - `index.html`: benefits, room and offer cards, the highlight block, testimonials and the CTA panel;
   - `offers.html`: offer cards;
   - `rooms.html`: room cards;
   - `onas.html`: brand cards and stats.
 - **Evidence:** `css/modules/base.css:5-17`, `css/modules/tokens.css:40-51`, `css/modules/sections.css:180-184`, `css/modules/sections.css:211-218`, `css/modules/sections.css:269-278`, `css/modules/components.css:771-777`, `css/modules/components.css:822-827`, `css/modules/components.css:957-963`, `css/modules/subpages.css:32-47`, `css/modules/subpages.css:107-113`, `css/modules/subpages.css:158-163`, `css/modules/subpages.css:272-277`, `css/modules/subpages.css:310-316`, `css/modules/subpages.css:330-334`, `offers.html:153-164`, `onas.html:184-203`
-- **Current state:** Body text uses `--fs-400`, which is 16 px at a 390 px viewport and 17.4 px at 1280 px. The legal pages also use this size for their paragraphs. Descriptive copy in the other components uses two smaller steps without a role rule:
+- **State before implementation:** Body text uses `--fs-400`, which is 16 px at a 390 px viewport and 17.4 px at 1280 px. The legal pages also use this size for their paragraphs. Descriptive copy in the other components uses two smaller steps without a role rule:
   - `--fs-200` (12.8 px at 390 px, 13.4 px at 1280 px): benefit text, room card metadata and text, offer card text, CTA text, the highlight bullet list, the two-sentence brand card paragraphs and stat labels.
   - `--fs-300` (14.4 px at 390 px, 15.0 px at 1280 px): the highlight paragraph, testimonial quotes, the offer card eyebrow and bullet list, and the brand lead.
 
@@ -55,6 +56,9 @@ Each proposal applies existing tokens and patterns more consistently and keeps t
   - At 390, 800 and 1280 px, card grids keep their column counts and card buttons keep their alignment. No text overflows.
 - **Impact:** High
 - **Effort:** Medium
+
+- **Completion:** Added `--fs-supporting: var(--fs-300)` and `--fs-meta: var(--fs-200)` in `tokens.css`. All nine descriptive selectors in the acceptance criteria use the supporting role; room metadata, testimonial attributions, brand stat labels and offer eyebrows (`.offer-card__meta`) use the metadata role. `.list` occurs only in the homepage highlight block. Lead sizes remain unchanged; offer descriptions match their lists and exceed their eyebrows, and the highlight paragraph and list share one size. Only font-size references and the two aliases changed; HTML, JavaScript, headings, buttons, badges, form/legal typography, line-height declarations, colours, spacing and layout rules are unchanged.
+- **Verification:** Local source-mode Playwright/Chromium measurements before and after the change passed on `index.html`, `offers.html`, `rooms.html` and `onas.html` at 390, 800 and 1280 px (12 page/viewport combinations). Supporting sizes: 14.4 / 14.688 / 15.0336 px; metadata: 12.8 / 13.056 / 13.3632 px. Role sizes, lead hierarchy, both resolved inversions, unchanged grid column counts, button horizontal positions and offsets from card bottoms passed; no in-scope text or page overflow was detected. Existing automatic grid stretching changes some button heights as text reflows, while typography and alignment remain unchanged. `npm run build` passed (12 HTML pages), all four `qa:fast` checks passed, and `git diff --check` passed. Non-blocking warnings: old Browserslist data and Node module-type detection. No `test:a11y`, other-browser, production-browser or live-deployment checks were run; all required verification was available.
 
 ### IMP-UI-02 — Give the current navigation link a state distinct from hover
 

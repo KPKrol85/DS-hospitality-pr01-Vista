@@ -50,6 +50,10 @@
   --fs-900: clamp(2.1rem, 2vw + 1.3rem, 3rem);
   --fs-1000: clamp(2.4rem, 2.6vw + 1.4rem, 3.8rem);
 
+  /* Text roles */
+  --fs-supporting: var(--fs-300);
+  --fs-meta: var(--fs-200);
+
   /* Buttons */
   --fs-btn: 0.8rem;
 
