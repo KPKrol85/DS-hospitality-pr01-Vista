@@ -155,7 +155,8 @@
   border: 1px solid var(--border);
   background: var(--bg-elev);
   color: var(--text);
-  font-size: var(--fs-200);
+  font-size: var(--fs-400);
+  font-weight: 400;
   line-height: var(--lh-normal);
   letter-spacing: var(--ls-wide);
   transition:
@@ -197,10 +198,13 @@ fieldset.form__field .form__error {
 .form__hint {
   margin: 0;
   font-size: var(--fs-100);
+  color: var(--muted);
 }
-.form__field > label {
+.form__field > label,
+.form__field .grid-2 label,
+fieldset.form__field legend {
   font-size: var(--fs-200);
-  color: color-mix(in oklab, var(--text) 75%, transparent);
+  color: var(--muted);
   font-weight: 500;
 }
 .form__field :is(input, textarea, select):disabled {
@@ -214,11 +218,6 @@ fieldset.form__field .form__error {
   -webkit-text-fill-color: var(--text);
   box-shadow: 0 0 0 1000px var(--bg-elev) inset;
   transition: background-color 9999s;
-}
-.form__field input[type="number"] {
-  color: color-mix(in oklab, var(--text) 70%, transparent);
-  font-weight: 500;
-  font-size: var(--fs-200);
 }
 .form__field--checkbox .checkbox {
   display: grid;
@@ -237,16 +236,8 @@ fieldset.form__field {
   padding: var(--space-sm);
   background: color-mix(in oklab, var(--bg-elev) 90%, transparent);
 }
-.form__field .grid-2 label {
-  font-size: var(--fs-200);
-  font-weight: 500;
-  color: var(--muted);
-}
 fieldset.form__field legend {
   padding: 0 var(--space-2xs);
-  font-size: var(--fs-300);
-  font-weight: 500;
-  color: var(--muted);
 }
 .form__actions {
   display: flex;

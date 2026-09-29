@@ -97,12 +97,13 @@ Each proposal applies existing tokens and patterns more consistently and keeps t
 
 ### IMP-UI-03 — Unify contact form value, label and hint presentation
 
+- **Status:** COMPLETED (2026-09-29)
 - **Affected area:** The contact inquiry form on `contact.html`:
   - the text, email, telephone, date and number inputs, and the textarea;
   - the field labels and the stay-date fieldset legend;
   - the hints and the consent label.
 - **Evidence:** `css/modules/components.css:151-171`, `css/modules/components.css:192-205`, `css/modules/components.css:218-222`, `css/modules/components.css:240-250`, `contact.html:227-281`
-- **Current state:** Measured in Chromium at 1280 px, where body text is 17.4 px:
+- **State before implementation:** Measured in Chromium at 1280 px, where body text is 17.4 px:
   - Values in the text, email, telephone and date inputs and the textarea are 13.4 px (12.8 px at 390 px). They use weight 400, full text colour and 0.04em letter spacing.
   - The guest count is pre-filled with "2" (`contact.html:274`) and renders at 70% text opacity and weight 500. It looks different from every other value and similar to the placeholder style (`--muted` at 0.7 opacity).
   - Field labels are 13.4 px at 75% text opacity. The arrival and departure labels in the fieldset use `--muted` instead. The "Termin pobytu" legend is 15.0 px in `--muted`.
@@ -131,6 +132,8 @@ Each proposal applies existing tokens and patterns more consistently and keeps t
   - Enhanced and native validation, error display, focus on the first invalid field and submission all work as before.
 - **Impact:** Medium
 - **Effort:** Small
+- **Completion summary:** Unified form values at `--fs-400` in full text colour, labels and legend at `--fs-200` in muted colour, and hints at `--fs-100` in muted colour; removed the guest-count override while keeping placeholders distinct.
+- **Verification:** Chromium checks at 390 px and 1280 px in both themes, focused validation regression, `npm run build`, `npm run qa:fast` and `git diff --check` passed.
 
 ### IMP-UI-04 — Align section headings, intros and copy to the content grid edge
 
