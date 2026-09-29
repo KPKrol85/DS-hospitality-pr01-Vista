@@ -1,8 +1,8 @@
 # Vista — Workflow Improvements
 
-**Analysis date:** 2026-09-28  
-**Project type:** Static multi-page HTML/CSS/vanilla JavaScript site with Node.js tooling and Netlify configuration  
-**Analysis mode:** Evidence-based workflow improvement review  
+**Analysis date:** 2026-09-28
+**Project type:** Static multi-page HTML/CSS/vanilla JavaScript site with Node.js tooling and Netlify configuration
+**Analysis mode:** Evidence-based workflow improvement review
 **Focus:** Project-wide development and maintenance workflow
 
 ## Improvement overview
@@ -43,8 +43,21 @@ The project has a source-mode development server, a clean source-to-`dist/` buil
 
 ## Selection summary
 
-Both proposals address existing workflows and can be implemented in focused sessions. IMP-WORKFLOW-01 concerns local inspection of the production package; IMP-WORKFLOW-02 concerns maintenance of the instructions for that workflow. They are technically independent, though documenting a new preview command is simplest after it exists. No additional proposal was added merely to reach five: the completed Quality report already covers booking-date, JSON-LD, accessibility, and image-pipeline safeguards, and the archived UI/UX reports concern visitor-facing behavior.
+Both proposals address existing workflows and were implemented in focused sessions. IMP-WORKFLOW-01 concerns local inspection of the production package; IMP-WORKFLOW-02 concerns maintenance of the instructions for that workflow. They are technically independent, though documenting a new preview command was simplest after it existed. No additional proposal was added merely to reach five: the completed Quality report already covers booking-date, JSON-LD, accessibility, and image-pipeline safeguards, and the archived UI/UX reports concern visitor-facing behavior.
 
-## Analysis limitations
+## Completion summary
 
-This was a static repository and documentation review with read-only Git inspection. No build, browser session, deployment, Netlify Forms request, or CI run was performed. An attempted `npm run qa:fast` did not start because the command runner failed while creating the process; its current result is therefore unverified here. The report does not infer live-platform behavior from configuration. Existing factual documentation discrepancies are identified as corrections, not counted as separate optional improvements. No proposed improvement was implemented.
+- **Status:** COMPLETED
+- **Completion date:** 2026-09-29
+- Both selected workflow improvements were implemented and verified.
+- Vista now has a dedicated read-only local preview for the generated `dist/` package at `127.0.0.1:8182`.
+- Workflow documentation ownership is established around `package.json` as the command authority and `docs/settings.md` as the maintained detailed workflow guide.
+- Maintained documentation now reflects the current `qa:fast` chain, production preview workflow, automatic root HTML discovery, and active `docs/` paths.
+- No new runtime dependencies, deployment changes, or architectural changes were introduced.
+- This report is archived as the completed record of the workflow-improvement cycle.
+
+## Original analysis limitations
+
+The original analysis was a static repository and documentation review with read-only Git inspection. At that stage, no build, browser session, deployment, Netlify Forms request, or CI run was performed. An attempted `npm run qa:fast` did not start because the command runner failed while creating the process.
+
+These limitations describe the initial analysis only. Subsequent implementation verification is recorded under the individual completed improvement entries above.
