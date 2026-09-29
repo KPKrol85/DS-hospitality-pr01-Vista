@@ -119,8 +119,7 @@
     background 0.2s ease,
     box-shadow 0.2s ease;
 }
-.site-nav__list a[aria-current="page"],
-.site-nav__list a:hover {
+.site-nav__list a:not([aria-current="page"]):hover {
   background: var(--bg-elev);
   box-shadow: var(--elev);
 }
@@ -130,11 +129,10 @@
   gap: var(--space-xs);
   font-size: var(--fs-300);
 }
-.site-nav__list li > a[aria-current="page"],
-.site-nav__list li > a.is-active {
+.site-nav__list a[aria-current="page"] {
   background: var(--bg-elev);
   box-shadow: var(--elev);
-  color: var(--text);
+  color: var(--primary);
 }
 .no-js .site-header__nav-toggle {
   display: none;

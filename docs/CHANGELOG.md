@@ -39,6 +39,7 @@ All significant changes to this project are documented in this file.
 
 ### Fixed
 
+- Distinguished current header-navigation links from hover with the existing primary text colour and a single ARIA-based current-state rule; verified both theme contrasts and unchanged desktop/mobile geometry in local Chromium.
 - Unified descriptive card and section copy through existing-scale supporting and metadata aliases, corrected offer and highlight text hierarchy, and verified responsive grid counts and button alignment in local Chromium at 390, 800 and 1280 px.
 - Made one-shot `img:opt` exit non-zero after per-file failures while preserving continued processing, summary output, successful exit code 0, and watch behavior.
 - Hardened gallery URL-fragment matching with strict known-filter comparisons and regression coverage for valid and malformed fragments.

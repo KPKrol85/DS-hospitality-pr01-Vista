@@ -62,15 +62,16 @@ Each proposal applies existing tokens and patterns more consistently and keeps t
 
 ### IMP-UI-02 — Give the current navigation link a state distinct from hover
 
+- **Status:** COMPLETED (2026-09-29)
 - **Affected area:** The shared header navigation on all 12 root pages, in the desktop bar (from 961 px) and the mobile menu panel.
 - **Evidence:** `css/modules/layout.css:112-126`, `css/modules/layout.css:133-138`, `css/modules/layout.css:152-164`, `css/modules/layout.css:425-429`, `css/modules/components.css:883-901`, `css/modules/tokens.css:3-4`, `css/modules/tokens.css:19-20`, `css/modules/tokens.css:32-33`, `js/features/aria-current.js:11-17`
-- **Current state:** One rule gives the current-page link and any hovered link the same `--bg-elev` background and `--elev` shadow (`0 10px 30px rgba(0, 0, 0, 0.06)`). All links have the same text colour and weight. On `contact.html` at 1280 px, hovering "Pokoje" produced computed styles identical to the current "Kontakt" link.
+- **State before implementation:** One rule gave the current-page link and any hovered link the same `--bg-elev` background and `--elev` shadow (`0 10px 30px rgba(0, 0, 0, 0.06)`). All links had the same text colour and weight. On `contact.html` at 1280 px, hovering "Pokoje" produced computed styles identical to the current "Kontakt" link.
 
-  The current link differs from the others only by a small surface change:
+  The current link differed from the others only by a small surface change:
   - In the light theme, a white background on the `#faf8f3` header and menu background, about 1.06:1.
   - In the dark theme, `#141a24` on `#0a0d11`, about 1.12:1. The black 6% shadow is not visible there.
 
-  Two rules declare the current state. The second also targets `.is-active`, which `aria-current.js` adds alongside `aria-current`.
+  Two rules declared the current state. The second also targeted `.is-active`, which `aria-current.js` adds alongside `aria-current`.
 
   Other site components already separate selected and hover states. The footer marks its current link with `--primary`. The room and gallery filters use a selected style that differs from hover.
 - **Proposed improvement:** Give `a[aria-current="page"]` its own style that stays recognisable while another link is hovered. Use existing tokens, for example a primary-tinted text colour, a heavier weight or an indicator line, consistent with the footer and filter selected states. Keep hover as a lighter preview. Declare the current state in one rule keyed to `aria-current`.
@@ -91,6 +92,8 @@ Each proposal applies existing tokens and patterns more consistently and keeps t
   - Pages without a current header link render as before: the legal pages, `404.html`, `offline.html` and `dziekujemy.html`.
 - **Impact:** Medium
 - **Effort:** Small
+- **Completion summary:** Separated header hover and current-page states: hover now applies only to non-current links, while `aria-current="page"` uses `var(--primary)` for a persistent selected state. Header CSS no longer depends on `.is-active`.
+- **Verification:** Chromium checks passed at 390 px and 1280 px in light and dark themes across the target pages; current-link contrast passed in both themes, header geometry remained unchanged, and `npm run build`, `npm run qa:fast` and `git diff --check` passed.
 
 ### IMP-UI-03 — Unify contact form value, label and hint presentation
 
