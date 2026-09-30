@@ -5,21 +5,27 @@
 **Analysis mode:** Evidence-based UI improvement review
 **Focus:** Project-wide UI
 
+## Implementation closure
+
+**Status:** COMPLETED — All five selected UI improvements were implemented.
+**Completion date:** 2026-09-30
+**Archive note:** The UI improvement cycle is closed; this report is archived for historical reference.
+
 ## Improvement overview
 
-Vista's interface is built on one token file (fluid type scale, spacing, radius, theme colours and focus-ring tokens), BEM-style components and shared state patterns across 12 root pages. The five proposals in the archived UI report (`docs/archive/improvements/IMPROVEMENTS-UI-2026-09-26.md`) are implemented in the current source. No active plan or audit covers UI work.
+At the time of the original analysis, Vista's interface was built on one token file (fluid type scale, spacing, radius, theme colours and focus-ring tokens), BEM-style components and shared state patterns across 12 root pages. The five proposals in the earlier archived UI report (`docs/archive/improvements/IMPROVEMENTS-UI-2026-09-26.md`) had been implemented, and no active plan or audit covered UI work.
 
-The remaining opportunities lie below the heading level and in layout consistency:
+This review identified five further opportunities below the heading level and in layout consistency:
 
-- Descriptive copy uses two type steps with no role rule.
-- The header gives the current page the same style as a hovered link.
-- The contact form gives values, labels and hints conflicting emphasis.
-- Section text and content grids start at different inline edges.
-- Several fixed-count grids end with a partial row at common widths.
+- Descriptive copy used two type steps with no role rule.
+- The header gave the current page the same style as a hovered link.
+- The contact form gave values, labels and hints conflicting emphasis.
+- Section text and content grids started at different inline edges.
+- Several fixed-count grids ended with a partial row at common widths.
 
-Each proposal applies existing tokens and patterns more consistently and keeps the current visual identity. All five were confirmed with computed values in Chromium.
+The original findings were confirmed with computed values in Chromium. The five improvements applied existing tokens and patterns while keeping the visual identity. Their records below retain the original evidence, proposed solutions and acceptance criteria alongside the completion summaries and verification results.
 
-## Proposed improvements
+## Completed improvements
 
 ### IMP-UI-01 — Map descriptive card and section copy to one supporting-text step
 
@@ -57,7 +63,7 @@ Each proposal applies existing tokens and patterns more consistently and keeps t
 - **Impact:** High
 - **Effort:** Medium
 
-- **Completion:** Added `--fs-supporting: var(--fs-300)` and `--fs-meta: var(--fs-200)` in `tokens.css`. All nine descriptive selectors in the acceptance criteria use the supporting role; room metadata, testimonial attributions, brand stat labels and offer eyebrows (`.offer-card__meta`) use the metadata role. `.list` occurs only in the homepage highlight block. Lead sizes remain unchanged; offer descriptions match their lists and exceed their eyebrows, and the highlight paragraph and list share one size. Only font-size references and the two aliases changed; HTML, JavaScript, headings, buttons, badges, form/legal typography, line-height declarations, colours, spacing and layout rules are unchanged.
+- **Completion summary:** Added `--fs-supporting: var(--fs-300)` and `--fs-meta: var(--fs-200)` in `tokens.css`. All nine descriptive selectors in the acceptance criteria use the supporting role; room metadata, testimonial attributions, brand stat labels and offer eyebrows (`.offer-card__meta`) use the metadata role. `.list` occurs only in the homepage highlight block. Lead sizes remain unchanged; offer descriptions match their lists and exceed their eyebrows, and the highlight paragraph and list share one size. Only font-size references and the two aliases changed; HTML, JavaScript, headings, buttons, badges, form/legal typography, line-height declarations, colours, spacing and layout rules are unchanged.
 - **Verification:** Local source-mode Playwright/Chromium measurements before and after the change passed on `index.html`, `offers.html`, `rooms.html` and `onas.html` at 390, 800 and 1280 px (12 page/viewport combinations). Supporting sizes: 14.4 / 14.688 / 15.0336 px; metadata: 12.8 / 13.056 / 13.3632 px. Role sizes, lead hierarchy, both resolved inversions, unchanged grid column counts, button horizontal positions and offsets from card bottoms passed; no in-scope text or page overflow was detected. Existing automatic grid stretching changes some button heights as text reflows, while typography and alignment remain unchanged. `npm run build` passed (12 HTML pages), all four `qa:fast` checks passed, and `git diff --check` passed. Non-blocking warnings: old Browserslist data and Node module-type detection. No `test:a11y`, other-browser, production-browser or live-deployment checks were run; all required verification was available.
 
 ### IMP-UI-02 — Give the current navigation link a state distinct from hover
@@ -117,7 +123,7 @@ Each proposal applies existing tokens and patterns more consistently and keeps t
 
   iOS Safari zooms the page when a text field smaller than 16 px receives focus. This is known platform behaviour, not tested on a device for this report. Control text of 16 px or more avoids it.
 - **Implementation scope:** The form rules in `css/modules/components.css`. No markup changes. Keep unchanged:
-  - the invalid-state border and outline, and the `.form__error` colours (see Analysis limitations);
+  - the invalid-state border and outline, and the `.form__error` colours (see Original analysis limitations);
   - the focus-ring tokens and the autofill rule;
   - disabled and read-only states and the checkbox size;
   - the honeypot, native constraints and Netlify attributes;
@@ -214,24 +220,26 @@ Each proposal applies existing tokens and patterns more consistently and keeps t
 
 These five proposals were selected because each one:
 
-- is based on source rules shared by several components or pages;
+- was based on source rules shared by several components or pages;
 - was confirmed with computed values in Chromium;
-- reuses existing tokens and state patterns without changing the visual identity.
+- could reuse existing tokens and state patterns without changing the visual identity.
 
-Dependencies:
+Original dependency notes:
 
-- IMP-UI-04 and IMP-UI-05 both edit the homepage testimonial grid (the `.testimonials` gap and columns, and the `.testimonial` margin). Implement them one after the other.
-- IMP-UI-01 excludes the contact form, which IMP-UI-03 covers. The two can be implemented independently.
-- IMP-UI-02 is independent of the others.
+- IMP-UI-04 and IMP-UI-05 both concerned the homepage testimonial grid (the `.testimonials` gap and columns, and the `.testimonial` margin), so their implementation scopes overlapped.
+- IMP-UI-01 excluded the contact form, which IMP-UI-03 covered. Their implementation scopes were independent.
+- IMP-UI-02 was independent of the others.
 
-One opportunity was ranked lower and not included: hover elevation on static cards.
+One opportunity was ranked lower and remained outside the five-item cycle: hover elevation on static cards. At the time of the original analysis:
 
 - Benefits, testimonials, the CTA panel and the `rooms.html` room cards lift on hover like the interactive offer and gallery cards. The `rooms.html` room cards contain no focusable element.
 - A Chromium hover check on a `rooms.html` card confirmed the lift, the stronger shadow and the tinted border.
 - Five rules repeat the same literal hover lift and shadow, and the CTA panel uses a sixth variant (`css/modules/sections.css:160-164`, `css/modules/components.css:928-932`, `css/modules/components.css:813-817`).
 - `.legal-card` references an undefined `--elev-soft` (`css/modules/subpages.css:100`).
 
-## Analysis limitations
+## Original analysis limitations
+
+These limitations describe the initial analysis before implementation; each completed improvement records its own verification above.
 
 - **Browser evidence:**
   - The project's `scripts/dev-server.mjs` served the pages in source mode. They were inspected in Chromium (the Claude desktop browser pane) at 390, 600, 700, 800, 1000 and 1280 px.
@@ -240,8 +248,8 @@ One opportunity was ranked lower and not included: hover elevation on static car
   - Hover was tested on one navigation link and one room card.
   - Other browsers, real devices (including the iOS behaviour cited in IMP-UI-03) and assistive technologies were not tested.
 - **Checks not run:** `npm run qa:fast`, `npm run test:a11y` and the build were not run, because no project source was changed.
-- **Out of scope — candidate defects observed:** These belong in an audit, not in this report.
-  - **Primary colour in the dark theme:** white `--primary-contrast` on the dark `--primary` (`#34d1b2`) computes to 1.93:1. This affects `.offer-card__badge` and the start of the `.btn--primary` gradient (`css/modules/tokens.css:8-10`, `css/modules/tokens.css:111-122`). The archived 2026-09-26 report first noted this, and it is still present.
+- **Out of scope — candidate defects observed:** These observations were outside the five selected improvements and belonged in an audit, not in this report.
+  - **Primary colour in the dark theme:** white `--primary-contrast` on the dark `--primary` (`#34d1b2`) computes to 1.93:1. This affects `.offer-card__badge` and the start of the `.btn--primary` gradient (`css/modules/tokens.css:8-10`, `css/modules/tokens.css:111-122`). The archived 2026-09-26 report first noted this; the original analysis observed it again.
   - **Form errors in the dark theme:** `.form__error` outside the date fieldset uses the literal colour `#b91c1c` (`css/modules/components.css:181-184`). Against the dark page colour `#0a0d11`, this computes to about 3.0:1, not counting the background gradient. Only the errors inside the fieldset use the theme-aware `--form-error-text-elevated`. For this reason, IMP-UI-03 leaves error colours unchanged.
   - **Homepage gallery markup** (`index.html:525-736`):
     - The images declare `width="800" height="800"` for 3:2 files.
@@ -250,4 +258,4 @@ One opportunity was ranked lower and not included: hover elevation on static car
 
     At 1280 px, each tile reserves a 285 × 285 px box until its image loads, then shrinks to 285 × 190 px. Each tile loads the 1600 px AVIF.
   - **Contact page decoration:** `.contact-info::after` is placed at fixed offsets of 130 px and 520 px (`css/modules/subpages.css:400-411`). At 390 px, it overlaps the map caption and the form heading, at opacity 0.1 in the light theme and 0.25 in the dark theme.
-  - **Gallery scrolling:** gallery filter scrolling still uses `behavior: "smooth"` without a reduced-motion check (`js/features/gallery-filters.js:66-80`). The archived UX report also noted this.
+  - **Gallery scrolling:** gallery filter scrolling used `behavior: "smooth"` without a reduced-motion check (`js/features/gallery-filters.js:66-80`). The archived UX report also noted this.
