@@ -20,7 +20,7 @@
 @media (min-width: 760px) {
   .gallery-section__title {
     text-align: left;
-    margin-left: var(--space-md);
+    margin-left: 0;
   }
   .gallery-section__title::after {
     margin: var(--space-sm) 0 0;
@@ -338,9 +338,6 @@
     align-content: center;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   }
-  .brand__content {
-    margin-left: var(--space-md);
-  }
   .brand__subtitle {
     text-align: left;
   }
@@ -355,9 +352,6 @@
   }
   .brand__media {
     height: auto;
-  }
-  .section--about .brand__subtitle {
-    margin-left: var(--space-md);
   }
 }
 @media (min-width: 1024px) {

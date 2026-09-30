@@ -137,11 +137,12 @@ Each proposal applies existing tokens and patterns more consistently and keeps t
 
 ### IMP-UI-04 — Align section headings, intros and copy to the content grid edge
 
+- **Status:** COMPLETED (2026-09-30)
 - **Affected area:**
   - section headers and intros on `index.html`, `rooms.html`, `offers.html`, `gallery.html` and `onas.html`;
   - the homepage highlight block and testimonials.
 - **Evidence:** `css/modules/layout.css:1-4`, `css/modules/sections.css:211-215`, `css/modules/sections.css:227-230`, `css/modules/sections.css:246-263`, `css/modules/sections.css:337-349`, `css/modules/subpages.css:20-28`, `css/modules/subpages.css:341-343`, `css/modules/subpages.css:359-361`
-- **Current state:** From 760 px, content grids start at the container edge, but the text above them is indented by different spacing tokens:
+- **State before implementation:** From 760 px, content grids start at the container edge, but the text above them is indented by different spacing tokens:
   - `--space-md` for section headers, gallery section titles and brand subtitles;
   - `--space-sm` for section intros;
   - `--space-lg` for the highlight paragraph and its button.
@@ -169,6 +170,8 @@ Each proposal applies existing tokens and patterns more consistently and keeps t
   - The layout at 390 px is unchanged.
 - **Impact:** Medium
 - **Effort:** Small
+- **Completion summary:** Removed desktop/tablet insets from section text, gallery and brand headings, and homepage highlight content; testimonial cards now use the grid gap for spacing. The 390 px layout remains unchanged.
+- **Verification:** Chromium checks at 390, 800 and 1280 px, `npm run build`, `npm run qa:fast` and `git diff --check` passed.
 
 ### IMP-UI-05 — Choose grid column counts that divide each grid's item count
 
