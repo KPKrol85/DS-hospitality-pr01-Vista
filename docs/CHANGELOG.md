@@ -39,6 +39,7 @@ All significant changes to this project are documented in this file.
 
 ### Fixed
 
+- Balanced fixed-count room, offer, testimonial and gallery grids across responsive widths while preserving card minimum widths.
 - Aligned section headings, intros, gallery and brand copy, highlight content, and testimonial cards with the existing content grid from 760 px.
 - Unified contact-form value, label, legend and hint typography and colour across light and dark themes.
 - Distinguished current header-navigation links from hover with the existing primary text colour and a single ARIA-based current-state rule; verified both theme contrasts and unchanged desktop/mobile geometry in local Chromium.

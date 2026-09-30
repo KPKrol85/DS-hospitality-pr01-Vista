@@ -175,13 +175,14 @@ Each proposal applies existing tokens and patterns more consistently and keeps t
 
 ### IMP-UI-05 — Choose grid column counts that divide each grid's item count
 
+- **Status:** COMPLETED (2026-09-30)
 - **Affected area:**
   - the room, offer, testimonial and gallery grids on the homepage;
   - the five category grids on `gallery.html`;
   - the three `.grid-3` groups on `onas.html`;
   - the unfiltered room grid on `rooms.html`.
 - **Evidence:** `css/modules/utilities.css:69-91`, `css/modules/components.css:678-721`, `css/modules/sections.css:246-250`, `css/modules/subpages.css:68-81`, `index.html:260`, `index.html:458`, `index.html:498`, `index.html:525`, `gallery.html:163`, `gallery.html:341`, `gallery.html:519`, `gallery.html:697`, `gallery.html:875`, `onas.html:182`, `onas.html:210`, `onas.html:232`, `rooms.html:166`
-- **Current state:** Each grid class sets its column counts per breakpoint without regard to how many items the grid holds. As a result, several grids end with a partial last row. Chromium measured these row patterns:
+- **State before implementation:** Each grid class sets its column counts per breakpoint without regard to how many items the grid holds. As a result, several grids end with a partial last row. Chromium measured these row patterns:
   - `index.html`:
     - The 4 offer cards use 3 columns from 1024 px and render 3 + 1 at 1280 px.
     - The 6 gallery photos use 4 columns and render 4 + 2 at 1280 px.
@@ -206,6 +207,8 @@ Each proposal applies existing tokens and patterns more consistently and keeps t
   - Room and gallery filtering work as before.
 - **Impact:** Medium
 - **Effort:** Medium
+- **Completion summary:** Fixed-count grids now use balanced column counts or a full-width trailing card, with reusable modifiers for three and four items. Room, brand and testimonial minimum widths remain enforced.
+- **Verification:** Chromium layout and filter checks at the required widths, `npm run build`, `npm run qa:fast` and `git diff --check` passed.
 
 ## Selection summary
 

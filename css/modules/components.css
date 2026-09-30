@@ -704,9 +704,12 @@ body.has-project-modal {
   .gallery-grid {
     grid-template-columns: repeat(3, 1fr);
   }
+  .gallery-grid--balanced-four {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 @media (min-width: 1024px) {
-  .gallery-grid {
+  .gallery-grid--balanced-four {
     grid-template-columns: repeat(4, 1fr);
   }
 }
