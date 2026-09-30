@@ -5,13 +5,19 @@
 **Analysis mode:** Evidence-based technical improvement review
 **Focus:** Project-wide technical implementation
 
+## Implementation closure
+
+**Status:** COMPLETED — All three selected technical improvements were implemented and verified.
+**Completion date:** 2026-09-30
+**Archive note:** The technical-improvement cycle is closed; this report is archived for historical reference.
+
 ## Improvement overview
 
-Vista uses complete root HTML documents, ordered CSS modules, feature-level JavaScript modules, and a separate generated production package. The reviewed areas include initialization, navigation and filters, dialogs, form validation and offer prefill, theme ownership, JSON-LD loading, and source-to-distribution/PWA contracts. Current sources were compared with README, maintained project/build guidance, the changelog, and archived plans, audits, and UI/UX/Quality/Workflow reports. No existing TECH report or uncompleted plan checkbox was found.
+At the time of the original analysis, Vista used complete root HTML documents, ordered CSS modules, feature-level JavaScript modules, and a separate generated production package. The reviewed areas included initialization, navigation and filters, dialogs, form validation and offer prefill, theme ownership, JSON-LD loading, and source-to-distribution/PWA contracts. Sources were compared with README, maintained project/build guidance, the changelog, and archived plans, audits, and UI/UX/Quality/Workflow reports. No existing TECH report or uncompleted plan checkbox was found.
 
-Three opportunities qualify: consolidate repeated field validation inside its existing module, give repeated theme values one definition, and consolidate the copied-file mapping within the existing build script. These are maintenance proposals, not defect findings or approved implementation tasks. Existing test coverage, completed interaction improvements, and workflow documentation work are not proposed again. Impact and effort below are relative engineering estimates, not measured outcomes or delivery commitments.
+The review identified three technical maintainability opportunities: consolidate repeated field validation inside its existing module, give repeated theme values one definition, and consolidate the copied-file mapping within the existing build script. All three selected improvements were subsequently implemented. The records below preserve the original evidence and line references, proposed changes, scope, acceptance criteria, completion summaries, and verification history. Existing test coverage, completed interaction improvements, and workflow documentation work were not proposed again. Impact and effort below remain original relative engineering estimates, not measured outcomes or delivery commitments.
 
-## Proposed improvements
+## Completed improvements
 
 ### IMP-TECH-01 — Reuse phone and guest validators across form events
 
@@ -60,10 +66,12 @@ Three opportunities qualify: consolidate repeated field validation inside its ex
 
 ## Selection summary
 
-The proposals remove concrete duplication while preserving the current architecture and public behavior. They touch separate source files, have no implementation dependency on one another, and can be selected independently. The form proposal comes first because it reuses an established local pattern with the smallest scope; palette consolidation follows; build mapping consolidation needs a package comparison and therefore carries more verification work.
+The three improvements were selected to remove concrete duplication while preserving the architecture and public behavior. They concerned separate source files and had no implementation dependency on one another. The form proposal was listed first because it reused an established local pattern with the smallest scope; palette consolidation followed; build mapping consolidation required a package comparison and therefore carried more verification work.
 
-Together they form a bounded candidate backlog for focused development, without a guaranteed one-day completion time. Only three were selected: broader changes to repeated HTML/JSON-LD ownership would affect more source and fallback contracts, while additional small helper extractions offered insufficient value to justify separate tasks. Completed Quality and Workflow objectives remain outside this set.
+Together they formed the three-item cycle, now completed. Broader changes to repeated HTML/JSON-LD ownership were left outside the cycle because they would affect more source and fallback contracts, while additional small helper extractions offered insufficient value to justify separate tasks. Completed Quality and Workflow objectives were outside this set.
 
-## Analysis limitations
+## Original analysis limitations
 
-This review is based on current source, configuration, module relationships, documentation, and read-only Git inspection. No application tests, build, browser session, or live Netlify request was run. The duplication is source-visible; behavior preservation and package equivalence are acceptance criteria for future implementation, not verified outcomes of this analysis. Historical verification records were used to avoid recycling completed work and were not treated as current runtime evidence.
+These limitations describe the initial technical review before implementation; each completed improvement records its own implementation verification above.
+
+The original review was based on source, configuration, module relationships, documentation, and read-only Git inspection. No application tests, build, browser session, or live Netlify request was run during that analysis. The duplication was source-visible; behavior preservation and package equivalence were acceptance criteria to verify during implementation, not verified outcomes of the initial analysis. Historical verification records were used to avoid recycling completed work and were not treated as runtime evidence for that analysis.

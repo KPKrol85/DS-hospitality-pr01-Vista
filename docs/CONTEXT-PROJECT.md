@@ -2,7 +2,7 @@
 
 **Project type:** Static multi-page website (HTML, CSS, vanilla JavaScript) with a Node.js build pipeline and Netlify configuration
 **Context status:** Active
-**Last reviewed:** 2026-09-25
+**Last reviewed:** 2026-09-30
 
 ## Project identity
 
@@ -93,7 +93,7 @@ The project is released under proprietary KP_Code terms (`LICENSE`), not an open
 - **Fonts:** self-hosted WOFF2 (Inter, Manrope) with `font-display: swap`.
 - **Images:** `<picture>` with AVIF, WebP, and fallback `srcset` from `assets/img/optimized/`, plus explicit `width` and `height`. Below-the-fold images use `loading="lazy"`.
 - **JavaScript modules:**
-  - Each `js/features/*.js` module exports an `init*` (or setup) function. It finds its own hooks (`data-*` attributes or IDs), returns early when they are absent, and is called from `boot()` in `js/script.js` on `DOMContentLoaded`.
+  - Feature entry points export an `init*` (or setup) function called from `boot()` in `js/script.js` on `DOMContentLoaded`, generally returning early when their hooks are absent. Helper modules such as `modal-focus.js` and `logger.js` are consumed by other modules instead.
   - Dialog focus handling (activation, background `inert` isolation, focus trap, focus restore) is shared in `js/features/modal-focus.js`. The lightbox and project notice both use it.
   - `localStorage` access is wrapped in `try`/`catch` and degrades silently.
   - Logging goes through `js/features/logger.js`, which prints only when the URL contains `?debug=1`.
@@ -103,7 +103,7 @@ The project is released under proprietary KP_Code terms (`LICENSE`), not an open
   - exactly one `<script type="module" defer src="js/script.js?vista-dev-1"></script>`.
 
   The build fails otherwise.
-- **Content Security Policy** (`netlify/_headers`): `script-src 'self'`, `style-src 'self'`, and `frame-src` limited to Google Maps. Do not use inline scripts (JSON-LD data blocks excepted), `<style>` blocks, `style` attributes, inline event handlers, or third-party scripts, styles, or fonts without updating the CSP.
+- **Content Security Policy** (`netlify/_headers`): `script-src 'self'`, `style-src 'self'`, and `frame-src 'self' https://www.google.com https://maps.google.com`. Do not use inline scripts (JSON-LD data blocks excepted), `<style>` blocks, `style` attributes, inline event handlers, or third-party scripts, styles, or fonts without updating the CSP.
 - **Language:** site content is Polish. `README.md` is bilingual PL/EN, and its two sections must stay factually equivalent. `docs/` files and commit messages are in English.
 
 ## Quality contracts
@@ -128,7 +128,7 @@ The project is released under proprietary KP_Code terms (`LICENSE`), not an open
 
 - All content is static HTML. There is no application data store.
 - **`localStorage`:** `theme-pref` stores the theme preference, and `vista_project_banner_accepted` stores dismissal of the project-notice modal.
-- **URL hash:** selects the initial gallery filter.
+- **URL hash:** selects the initial room or gallery filter; filter clicks update it without adding history entries, and recognized hash changes restore the selection.
 - **Cache Storage (production worker only):** caches are named `vista-static-<hash>` and `vista-html-<hash>`.
   - Navigations are network-first with fallback to a cached page, then `index.html` for `/`, then `offline.html`.
   - Other same-origin GET requests are cache-first.
@@ -146,7 +146,7 @@ The project is released under proprietary KP_Code terms (`LICENSE`), not an open
 - **Production build:** `npm run build` creates a clean `dist/` from canonical sources, including bundles, public assets, and automatically discovered root `*.html` pages. Packaged HTML receives production references and `data-vista-build="production"`; the generated worker precaches the pages and core assets with a content-based cache version. Package integrity is checked by the build. See [dist notes](dist-notes.md) for distribution-specific behavior and [settings](settings.md) for command details.
 - **Production preview:** `npm run preview` serves an already built `dist/` locally without rebuilding it. It allows production-mode inspection but does not emulate Netlify platform behavior; usage and origin are maintained in [settings](settings.md#local-production-preview).
 - `build:css` and `build:js` on their own write into `dist/` without cleaning it.
-- **Image pipeline:** `img:opt` mirrors `assets/img/src/` (JPEG/PNG) into `assets/img/optimized/` as a copy of the original plus WebP and AVIF, max width 2000px. It is incremental by modification time. `img:watch` runs the same process continuously. `img:clean` deletes all of `assets/img/optimized/`, which includes tracked files.
+- **Image pipeline:** `img:opt` mirrors `assets/img/src/` (JPEG/PNG) into `assets/img/optimized/` as an unchanged copy of the original plus WebP and AVIF variants limited to 2000px width without enlargement. It is incremental by modification time. `img:watch` runs the same process continuously. `img:clean` deletes all of `assets/img/optimized/`, which includes tracked files.
 
 ## Testing and verification
 
