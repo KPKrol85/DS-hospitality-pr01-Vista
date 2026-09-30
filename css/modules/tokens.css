@@ -1,11 +1,19 @@
 :root {
   /* Colors light */
-  --bg: #faf8f3;
-  --bg-elev: #ffffff;
-  --text: #1f2430;
-  --muted: #55585e;
-  --border: #e0e3e8;
-  --primary: #0f6fbf;
+  --bg-light: #faf8f3;
+  --bg-elev-light: #ffffff;
+  --text-light: #1f2430;
+  --muted-light: #55585e;
+  --border-light: #e0e3e8;
+  --primary-light: #0f6fbf;
+
+  /* Default light semantics */
+  --bg: var(--bg-light);
+  --bg-elev: var(--bg-elev-light);
+  --text: var(--text-light);
+  --muted: var(--muted-light);
+  --border: var(--border-light);
+  --primary: var(--primary-light);
   --primary-alt: #0a5ca0;
   --primary-contrast: #ffffff;
 
@@ -22,6 +30,15 @@
   --muted-dark: #a6b3c6;
   --border-dark: #1b2433;
   --primary-dark: #34d1b2;
+  --form-error-text-elevated-dark: #f87171;
+
+  /* Theme gradients */
+  --bg-gradients-light:
+    radial-gradient(60vw 60vw at 10% 6%, color-mix(in oklab, #ffd37a 35%, transparent) 0%, transparent 60%),
+    radial-gradient(40vw 40vw at 88% 90%, color-mix(in oklab, var(--focus)  10%, transparent) 0%, transparent 70%);
+  --bg-gradients-dark:
+    radial-gradient(60vw 60vw at 92% 8%, color-mix(in oklab, #2d9bf0 18%, transparent) 0%, transparent 60%),
+    radial-gradient(35vw 35vw at 6% 94%, color-mix(in oklab, var(--primary-dark) 10%, transparent) 0%, transparent 70%);
 
   /* Focus ring */
   --focus-ring-color: var(--primary);
@@ -101,58 +118,50 @@
 }
 
 html[data-theme="light"] {
-  --bg: #faf8f3;
-  --bg-elev: #ffffff;
-  --text: #1f2430;
-  --muted: #55585e;
-  --primary: #0f6fbf;
-  --border: #e0e3e8;
-  --bg-gradients:
-    radial-gradient(60vw 60vw at 10% 6%, color-mix(in oklab, #ffd37a 35%, transparent) 0%, transparent 60%),
-    radial-gradient(40vw 40vw at 88% 90%, color-mix(in oklab, var(--focus)  10%, transparent) 0%, transparent 70%);
+  --bg: var(--bg-light);
+  --bg-elev: var(--bg-elev-light);
+  --text: var(--text-light);
+  --muted: var(--muted-light);
+  --primary: var(--primary-light);
+  --border: var(--border-light);
+  --bg-gradients: var(--bg-gradients-light);
 }
 
 html[data-theme="dark"] {
-  --form-error-text-elevated: #f87171;
+  --form-error-text-elevated: var(--form-error-text-elevated-dark);
   --bg: var(--bg-dark);
   --bg-elev: var(--bg-elev-dark);
   --text: var(--text-dark);
   --muted: var(--muted-dark);
   --primary: var(--primary-dark);
   --border: var(--border-dark);
-  --bg-gradients:
-    radial-gradient(60vw 60vw at 92% 8%, color-mix(in oklab, #2d9bf0 18%, transparent) 0%, transparent 60%),
-    radial-gradient(35vw 35vw at 6% 94%, color-mix(in oklab, var(--primary-dark) 10%, transparent) 0%, transparent 70%);
+  --bg-gradients: var(--bg-gradients-dark);
 }
 
 @media (prefers-color-scheme: dark) {
   html:not([data-theme]),
   html[data-theme="auto"] {
-    --form-error-text-elevated: #f87171;
+    --form-error-text-elevated: var(--form-error-text-elevated-dark);
     --bg: var(--bg-dark);
     --bg-elev: var(--bg-elev-dark);
     --text: var(--text-dark);
     --muted: var(--muted-dark);
     --primary: var(--primary-dark);
     --border: var(--border-dark);
-    --bg-gradients:
-      radial-gradient(60vw 60vw at 92% 8%, color-mix(in oklab, #2d9bf0 18%, transparent) 0%, transparent 60%),
-      radial-gradient(35vw 35vw at 6% 94%, color-mix(in oklab, var(--primary-dark) 10%, transparent) 0%, transparent 70%);
+    --bg-gradients: var(--bg-gradients-dark);
   }
 }
 
 @media (prefers-color-scheme: light) {
   html:not([data-theme]),
   html[data-theme="auto"] {
-    --bg: #faf8f3;
-    --bg-elev: #ffffff;
-    --text: #1f2430;
-    --muted: #55585e;
-    --primary: #0f6fbf;
-    --border: #e0e3e8;
-    --bg-gradients:
-      radial-gradient(60vw 60vw at 10% 6%, color-mix(in oklab, #ffd37a 35%, transparent) 0%, transparent 60%),
-      radial-gradient(40vw 40vw at 88% 90%, color-mix(in oklab, var(--focus) 10%, transparent) 0%, transparent 70%);
+    --bg: var(--bg-light);
+    --bg-elev: var(--bg-elev-light);
+    --text: var(--text-light);
+    --muted: var(--muted-light);
+    --primary: var(--primary-light);
+    --border: var(--border-light);
+    --bg-gradients: var(--bg-gradients-light);
   }
 }
 

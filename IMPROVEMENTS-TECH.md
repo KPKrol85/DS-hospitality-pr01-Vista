@@ -30,13 +30,16 @@ Three opportunities qualify: consolidate repeated field validation inside its ex
 
 ### IMP-TECH-02 — Define theme palette values once for explicit and automatic modes
 
+- **Status:** COMPLETED
 - **Affected area:** Palette ownership in `css/modules/tokens.css`.
 - **Evidence:** `css/modules/tokens.css:1–24` defines default light values and named dark values. Explicit theme selectors at `103–126` and automatic-mode media rules at `128–157` repeat the light color literals, gradient expressions, and dark error-text value. `css/modules/base.css:31` consumes `--bg-gradients`; `css/modules/components.css:187` consumes `--form-error-text-elevated`. `js/theme-init.js` resolves the pre-paint theme, while `js/features/theme.js` manages later preference changes.
-- **Current implementation:** Explicit Light/Dark and CSS Auto fallback assign the same semantic tokens through separate selectors. Most dark colors already reference named palette tokens, but light colors and both gradient definitions are maintained in multiple places. Updating those values requires synchronizing the explicit and automatic branches.
+- **State before implementation:** Explicit Light/Dark and CSS Auto fallback assign the same semantic tokens through separate selectors. Most dark colors already reference named palette tokens, but light colors and both gradient definitions are maintained in multiple places. Updating those values requires synchronizing the explicit and automatic branches.
 - **Proposed improvement:** Extend the existing palette-token approach only to repeated theme values: maintain each light palette value, each theme gradient, and the dark form-error color once, then reference them from the existing semantic assignments. Retain the selectors that decide when each palette applies.
 - **Expected engineering value:** A palette adjustment has one value definition regardless of whether the theme is selected by JavaScript or the CSS system-preference fallback. Existing component consumers keep their semantic token names.
 - **Implementation scope:** Limit production-source edits to `css/modules/tokens.css`; reuse the existing dark palette tokens. Preserve all resolved colors and gradient parameters, selector precedence, the root `--bg-gradients: none` baseline, explicit preference precedence over the OS, and Auto/no-attribute fallback behavior. Keep typography, spacing, component rules, theme scripts, and storage unchanged; no CSS preprocessor or theme framework is needed.
 - **Acceptance criteria:** The identified repeated palette literals and gradient definitions each have one maintained definition, with explicit and automatic branches referencing it. Computed semantic tokens and body backgrounds match the baseline for explicit Light/Dark under both OS preferences and for Auto/missing `data-theme` under each preference. Form-error text retains its existing resolved colors. Source-mode and bundled CSS retain the same theme selection behavior, including the no-JavaScript fallback.
+- **Completion summary:** Added shared definitions for repeated Light colors, Light/Dark gradients, and dark elevated form-error text, preserving resolved values and theme selection.
+- **Verification:** Source/bundle before/after computed-style checks, `npm run build`, `npm run qa:fast`, and `git diff --check` passed.
 - **Impact:** Medium
 - **Effort:** Small
 

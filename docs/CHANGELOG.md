@@ -39,6 +39,7 @@ All significant changes to this project are documented in this file.
 
 ### Changed
 
+- Consolidated repeated theme colors and gradients into shared palette tokens without changing resolved values or theme selection.
 - Consolidated phone and guest validation into local functions shared by contact-form input and submit handlers.
 
 ### Fixed
