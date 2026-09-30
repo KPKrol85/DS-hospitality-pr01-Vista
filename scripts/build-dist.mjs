@@ -7,8 +7,11 @@ import { fileURLToPath } from "node:url";
 const ROOT_DIR = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const DIST_DIR = path.join(ROOT_DIR, "dist");
 
-const REQUIRED_FILES = ["js/theme-init.js", "site.webmanifest", "robots.txt", "sitemap.xml", "pwa/service-worker.js"];
-const NETLIFY_FILES = [
+const COPIED_FILES = [
+  ["js/theme-init.js", "js/theme-init.js"],
+  ["site.webmanifest", "site.webmanifest"],
+  ["robots.txt", "robots.txt"],
+  ["sitemap.xml", "sitemap.xml"],
   ["netlify/_headers", "_headers"],
   ["netlify/_redirects", "_redirects"],
 ];
@@ -241,12 +244,7 @@ async function verifyDistribution(htmlPages) {
   const requiredFiles = [
     ...htmlPages,
     ...BUNDLE_FILES,
-    "js/theme-init.js",
-    "site.webmanifest",
-    "robots.txt",
-    "sitemap.xml",
-    "_headers",
-    "_redirects",
+    ...COPIED_FILES.map(([, destinationPath]) => destinationPath),
     "pwa/service-worker.js",
   ];
   for (const file of requiredFiles) {
@@ -294,16 +292,13 @@ async function main() {
     return;
   }
 
-  for (const file of REQUIRED_FILES) {
-    await assertExists(file, "file");
+  for (const [sourcePath] of COPIED_FILES) {
+    await assertExists(sourcePath, "file");
   }
+  await assertExists("pwa/service-worker.js", "file");
 
   for (const file of BUNDLE_FILES) {
     await assertDistExists(file, "bundle");
-  }
-
-  for (const [sourcePath] of NETLIFY_FILES) {
-    await assertExists(sourcePath, "Netlify file");
   }
 
   for (const directory of REQUIRED_DIRS) {
@@ -324,15 +319,8 @@ async function main() {
     await copyDirectoryIntoDist(directory);
   }
 
-  await copyFileIntoDist("js/theme-init.js");
-  await copyFileIntoDist("site.webmanifest");
-
-  for (const file of ["robots.txt", "sitemap.xml"]) {
-    await copyFileIntoDist(file);
-  }
-
-  for (const [sourcePath, targetPath] of NETLIFY_FILES) {
-    await copyFileIntoDist(sourcePath, targetPath);
+  for (const [sourcePath, destinationPath] of COPIED_FILES) {
+    await copyFileIntoDist(sourcePath, destinationPath);
   }
 
   const { passthroughImageCopies } = await writeDistHtml(htmlPages);

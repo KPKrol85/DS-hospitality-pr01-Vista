@@ -27,6 +27,7 @@ All significant changes to this project are documented in this file.
 
 ### Build and Tooling
 
+- Consolidated unchanged `dist/` file mappings for source validation, copying, and destination verification.
 - Added ignore rules for generated output, dependencies, local configuration, and test reports while retaining project sources and the lockfile.
 - Established modular CSS and JavaScript sources, PostCSS and esbuild asset builds, and a `dist` pipeline that rewrites HTML asset references and generates a content-versioned service worker.
 - Included a Sharp-based image pipeline and responsive image assets in AVIF, WebP, and fallback formats.
