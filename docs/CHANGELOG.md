@@ -37,6 +37,10 @@ All significant changes to this project are documented in this file.
 - Added `qa:fast` with link-integrity, JavaScript syntax, and JSON syntax checks for everyday verification.
 - Moved accessibility checks to project-managed Playwright and axe-core dependencies and synchronized npm and Deno lockfiles.
 
+### Changed
+
+- Consolidated phone and guest validation into local functions shared by contact-form input and submit handlers.
+
 ### Fixed
 
 - Balanced fixed-count room, offer, testimonial and gallery grids across responsive widths while preserving card minimum widths.

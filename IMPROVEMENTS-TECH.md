@@ -15,13 +15,16 @@ Three opportunities qualify: consolidate repeated field validation inside its ex
 
 ### IMP-TECH-01 — Reuse phone and guest validators across form events
 
+- **Status:** COMPLETED
 - **Affected area:** Enhanced contact-form validation in `js/features/form.js`.
 - **Evidence:** `js/features/form.js:150–160` repeats the guest parsing/range rule and optional-phone normalization/regex rule that appear again in the submit handler at `176–181` and `193–197`. The same module already shares `validateName`, `validateEmail`, `validateCheckin`, `validateCheckout`, and `validateConsent` between event handlers. `contact.html:243–253,274–276` defines the corresponding native controls and error messages.
-- **Current implementation:** Phone and guest input listeners each calculate validity and call `setError`; submission repeats those calculations before updating the aggregate result. Other fields already use local validator functions. The duplication is within one feature and does not require a shared validation framework.
+- **State before implementation:** Phone and guest input listeners each calculate validity and call `setError`; submission repeats those calculations before updating the aggregate result. Other fields already use local validator functions. The duplication is within one feature and does not require a shared validation framework.
 - **Proposed improvement:** Introduce local phone and guest validator functions following the existing pattern: calculate validity, update the field error, and return the result. Call each from both its input listener and the submit handler.
 - **Expected engineering value:** Each enhanced field rule and its error update have one implementation, so a later change does not require matching edits to input-time and submit-time branches.
 - **Implementation scope:** Limit production-source edits to `js/features/form.js`. Preserve the current phone regex, trimming, optional-empty behavior, guest `parseInt` semantics and bounds, listener timing, and submit validation order. Keep HTML constraints, date handling, offer prefill, honeypot, Netlify identity/action, and native submission unchanged. Changing accepted inputs is a separate task.
 - **Acceptance criteria:** Each of the two rules exists once and is called by both event paths; every present field is still evaluated on submit even after an earlier failure. A focused before/after contact-form check produces the same errors for empty/valid/invalid phone values and empty/boundary/out-of-range guest values, preserves first-invalid-field focus, and reaches the same native POST path for valid data. Error IDs, messages, and ARIA updates remain unchanged.
+- **Completion summary:** Added local `validatePhone()` and `validateGuests()` functions shared by input and submit handlers, preserving validation and native submission behavior.
+- **Verification:** The focused before/after Chromium regression, `npm run build`, `npm run qa:fast`, and `git diff --check` passed.
 - **Impact:** Medium
 - **Effort:** Small
 

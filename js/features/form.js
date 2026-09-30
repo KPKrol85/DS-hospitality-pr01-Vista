@@ -87,6 +87,14 @@ export function initForm() {
     return valid;
   }
 
+  function validatePhone() {
+    const value = (phone.value || "").trim();
+    const rePL = /^(\+?\d{1,3})?[\s-]?\d{3}[\s-]?\d{3}[\s-]?\d{3}$/;
+    const valid = value === "" || rePL.test(value);
+    setError(phone, "err-phone", !valid);
+    return valid;
+  }
+
   function validateCheckin() {
     const todayISO = refreshCheckinMin();
     const value = checkin?.value || "";
@@ -109,6 +117,13 @@ export function initForm() {
     const minOut = nextDay(checkin?.value);
     const valid = !!date && (!checkin?.value || (!!minOut && formatLocalISO(date) >= minOut));
     setError(checkout, "err-checkout", !valid);
+    return valid;
+  }
+
+  function validateGuests() {
+    const n = parseInt(guests.value || "0", 10);
+    const valid = n >= 1 && n <= 6;
+    setError(guests, "err-guests", !valid);
     return valid;
   }
 
@@ -148,15 +163,11 @@ export function initForm() {
   });
 
   guests?.addEventListener("input", () => {
-    const n = parseInt(guests.value || "0", 10);
-    setError(guests, "err-guests", !(n >= 1 && n <= 6));
+    validateGuests();
   });
 
   phone?.addEventListener("input", () => {
-    const value = (phone.value || "").trim();
-    const rePL = /^(\+?\d{1,3})?[\s-]?\d{3}[\s-]?\d{3}[\s-]?\d{3}$/;
-    const isValid = value === "" || rePL.test(value);
-    setError(phone, "err-phone", !isValid);
+    validatePhone();
   });
 
   form.addEventListener("submit", (e) => {
@@ -174,10 +185,7 @@ export function initForm() {
       ok = ok && v;
     }
     if (phone) {
-      const value = (phone.value || "").trim();
-      const rePL = /^(\+?\d{1,3})?[\s-]?\d{3}[\s-]?\d{3}[\s-]?\d{3}$/;
-      const v = value === "" || rePL.test(value);
-      setError(phone, "err-phone", !v);
+      const v = validatePhone();
       ok = ok && v;
     }
 
@@ -191,9 +199,7 @@ export function initForm() {
     }
 
     if (guests) {
-      const n = parseInt(guests.value || "0", 10);
-      const v = n >= 1 && n <= 6;
-      setError(guests, "err-guests", !v);
+      const v = validateGuests();
       ok = ok && v;
     }
 
