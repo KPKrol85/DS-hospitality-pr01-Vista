@@ -714,6 +714,139 @@ function custom404Scenario() {
   };
 }
 
+function skipLinkScenario() {
+  const label = 'index.html (skip link keyboard navigation)';
+
+  async function focusedState(page) {
+    return page.locator('.skip-link').evaluate((link) => {
+      // Normalize computed colors through canvas, as assertErrorContrast() does.
+      const toRgba = (color) => {
+        const ctx = document.createElement('canvas').getContext('2d');
+        ctx.fillStyle = color;
+        ctx.fillRect(0, 0, 1, 1);
+        return [...ctx.getImageData(0, 0, 1, 1).data];
+      };
+      const style = getComputedStyle(link);
+      const rect = link.getBoundingClientRect();
+      const opaqueAncestors = [];
+      for (let node = link; node; node = node.parentElement) {
+        opaqueAncestors.push(getComputedStyle(node).opacity === '1');
+      }
+      return {
+        active: document.activeElement === link,
+        focusVisible: link.matches(':focus-visible'),
+        rect: { left: rect.left, top: rect.top, right: rect.right, bottom: rect.bottom },
+        viewport: { width: innerWidth, height: innerHeight },
+        rem: parseFloat(getComputedStyle(document.documentElement).fontSize),
+        zIndex: style.zIndex,
+        overlay: getComputedStyle(document.documentElement).getPropertyValue('--z-overlay').trim(),
+        unobscured: link.contains(document.elementFromPoint(rect.left + rect.width / 2, rect.top + rect.height / 2)),
+        foreground: toRgba(style.color),
+        background: toRgba(style.backgroundColor),
+        backgroundImage: style.backgroundImage,
+        opaque: opaqueAncestors.every(Boolean),
+        outline: {
+          style: style.outlineStyle,
+          width: parseFloat(style.outlineWidth),
+          offset: parseFloat(style.outlineOffset),
+          color: toRgba(style.outlineColor)
+        }
+      };
+    });
+  }
+
+  // Loads a fresh document in an explicit theme and reveals the link with the first real Tab.
+  async function revealWithTab(page, theme) {
+    const url = new URL('index.html', page.url()).href;
+    await page.evaluate((value) => localStorage.setItem('theme-pref', value), theme);
+    await page.goto(url, { waitUntil: 'networkidle' });
+    assert.equal(await page.evaluate(() => document.documentElement.dataset.theme), theme, `${theme}: effective theme`);
+    const banner = page.locator('#projectBanner');
+    if (await banner.isVisible()) {
+      await page.locator('#projectBannerAccept').click();
+      await banner.waitFor({ state: 'hidden' });
+    }
+
+    const skip = page.locator('.skip-link');
+    assert.equal(await skip.getAttribute('href'), '#main');
+    assert.equal(await page.locator('main#main').count(), 1, 'Skip link target must exist');
+    const unfocused = await skip.evaluate((link) => ({
+      position: getComputedStyle(link).position,
+      right: link.getBoundingClientRect().right,
+      active: document.activeElement === link
+    }));
+    assert.equal(unfocused.position, 'absolute', `${theme}: unfocused skip link must stay out of flow`);
+    assert.ok(unfocused.right <= 0 && !unfocused.active, `${theme}: unfocused skip link must stay off-screen`);
+
+    await page.keyboard.press('Tab');
+    const state = await focusedState(page);
+    assert.ok(state.active && state.focusVisible, `${theme}: first Tab must focus the skip link with :focus-visible`);
+    // Existing placement: 1rem from the top-left corner, above the sticky header.
+    assert.ok(Math.abs(state.rect.left - state.rem) < 0.5 && Math.abs(state.rect.top - state.rem) < 0.5,
+      `${theme}: focused skip link must keep its top-left placement`);
+    assert.ok(state.rect.right <= state.viewport.width && state.rect.bottom <= state.viewport.height,
+      `${theme}: focused skip link must fit the viewport`);
+    assert.equal(state.zIndex, state.overlay, `${theme}: focused skip link must keep the overlay layer`);
+    assert.ok(state.unobscured, `${theme}: focused skip link must not be covered`);
+
+    assert.ok(state.opaque && state.foreground[3] === 255 && state.background[3] === 255 && state.backgroundImage === 'none',
+      `${theme}: contrast measurement requires opaque text on a solid surface`);
+    const text = luminance(state.foreground.slice(0, 3));
+    const surface = luminance(state.background.slice(0, 3));
+    const ratio = (Math.max(text, surface) + 0.05) / (Math.min(text, surface) + 0.05);
+    const { outline } = state;
+    console.log(`${label} [${theme}]: text rgb(${state.foreground.slice(0, 3)}) on rgb(${state.background.slice(0, 3)}) ` +
+      `= ${ratio.toFixed(3)}:1 (required 4.5:1); ring ${outline.style} ${outline.width}px rgb(${outline.color.slice(0, 3)}).`);
+    assert.ok(ratio >= 4.5, `${theme}: focused skip link contrast ${ratio.toFixed(3)}:1 must reach 4.5:1`);
+
+    assert.ok(outline.style !== 'none' && outline.width > 0 && outline.color[3] === 255,
+      `${theme}: focused skip link must keep a visible focus ring`);
+    const ring = outline.width + outline.offset;
+    assert.ok(state.rect.left - ring >= 0 && state.rect.top - ring >= 0, `${theme}: focus ring must stay inside the viewport`);
+    return url;
+  }
+
+  async function activateWithEnter(page, url, theme) {
+    await page.keyboard.press('Enter');
+    await page.waitForURL(`${url}#main`);
+    const main = await page.locator('main#main').evaluate((element) => ({
+      top: element.getBoundingClientRect().top,
+      scrollY: window.scrollY
+    }));
+    assert.ok(Math.abs(main.top) < 1 && main.scrollY > 0, `${theme}: Enter must scroll main content to the viewport top`);
+    // Chromium leaves the non-focusable main unfocused but continues sequential navigation from it.
+    await page.keyboard.press('Tab');
+    const next = await page.evaluate(() => {
+      const active = document.activeElement;
+      const rect = active.getBoundingClientRect();
+      return {
+        inMain: document.getElementById('main').contains(active),
+        visible: rect.top >= 0 && rect.bottom <= innerHeight,
+        unobscured: active.contains(document.elementFromPoint(rect.left + rect.width / 2, rect.top + rect.height / 2))
+      };
+    });
+    assert.deepEqual(next, { inMain: true, visible: true, unobscured: true },
+      `${theme}: the next Tab must reach visible main content below the sticky header`);
+  }
+
+  return {
+    label,
+    path: 'index.html',
+    setup: async (page) => {
+      for (const theme of ['dark', 'light']) {
+        const url = await revealWithTab(page, theme);
+        await activateWithEnter(page, url, theme);
+      }
+      // Full-page axe resolves dark transparent surfaces against white (see contactValidationScenario),
+      // so the unchanged axe pass checks the focused link in the light theme.
+      await revealWithTab(page, 'light');
+      // The runner shares a context; do not leave this preference for unrelated scenarios.
+      await page.evaluate(() => localStorage.removeItem('theme-pref'));
+      console.log(`${label}: Tab reveal, placement, contrast, focus ring and Enter navigation to #main passed in dark and light.`);
+    }
+  };
+}
+
 const scenarios = [
   custom404Scenario(),
   { label: 'index.html (baseline)', path: 'index.html' },
@@ -834,6 +967,7 @@ const scenarios = [
       await page.locator('#site-nav.is-open').waitFor({ state: 'visible' });
     }
   },
+  skipLinkScenario(),
   { label: 'rooms.html (baseline)', path: 'rooms.html' },
   {
     label: 'rooms.html (Deluxe filter active)',

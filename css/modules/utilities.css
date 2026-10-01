@@ -31,7 +31,7 @@
   top: auto;
   padding: var(--space-xs) var(--space-md);
   background: var(--focus);
-  color: #ffffff;
+  color: var(--text-light);
   font-weight: 600;
   border-radius: var(--radius-full);
   box-shadow: var(--elev);

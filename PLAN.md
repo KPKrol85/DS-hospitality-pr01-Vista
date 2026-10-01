@@ -77,11 +77,12 @@ Planning used static repository inspection and one read-only Sharp metadata chec
   - **Sources:** `contact.html` (`#guests`), `js/features/form.js` (`validateGuests`, `form.noValidate`, submit handler), `scripts/a11y-axe.mjs`. **Audit:** `AUDIT.md` P2-01.
   - **Verification (2026-10-01):** Enhanced and native validation now accept only integer guest counts 1–6; focused regression covers invalid/fractional values, recovery, exact `booking` POST values and no-JavaScript constraints. Required focused checks passed.
 
-- [ ] **PH2-02 — Make the focused skip link readable**
-  - [ ] Give the shared skip link a foreground/background pair with sufficient contrast; preserve its focused placement and visible focus indicator. Check other consumers before changing a shared token.
-  - [ ] Add a focused keyboard scenario in light and dark themes that exposes the link, checks its text contrast and activates the jump to main content; account for the project-notice overlay during setup.
+- [x] **PH2-02 — Make the focused skip link readable**
+  - [x] Give the shared skip link a foreground/background pair with sufficient contrast; preserve its focused placement and visible focus indicator. Check other consumers before changing a shared token.
+  - [x] Add a focused keyboard scenario in light and dark themes that exposes the link, checks its text contrast and activates the jump to main content; account for the project-notice overlay during setup.
   - **Completion condition:** The focused skip link has at least 4.5:1 normal-size text contrast and provides usable keyboard movement to main content in both themes.
   - **Sources:** `css/modules/utilities.css` (`.skip-link`), `css/modules/tokens.css` (`--focus`), shared root-page skip links, `scripts/a11y-axe.mjs`. **Audit:** `AUDIT.md` P2-02.
+  - **Verification (2026-10-01):** Focused skip navigation now meets 7.26:1 text contrast in light and dark themes (required 4.5:1); keyboard regression confirms visible focus and navigation to `#main`. Required focused checks passed.
 
 - [ ] **PH2-03 — Correct offer-badge contrast in dark mode**
   - [ ] Use a theme-appropriate foreground/background pair for `.offer-card__badge`. Inspect primary-button and other token consumers before changing `--primary-contrast`; keep the correction local if a shared change would reduce their contrast.
