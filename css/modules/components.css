@@ -180,7 +180,7 @@
   outline-offset: 2px;
 }
 .form__error {
-  color: #b91c1c;
+  color: var(--form-error-text);
   margin: 0;
 }
 fieldset.form__field .form__error {

@@ -78,21 +78,25 @@ function createStaticServer() {
 function summarizeViolations(label, violations) {
   for (const violation of violations) {
     console.error(`- ${label} -> ${violation.id} (${violation.impact || 'unknown'}) [nodes: ${violation.nodes.length}]`);
+    for (const node of violation.nodes) {
+      console.error(`  ${node.target.join(', ')}: ${node.failureSummary}`);
+    }
   }
 }
 
-async function runAxe(page) {
+async function runAxe(page, options = {}) {
   // Inject test instrumentation through Playwright without weakening the page's CSP.
   await page.evaluate(axeSource);
-  return page.evaluate(async () => {
+  return page.evaluate(async (scenarioOptions) => {
     return window.axe.run(document, {
       resultTypes: ['violations'],
       runOnly: {
         type: 'tag',
         values: ['wcag2a', 'wcag2aa', 'best-practice']
-      }
+      },
+      ...scenarioOptions
     });
-  });
+  }, options);
 }
 
 async function runScenario(page, baseUrl, spec) {
@@ -107,7 +111,7 @@ async function runScenario(page, baseUrl, spec) {
     await spec.setup(page, response);
   }
 
-  const result = await runAxe(page);
+  const result = await runAxe(page, spec.axeOptions);
   return { ...spec, result };
 }
 
@@ -204,6 +208,165 @@ function galleryFragmentScenario(fragment, filter, exerciseControls = false) {
 
       assert.deepEqual(errors, [], 'Gallery fragments must not cause uncaught initialization or interaction errors');
       console.log(`Gallery fragment behavior passed: ${JSON.stringify(fragment)}`);
+    }
+  };
+}
+
+function luminance(rgb) {
+  const linear = rgb.map((value) => {
+    const channel = value / 255;
+    return channel <= 0.04045 ? channel / 12.92 : ((channel + 0.055) / 1.055) ** 2.4;
+  });
+  return linear[0] * 0.2126 + linear[1] * 0.7152 + linear[2] * 0.0722;
+}
+
+async function assertErrorContrast(page, ids, label) {
+  // Decode rendered pixels with the project's existing image-tooling dependency.
+  const sharp = projectRequire('sharp');
+  await page.evaluate(() => document.fonts.ready);
+  const ratios = [];
+  for (const id of ids) {
+    const error = page.locator(`#err-${id}`);
+    const foreground = await error.evaluate((element) => {
+      const style = getComputedStyle(element);
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      ctx.fillStyle = style.color;
+      ctx.fillRect(0, 0, 1, 1);
+      const opaqueAncestors = [];
+      for (let node = element; node; node = node.parentElement) {
+        opaqueAncestors.push(getComputedStyle(node).opacity === '1');
+      }
+      return { rgba: [...ctx.getImageData(0, 0, 1, 1).data], opaque: opaqueAncestors.every(Boolean) };
+    });
+    assert.ok(foreground.opaque && foreground.rgba[3] === 255,
+      `${label}: err-${id} measurement requires opaque text and ancestors`);
+    const textLuminance = luminance(foreground.rgba.slice(0, 3));
+    let minimum = Infinity;
+    // body::before is fixed: exercise each surface at three viewport positions.
+    for (const position of [0.25, 0.5, 0.75]) {
+      await error.evaluate((element, fraction) => {
+        const rect = element.getBoundingClientRect();
+        window.scrollBy({ top: rect.top + rect.height / 2 - innerHeight * fraction, behavior: 'instant' });
+      }, position);
+      const painted = await error.screenshot({ animations: 'disabled' });
+      // Hide only glyph paint during capture; retain layout, page gradients and
+      // every composited background, including the translucent date fieldset.
+      // Playwright restores this screenshot-only style before axe runs.
+      const screenshot = await error.screenshot({
+        animations: 'disabled',
+        style: '.form__error { -webkit-text-fill-color: transparent !important; text-shadow: none !important; }'
+      });
+      const visible = await sharp(painted).removeAlpha().raw().toBuffer({ resolveWithObject: true });
+      const { data, info } = await sharp(screenshot).removeAlpha().raw().toBuffer({ resolveWithObject: true });
+      assert.deepEqual(info, visible.info, 'Glyph masking must preserve screenshot geometry');
+      assert.equal(info.channels, 3);
+      let glyphPixels = 0;
+      for (let offset = 0; offset < data.length; offset += 3) {
+        // The paired images locate actual glyphs, excluding line-box whitespace
+        // and neighboring input outlines. Use un-antialiased computed text color
+        // against the composited background underneath every painted glyph pixel.
+        if (data[offset] === visible.data[offset] && data[offset + 1] === visible.data[offset + 1] &&
+          data[offset + 2] === visible.data[offset + 2]) continue;
+        glyphPixels += 1;
+        const background = luminance([data[offset], data[offset + 1], data[offset + 2]]);
+        const ratio = (Math.max(textLuminance, background) + 0.05) / (Math.min(textLuminance, background) + 0.05);
+        minimum = Math.min(minimum, ratio);
+      }
+      assert.ok(glyphPixels > 0, `err-${id} must paint visible text at viewport position ${position}`);
+    }
+    console.log(`${label}: err-${id} minimum rendered contrast ${minimum.toFixed(3)}:1`);
+    assert.ok(minimum >= 4.5, `${label}: err-${id} contrast ${minimum.toFixed(3)}:1 must reach 4.5:1`);
+    ratios.push(minimum);
+  }
+  console.log(`${label}: minimum across all errors ${Math.min(...ratios).toFixed(3)}:1 (required 4.5:1).`);
+}
+
+function contactValidationScenario(preference, colorScheme) {
+  const effective = preference === 'auto' ? colorScheme : preference;
+  const label = `contact.html (validation errors visible) [${preference}, OS ${colorScheme}]`;
+  return {
+    label,
+    path: 'contact.html',
+    // Only PH1-03: axe treats transparent/gradient page surfaces as white in
+    // dark mode. assertErrorContrast() checks every error's rendered pixels at
+    // >= 4.5:1 instead; unrelated link contrast is outside this scenario's scope.
+    axeOptions: { rules: { 'color-contrast': { enabled: false } } },
+    beforeLoad: async (page) => {
+      await page.emulateMedia({ colorScheme, reducedMotion: 'reduce' });
+      await page.addInitScript((pref) => {
+        if (pref === 'auto') localStorage.removeItem('theme-pref');
+        else localStorage.setItem('theme-pref', pref);
+      }, preference);
+    },
+    setup: async (page) => {
+      const banner = page.locator('#projectBanner');
+      if (await banner.isVisible()) {
+        await page.locator('#projectBannerAccept').click();
+        await banner.waitFor({ state: 'hidden' });
+      }
+      const form = page.locator('form[data-form]');
+      await page.waitForFunction(() => document.querySelector('form[data-form]')?.noValidate === true);
+      assert.equal(await form.evaluate((element) => element.noValidate), true,
+        'Enhanced JavaScript validation must be initialized before submission');
+      const theme = await page.evaluate(() => ({
+        stored: localStorage.getItem('theme-pref'),
+        effective: document.documentElement.dataset.theme,
+        osDark: matchMedia('(prefers-color-scheme: dark)').matches,
+        background: getComputedStyle(document.body, '::before').backgroundColor,
+        foreground: getComputedStyle(document.querySelector('#err-name')).color,
+        gradients: getComputedStyle(document.body, '::before').backgroundImage
+      }));
+      assert.equal(theme.stored, preference === 'auto' ? null : preference);
+      assert.equal(theme.effective, effective, `${label}: effective theme`);
+      assert.equal(theme.osDark, colorScheme === 'dark');
+      assert.equal(theme.background, effective === 'dark' ? 'rgb(10, 13, 17)' : 'rgb(250, 248, 243)');
+      assert.equal(theme.foreground, effective === 'dark' ? 'rgb(248, 113, 113)' : 'rgb(185, 28, 28)');
+      assert.match(theme.gradients, /radial-gradient/, 'Measure with the real page gradients enabled');
+
+      const contactUrl = page.url();
+      const formAction = new URL(await form.evaluate((element) => element.action));
+      assert.equal(formAction.origin, new URL(contactUrl).origin, 'Vista form action must remain same-origin');
+      const formPosts = [];
+      page.on('request', (request) => {
+        if (request.method() !== 'POST') return;
+        const destination = new URL(request.url());
+        // Embedded Google Maps POSTs are not Vista contact-form submissions.
+        if (destination.origin === formAction.origin && destination.pathname === formAction.pathname) {
+          formPosts.push(request.url());
+        }
+      });
+      const phone = page.locator('#phone');
+      assert.equal(await phone.evaluate((element) => element.required), false, 'Phone must remain optional');
+      await phone.fill('123');
+      await phone.fill('');
+      assert.equal(await phone.getAttribute('aria-invalid'), 'false', 'Empty optional phone must be valid');
+      assert.equal(await page.locator('#err-phone').isVisible(), false);
+      await phone.fill('123');
+      assert.equal(await phone.evaluate((element) => element.validity.patternMismatch), true,
+        'Non-empty optional phone must actually violate its pattern');
+      await page.locator('#guests').fill('0');
+      await form.getByRole('button', { name: 'Wyślij zapytanie', exact: true }).click();
+
+      const ids = ['name', 'email', 'phone', 'checkin', 'checkout', 'guests', 'consent'];
+      for (const id of ids) {
+        const control = page.locator(`#${id}`);
+        const error = page.locator(`#err-${id}`);
+        assert.equal(await control.getAttribute('aria-invalid'), 'true', `${id} must be invalid`);
+        assert.ok((await control.getAttribute('aria-describedby') || '').split(/\s+/).includes(`err-${id}`),
+          `${id} must reference its error message`);
+        assert.equal(await error.isVisible(), true, `err-${id} must be visible`);
+        assert.ok((await error.innerText()).trim(), `err-${id} must contain feedback`);
+        assert.equal(await error.getAttribute('aria-live'), 'polite', `err-${id} must retain live feedback`);
+      }
+      await page.waitForFunction(() => document.activeElement === document.querySelector('#name'));
+      await assertErrorContrast(page, ids, label);
+      assert.equal(page.url(), contactUrl, 'Invalid submission must remain on contact.html');
+      assert.equal(await form.locator('.form__success').isVisible(), false, 'Invalid submission must not show success');
+      assert.deepEqual(formPosts, [], 'Invalid submission must not POST to the Vista form action');
+      // The runner shares a context; do not leave this preference for unrelated scenarios.
+      await page.evaluate(() => localStorage.removeItem('theme-pref'));
+      console.log(`${label}: all seven errors, optional phone, focus, ARIA/live feedback and blocked submission passed.`);
     }
   };
 }
@@ -489,38 +652,10 @@ const scenarios = [
     }
   },
   { label: 'contact.html (baseline)', path: 'contact.html' },
-  {
-    label: 'contact.html (validation errors visible)',
-    path: 'contact.html',
-    setup: async (page) => {
-      const banner = page.locator('#projectBanner');
-      if (await banner.isVisible()) {
-        await page.locator('#projectBannerAccept').click();
-        await banner.waitFor({ state: 'hidden' });
-      }
-
-      const form = page.locator('form[data-form]');
-      await page.waitForFunction(() => document.querySelector('form[data-form]')?.noValidate === true);
-      assert.equal(await form.evaluate((element) => element.noValidate), true,
-        'Enhanced JavaScript validation must be initialized before submission');
-
-      const contactUrl = page.url();
-      const posts = [];
-      page.on('request', (request) => {
-        if (request.method() === 'POST') posts.push(request.url());
-      });
-      await form.getByRole('button', { name: 'Wyślij zapytanie', exact: true }).click();
-      await page.locator('#name[aria-invalid="true"]').waitFor({ state: 'visible' });
-      await page.locator('#err-name').waitFor({ state: 'visible' });
-      assert.ok((await page.locator('#name').getAttribute('aria-describedby') || '').split(/\s+/).includes('err-name'),
-        'The invalid name field must reference its error message');
-      await page.waitForFunction(() => document.activeElement === document.querySelector('#name'));
-      assert.equal(page.url(), contactUrl, 'Invalid submission must remain on contact.html');
-      assert.equal(await form.locator('.form__success').isVisible(), false, 'Invalid submission must not show success');
-      assert.deepEqual(posts, [], 'Invalid submission must not send a POST request');
-      console.log('Contact validation error-state assertions passed.');
-    }
-  },
+  contactValidationScenario('light', 'dark'),
+  contactValidationScenario('dark', 'light'),
+  contactValidationScenario('auto', 'light'),
+  contactValidationScenario('auto', 'dark'),
   { label: 'regulamin.html (baseline)', path: 'regulamin.html' }
 ];
 

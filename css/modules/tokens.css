@@ -19,6 +19,7 @@
 
   /* Colors alert */
   --danger: #ef4444;
+  --form-error-text: #b91c1c;
   --form-error-text-elevated: #b91c1c;
   --success: #0f766e;
   --focus: #2dc7a6;
@@ -30,6 +31,7 @@
   --muted-dark: #a6b3c6;
   --border-dark: #1b2433;
   --primary-dark: #34d1b2;
+  --form-error-text-dark: #f87171;
   --form-error-text-elevated-dark: #f87171;
 
   /* Theme gradients */
@@ -128,6 +130,7 @@ html[data-theme="light"] {
 }
 
 html[data-theme="dark"] {
+  --form-error-text: var(--form-error-text-dark);
   --form-error-text-elevated: var(--form-error-text-elevated-dark);
   --bg: var(--bg-dark);
   --bg-elev: var(--bg-elev-dark);
@@ -141,6 +144,7 @@ html[data-theme="dark"] {
 @media (prefers-color-scheme: dark) {
   html:not([data-theme]),
   html[data-theme="auto"] {
+    --form-error-text: var(--form-error-text-dark);
     --form-error-text-elevated: var(--form-error-text-elevated-dark);
     --bg: var(--bg-dark);
     --bg-elev: var(--bg-elev-dark);

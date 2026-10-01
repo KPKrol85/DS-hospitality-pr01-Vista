@@ -46,6 +46,7 @@ All significant changes to this project are documented in this file.
 
 ### Fixed
 
+- Made contact-form error text theme-aware across light, dark and Auto settings while retaining the date-fieldset styling. Extended the focused regression to all seven errors, optional-phone validation, focus/ARIA/submission checks and rendered-background contrast measurement with a 4.5:1 minimum.
 - Made custom 404 assets, JSON-LD payloads and navigation/recovery links resolve from the domain root at missing URLs, including theme icons and 404 production-bundle references; preserved same-document skip navigation and `noindex,follow`. Added a focused local HTTP 404 regression with and without JavaScript.
 - Reset mobile navigation state on entry to desktop layout, preserving visible navigation and ordinary keyboard traversal; restricted mobile interactions to the mobile breakpoint and added a focused source-browser regression.
 - Balanced fixed-count room, offer, testimonial and gallery grids across responsive widths while preserving card minimum widths.
