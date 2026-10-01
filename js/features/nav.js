@@ -33,7 +33,7 @@ export function initNav() {
 
   function close({ returnFocus = true } = {}) {
     nav.classList.remove("is-open");
-    nav.hidden = true;
+    nav.hidden = mobileMq.matches;
 
     document.body.classList.remove("is-nav-open");
 
@@ -43,6 +43,7 @@ export function initNav() {
     if (returnFocus && lastFocused instanceof HTMLElement) {
       lastFocused.focus();
     }
+    lastFocused = null;
   }
 
   toggle.setAttribute("aria-expanded", "false");
@@ -54,17 +55,19 @@ export function initNav() {
       return;
     }
 
-    nav.hidden = false;
+    close({ returnFocus: false });
   };
 
   syncVisibility();
   mobileMq.addEventListener("change", syncVisibility);
 
   toggle.addEventListener("click", () => {
+    if (!mobileMq.matches) return;
     isOpen() ? close() : open();
   });
 
   nav.addEventListener("click", (e) => {
+    if (!mobileMq.matches) return;
     const t = e.target;
     if (t instanceof Element && t.matches("a")) {
       close();
@@ -72,7 +75,7 @@ export function initNav() {
   });
 
   document.addEventListener("keydown", (e) => {
-    if (!isOpen()) return;
+    if (!mobileMq.matches || !isOpen()) return;
 
     if (e.key === "Escape") {
       e.preventDefault();

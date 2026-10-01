@@ -30,7 +30,7 @@ Complete the important corrections in Phase 1 before final presentation or hando
 
 The earlier completed plans remain preserved in [the 2026-09-23 plan](docs/archive/plans/PLAN-2026-09-23.md) and [the 2026-09-24 plan](docs/archive/plans/PLAN-2026-09-24.md). Their checkboxes and verification records are historical; their identifiers must be qualified by archive filename when referenced. This active cycle does not recast those milestones or reopen resolved work solely because it was not retested today. The current breakpoint defect is distinct from the earlier closed-mobile-menu correction.
 
-Current inspection confirms the source/production build separation, reveal fallback, native-validation baseline, arrival-date gate and demonstrational content attribution. These existing mechanisms are preservation constraints, not newly completed tasks. No active-cycle item is complete yet.
+Current inspection confirms the source/production build separation, reveal fallback, native-validation baseline, arrival-date gate and demonstrational content attribution. These existing mechanisms are preservation constraints, not newly completed tasks. `PH1-01` is complete with local source verification; the remaining active-cycle items are open.
 
 Planning used static repository inspection and one read-only Sharp metadata check: 381 distinct image URL/width-descriptor pairs were inspected, with 76 mismatches across the three groups in `PH2-04`. Other audit findings were checked against their current source causes; the audit's browser and contrast results were not rerun. `dist/` is absent. No build, browser suite, deployment or live form delivery was verified during planning. These limits do not create speculative defects or block source corrections. No optional or deferred work is supported by the current scope.
 
@@ -38,12 +38,13 @@ Planning used static repository inspection and one read-only Sharp metadata chec
 
 **Goal:** Resolve the three current P1 findings affecting shared navigation, error-page recovery and validation feedback.
 
-- [ ] **PH1-01 — Reset mobile navigation across the desktop breakpoint**
-  - [ ] On entering desktop layout, clear mobile open state, body state, toggle state and stale focus-return state while keeping navigation rendered. Restrict mobile closing and focus trapping to the mobile layout, including link-click handling.
-  - [ ] Preserve opening, Escape, link selection and focus return on mobile, consistent closed state on return to mobile, and visible no-JavaScript navigation.
-  - [ ] Add a focused breakpoint-transition regression to `scripts/a11y-axe.mjs`: open at 390 px, cross 960/961 px and widen to desktop, traverse both navigation boundaries with Tab/Shift+Tab, press Escape, then return to mobile. Assert visibility and `aria-expanded`, not just absence of axe violations.
+- [x] **PH1-01 — Reset mobile navigation across the desktop breakpoint**
+  - [x] On entering desktop layout, clear mobile open state, body state, toggle state and stale focus-return state while keeping navigation rendered. Restrict mobile closing and focus trapping to the mobile layout, including link-click handling.
+  - [x] Preserve opening, Escape, link selection and focus return on mobile, consistent closed state on return to mobile, and visible no-JavaScript navigation.
+  - [x] Add a focused breakpoint-transition regression to `scripts/a11y-axe.mjs`: open at 390 px, cross 960/961 px and widen to desktop, traverse both navigation boundaries with Tab/Shift+Tab, press Escape, then return to mobile. Assert visibility and `aria-expanded`, not just absence of axe violations.
   - **Completion condition:** Desktop navigation remains visible and permits ordinary keyboard traversal after a mobile-open transition; Escape cannot hide it, and returning to mobile restores consistent controls and focus behavior.
   - **Sources:** `js/features/nav.js` (`syncVisibility`, `close`, keyboard/link handlers), `css/modules/layout.css`, shared root-page navigation. **Audit:** `AUDIT.md` P1-01.
+  - **Verification (2026-10-01):** `npm run qa:fast` and `npm run test:a11y -- --scenario "nav breakpoint transition"` passed. Local source Chromium assertions cover 390 → 960 → 961 → 1280 → 390 px, state/labels, focus preservation on desktop entry, both desktop Tab boundaries, Escape, link selection, mobile reopening/trapping/focus return, and no-JavaScript visibility/keyboard traversal. Axe reported no violations in the scenario's final state. No production build or deployment verification was run.
 
 - [ ] **PH1-02 — Resolve custom 404 assets and recovery links from any missing path**
   - [ ] Correct the canonical error document's URL resolution for styles, scripts, images, metadata payloads and navigation/recovery links. Preserve its in-page skip link and the domain-root hosting contract.

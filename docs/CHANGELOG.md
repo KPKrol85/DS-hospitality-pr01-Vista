@@ -46,6 +46,7 @@ All significant changes to this project are documented in this file.
 
 ### Fixed
 
+- Reset mobile navigation state on entry to desktop layout, preserving visible navigation and ordinary keyboard traversal; restricted mobile interactions to the mobile breakpoint and added a focused source-browser regression.
 - Balanced fixed-count room, offer, testimonial and gallery grids across responsive widths while preserving card minimum widths.
 - Aligned section headings, intros, gallery and brand copy, highlight content, and testimonial cards with the existing content grid from 760 px.
 - Unified contact-form value, label, legend and hint typography and colour across light and dark themes.

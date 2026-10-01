@@ -210,6 +210,109 @@ function galleryFragmentScenario(fragment, filter, exerciseControls = false) {
 const scenarios = [
   { label: 'index.html (baseline)', path: 'index.html' },
   {
+    label: 'index.html (nav breakpoint transition)',
+    path: 'index.html',
+    beforeLoad: (page) => page.setViewportSize({ width: 390, height: 844 }),
+    setup: async (page) => {
+      const nav = page.locator('#site-nav');
+      const toggle = page.locator('#nav-toggle');
+      const first = nav.locator('a').first();
+      const last = nav.locator('a').last();
+      const assertFocused = async (locator, message) => {
+        assert.equal(await locator.evaluate((el) => el === document.activeElement), true, message);
+      };
+      const assertState = async (mobile, open) => {
+        // Wait for the asynchronous matchMedia change event after resizing.
+        await page.waitForFunction(({ mobile, open }) => {
+          const nav = document.getElementById('site-nav');
+          const toggle = document.getElementById('nav-toggle');
+          return window.matchMedia('(max-width: 960px)').matches === mobile &&
+            nav.hidden === (mobile && !open) &&
+            nav.classList.contains('is-open') === open &&
+            document.body.classList.contains('is-nav-open') === open &&
+            toggle.getAttribute('aria-expanded') === String(open) &&
+            toggle.getAttribute('aria-label') === (open ? 'Zamknij menu' : 'Otwórz menu');
+        }, { mobile, open });
+        assert.equal(await nav.isVisible(), !mobile || open, 'Navigation visibility must match layout and state');
+      };
+
+      const banner = page.locator('#projectBanner');
+      if (await banner.isVisible()) {
+        await page.locator('#projectBannerAccept').click();
+        await banner.waitFor({ state: 'hidden' });
+      }
+      await assertState(true, false);
+      await toggle.click();
+      await assertState(true, true);
+      await assertFocused(first, 'Opening mobile navigation must focus its first link');
+      await page.setViewportSize({ width: 960, height: 844 });
+      await assertState(true, true);
+
+      for (const width of [961, 1280]) {
+        await page.setViewportSize({ width, height: 844 });
+        await assertState(false, false);
+        await assertFocused(first, 'Entering or resizing desktop must not restore focus to the hidden toggle');
+      }
+      await last.focus();
+      await page.keyboard.press('Tab');
+      assert.equal(await nav.evaluate((el) => el.contains(document.activeElement)), false,
+        'Desktop Tab must leave the end of navigation');
+      await first.focus();
+      await page.keyboard.press('Shift+Tab');
+      assert.equal(await nav.evaluate((el) => el.contains(document.activeElement)), false,
+        'Desktop Shift+Tab must leave the beginning of navigation');
+      await first.focus();
+      await page.keyboard.press('Escape');
+      await assertState(false, false);
+      await assertFocused(first, 'Desktop Escape must not restore mobile focus');
+      // Use the existing in-page link so a reload cannot conceal a stale close state.
+      await nav.locator('a[href="#book"]').click();
+      await assertState(false, false);
+
+      await page.setViewportSize({ width: 390, height: 844 });
+      await assertState(true, false);
+      await toggle.click();
+      await assertState(true, true);
+      await assertFocused(first, 'Mobile navigation must reopen with first-link focus');
+      await page.keyboard.press('Shift+Tab');
+      await assertFocused(last, 'Mobile Shift+Tab must wrap to the last link');
+      await page.keyboard.press('Tab');
+      await assertFocused(first, 'Mobile Tab must wrap to the first link');
+      await page.keyboard.press('Escape');
+      await assertState(true, false);
+      await assertFocused(toggle, 'Mobile Escape must restore focus to the toggle');
+      await toggle.click();
+      await nav.locator('a[href="#book"]').click();
+      await assertState(true, false);
+      // Native fragment navigation may move focus after the menu's close handler.
+      assert.equal(new URL(page.url()).hash, '#book', 'Mobile link selection must retain its destination');
+      await toggle.click();
+      await toggle.click();
+      await assertState(true, false);
+      await assertFocused(toggle, 'Mobile toggle close must retain focus');
+
+      const noJsContext = await page.context().browser().newContext({
+        javaScriptEnabled: false, viewport: { width: 390, height: 844 }
+      });
+      try {
+        const noJsPage = await noJsContext.newPage();
+        await noJsPage.goto(page.url(), { waitUntil: 'networkidle' });
+        for (const width of [390, 961, 1280, 390]) {
+          await noJsPage.setViewportSize({ width, height: 844 });
+          assert.equal(await noJsPage.locator('#site-nav').isVisible(), true, 'No-JS navigation must remain visible');
+          const links = noJsPage.locator('#site-nav a');
+          await links.first().focus();
+          await noJsPage.keyboard.press('Tab');
+          assert.equal(await links.nth(1).evaluate((el) => el === document.activeElement), true,
+            'No-JS navigation must retain keyboard traversal');
+        }
+      } finally {
+        await noJsContext.close();
+      }
+      console.log('Navigation breakpoint, desktop/mobile keyboard and no-JS assertions passed.');
+    }
+  },
+  {
     label: 'index.html (mobile nav open)',
     path: 'index.html',
     setup: async (page) => {
@@ -284,6 +387,16 @@ const scenarios = [
   { label: 'regulamin.html (baseline)', path: 'regulamin.html' }
 ];
 
+// Example: npm run test:a11y -- --scenario "nav breakpoint transition"
+const scenarioFlag = process.argv.indexOf('--scenario');
+const scenarioFilter = scenarioFlag === -1 ? null : process.argv[scenarioFlag + 1];
+assert.ok(scenarioFlag === -1 || (scenarioFilter && !scenarioFilter.startsWith('--')),
+  '--scenario requires a label filter');
+const selectedScenarios = scenarioFilter
+  ? scenarios.filter((scenario) => scenario.label.includes(scenarioFilter))
+  : scenarios;
+assert.ok(selectedScenarios.length, `No scenarios match: ${scenarioFilter}`);
+
 const server = createStaticServer();
 let browser;
 let context;
@@ -301,7 +414,7 @@ try {
 
   const allViolations = [];
 
-  for (const scenario of scenarios) {
+  for (const scenario of selectedScenarios) {
     const page = await context.newPage();
     const { result } = await runScenario(page, baseUrl, scenario);
     const violations = result.violations || [];
@@ -319,7 +432,7 @@ try {
     console.error(`\nAccessibility violations found: ${count}`);
     process.exitCode = 1;
   } else {
-    console.log('Axe accessibility checks passed for all scenarios.');
+    console.log(`Axe accessibility checks passed for ${selectedScenarios.length} selected scenario(s).`);
   }
 } finally {
   await context?.close();
