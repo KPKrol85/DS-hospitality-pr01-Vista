@@ -99,11 +99,12 @@ Planning used static repository inspection and one read-only Sharp metadata chec
   - **Sources:** `index.html`, `rooms.html`, `gallery.html`; referenced variants under `assets/img/optimized/gallery/`, `assets/img/optimized/rooms/` and `assets/img/optimized/subpage-gallery/pokoje/`; `scripts/optimize-images.mjs` for generation ownership. **Audit:** `AUDIT.md` P2-04.
   - **Verification (2026-10-01):** All 421 source `srcset` width descriptors now match decoded image metadata (`check:image-descriptors`, added to `qa:fast`); representative mobile/desktop DPR 1/2 checks select candidates consistent with rendered sizes. Homepage gallery `<source>` elements received their `<img>` `sizes` after Chromium showed a `100vw` fallback. Required focused checks passed.
 
-- [ ] **PH2-05 — Align sitemap membership with the noindex policy**
-  - [ ] Remove the cookies, privacy-policy and terms URLs from `sitemap.xml`; preserve their existing `noindex,follow` directives and public navigation access.
-  - [ ] Compare all remaining sitemap entries with current root-page indexing directives and canonical URLs, and run `npm run check:links` to check local targets.
+- [x] **PH2-05 — Align sitemap membership with the noindex policy**
+  - [x] Remove the cookies, privacy-policy and terms URLs from `sitemap.xml`; preserve their existing `noindex,follow` directives and public navigation access.
+  - [x] Compare all remaining sitemap entries with current root-page indexing directives and canonical URLs, and run `npm run check:links` to check local targets.
   - **Completion condition:** The sitemap lists the intended indexable canonical pages and excludes noindex pages; legal pages retain their approved indexing policy.
   - **Sources:** `sitemap.xml`, root-page robots/canonical metadata, `cookies.html`, `polityka-prywatnosci.html`, `regulamin.html`, `scripts/check-link-integrity.mjs`. **Audit:** `AUDIT.md` P2-05.
+  - **Verification (2026-10-01):** Sitemap now contains only the six intended indexable canonical pages; legal pages retain noindex,follow, remain publicly linked, and local sitemap targets pass link integrity checks.
 
 ## Phase 3 — Verify the integrated production package
 
