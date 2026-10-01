@@ -1,0 +1,154 @@
+# Vista — Final Technical Front-End Audit
+
+**Audit date:** 2026-09-30  
+**Project type:** Demonstrational static multi-page hospitality website (HTML, modular CSS, vanilla JavaScript), with Node.js tooling and Netlify configuration  
+**Audit mode:** Final repository and implementation review  
+**Current readiness:** Needs important fixes
+
+## 1. Executive assessment
+
+Vista has coherent canonical-source ownership, a documented source/production split, and useful executable checks. All 12 source routes loaded in local Chromium without uncaught page errors or failed local asset responses in the route sweep. The existing fast checks and 15 configured accessibility scenarios passed. Additional state-specific checks nevertheless confirmed a navigation breakpoint defect, incorrect nested-404 URL resolution, and insufficient contrast in dark-theme form errors. Smaller issues affect numeric validation, two other text contrast states, responsive-image descriptors, and sitemap consistency. These findings warrant corrections before final presentation; no P0 issue was detected. Production packaging and live Netlify behavior were not verified in this audit.
+
+## 2. Audit scope and verification
+
+### Areas inspected
+
+- All 12 root HTML documents: shared shell, primary routes, inquiry form, gallery, legal content mechanisms, and utility pages. Review covered metadata, landmarks, headings, control semantics, ID references, links, images, and project disclosure.
+- All maintained CSS modules and browser JavaScript modules: navigation, themes, filters, tabs, dialogs, reveal, form validation, map fallback, JSON-LD loading, and local persistence.
+- Build, development, preview, image-processing, syntax, link, booking-date, JSON-LD, and axe scripts; package and lockfile metadata; Netlify configuration, Edge Function, headers and redirects; service worker template, manifest, robots and sitemap.
+- README, active project context, workflow and distribution notes, license, and archived audit/review findings. Historical verification was not treated as a current result. No root `AUDIT.md` existed at the start; the checkout was clean.
+- Asset references and selected binary metadata, including every distinct width-descriptor image URL collected from HTML and all manifest image dimensions. This was not a visual or provenance inspection of every asset.
+
+### Verification performed
+
+- `npm run qa:fast` — executed and passed: local reference checks for 12 HTML files plus sitemap; syntax checks for 30 JavaScript and 12 JSON files; 11 local Edge Function booking-date scenarios; equivalence of 12 embedded/external JSON-LD pairs. Node emitted a non-fatal module-type detection warning for the Edge Function.
+- `npm run test:a11y` — executed and passed all 15 configured source-mode Chromium/axe scenarios. These include mobile navigation open, room filtering, gallery fragment restoration, lightbox behavior, and invalid contact submission. The invalid submission sent no POST.
+- `node scripts/dev-server.mjs` with ad hoc `node` stdin/Playwright checks — executed against local source pages. All 12 routes had one `h1`, one `main`, Polish document language, no duplicate IDs, and no unresolved `aria-labelledby`, `aria-describedby`, or `aria-controls` references. At 320, 390, 768, 961 and 1280 CSS pixels, the JavaScript-enabled route sweep detected no horizontal document overflow above one pixel.
+- Focused Chromium reproductions — confirmed the mobile-to-desktop menu failure and submission of `guests=6.5`. The latter POST was fulfilled by browser request interception; it was not delivered to Netlify or another recipient. No-JavaScript checks confirmed visible homepage reveal content/navigation and active native required-field validation on the contact form; these checks do not establish complete no-JavaScript layout coverage.
+- Targeted contrast checks — axe confirmed 2.13:1 for the focused skip link and 1.92:1 for the six dark-theme offer badges. For `#err-name`, computed foreground color and an in-memory screenshot sample of the rendered background confirmed approximately 3.01:1 in dark mode. Findings below describe the exact tested states.
+- Nested-404 simulation — Chromium received the current `404.html` body with HTTP 404 at `/missing/deep-page` through local request interception. Relative script/image requests failed, and recovery links resolved under `/missing/`. This tested browser URL resolution, not Netlify delivery.
+- Read-only Sharp metadata inspection — checked 381 distinct image URL/width-descriptor entries collected from HTML; detected the mismatches described in P2-04. Declared image dimensions in the manifest matched the inspected files.
+- Static checks confirmed matching root dependency declarations in `package.json` and `package-lock.json`, matching proprietary license metadata, and no tracked `dist/` or obsolete source-tree bundles. A targeted source scan found no `innerHTML`, `insertAdjacentHTML`, `eval`, `new Function`, or `document.write` usage in the inspected HTML/JavaScript. This is a limited repository check, not a security assurance.
+- `git diff --check` — executed and passed. Final status inspection confirmed that only the new `AUDIT.md` changed.
+
+### Verification limitations
+
+- No explicit live URL was supplied. No deployment was inferred from canonical metadata. Live redirects, response headers/CSP, Edge execution, Forms collection, third-party map rendering, external links, and search-engine behavior were not verified. Archived reports of earlier production checks are not evidence for this checkout.
+- `dist/` was absent. Build and image-generation commands were deliberately not run because they clean or write output outside the sole permitted file. Build, asset rewriting, precache generation and cache invalidation were inspected statically; current build success, production bundles, installation/update behavior and offline navigation remain unverified.
+- Browser execution used the existing Chromium installation. Firefox, WebKit, physical devices, assistive technology, production performance and full contrast coverage were not tested. Existing axe scenarios do not exercise all themes, focus states or breakpoint transitions.
+- Automated dark-form contrast output treated transparent regions over the body pseudo-element as white. Those apparent label/background failures were not accepted as findings; P1-03 uses separately sampled rendered-background evidence. No WCAG conformance conclusion is made.
+- Legal documents were compared with visible technical mechanisms and project scope only. Legal compliance, third-party asset rights, dependency vulnerabilities and external infrastructure were not audited. No dependencies were installed or updated.
+
+## 3. Verified strengths
+
+- Canonical source and generated-output roles are explicit and consistent with executable configuration: source pages load readable modules, while `scripts/build-dist.mjs` rewrites package copies and `js/script.js` gates worker registration on the production marker (`package.json`, `.gitignore`, `scripts/build-dist.mjs`, `js/script.js`). The build itself was not executed.
+- The fast gate checks executable arrival-date handling and semantic JSON-LD pair equality, in addition to syntax and local references. All four checks passed on the current files (`scripts/check-booking-date.mjs`, `scripts/check-jsonld-pairs.mjs`, `package.json`).
+- Gallery handling passed recognized and malformed-fragment scenarios, category visibility assertions, history replacement checks, and lightbox navigation checks. Room category filtering passed its configured rendered-state check (`js/features/gallery-filters.js`, `js/features/room-filters.js`, `scripts/a11y-axe.mjs`).
+- The native contact form baseline remains enabled without JavaScript; enhanced initialization installs validation handlers before setting `noValidate`. Local Edge tests reject missing, malformed and past arrival dates. Contact copy identifies an inquiry to the project author and explicitly excludes accommodation reservations (`contact.html:222-224`, `js/features/form.js`, `netlify/edge-functions/validate-booking-date.js`). Numeric guest validation still has the separate defect below.
+- Reveal content is visible by default, and dialog code centralizes focus containment and restoration with background `inert` isolation. Theme and project-notice storage accesses are guarded (`css/modules/utilities.css`, `js/features/reveal.js`, `js/features/modal-focus.js`, `js/features/theme.js`, `js/features/project-banner.js`). Homepage reveal visibility was checked with JavaScript disabled.
+- The service worker template scopes cleanup to Vista cache names, ignores non-GET/cross-origin requests and caches only successful responses. Its generator hashes packaged file contents, including images, and checks the precache list against package files. These are source-inspected safeguards, not verified production/offline results (`pwa/service-worker.js`, `scripts/build-dist.mjs`).
+- Current JSON-LD pairs describe website/page content rather than an operating `Hotel` entity. Contact and map attribution distinguish the author from the fictional Vista brand; the README accurately separates local/source behavior from unverified deployment behavior (`assets/seo/`, `contact.html`, `README.md`).
+
+## 4. P0 — Critical risks
+
+None detected.
+
+## 5. P1 — Important issues worth fixing next
+
+### [P1-01] Open mobile navigation retains its keyboard trap after entering desktop layout
+
+- **Classification:** Defect
+- **Affected area:** Shared navigation, responsive behavior, keyboard accessibility
+- **Evidence:** `js/features/nav.js:34-61`, `js/features/nav.js:74-97`; `css/modules/layout.css` — `.js .site-nav[hidden]` and the 961px desktop rules.
+- **Current behavior:** Opening the menu at 390px and widening to 1280px leaves `is-open` active. The desktop transition only clears `hidden`; it does not reset mobile state. In Chromium, Tab from the last navigation link returned to Home instead of leaving the navigation. Escape then set `hidden=true`, making the entire desktop navigation `display:none` while its toggle was also hidden.
+- **Impact:** A resize or orientation change can trap keyboard traversal in the shared header and then remove its navigation controls until reload or another breakpoint change.
+- **Recommended direction:** Reset mobile open/focus state when entering desktop layout and restrict mobile close/trap behavior to the mobile state. Keep desktop navigation rendered.
+- **Verification criteria:** Open the menu below 961px, cross the breakpoint, and verify normal Tab/Shift+Tab traversal and visible navigation after Escape. Returning to mobile must produce consistent visibility and `aria-expanded` state.
+
+### [P1-02] The custom 404 document resolves assets and recovery links under the missing path
+
+- **Classification:** Contract mismatch
+- **Affected area:** Error routing, shared assets, recovery navigation
+- **Evidence:** `netlify/_redirects:2`; `404.html:17-19`, `404.html:102-103`, `404.html:254`; `scripts/build-dist.mjs:132-133`.
+- **Current behavior:** The catch-all maps missing paths to `404.html`, whose assets and recovery links are document-relative. Serving that document at `/missing/deep-page` in local Chromium requested scripts/images under `/missing/` and resolved Home to `/missing/index.html` and Contact to `/missing/contact.html`. The production rewrite retains relative bundle URLs, so it does not correct this URL-base dependency.
+- **Impact:** Nested missing URLs cannot reliably show the styled error page or return visitors to valid routes through its main recovery links. Directly opening `/404.html` does not expose the problem.
+- **Recommended direction:** Make the error document's public asset and recovery URLs resolve correctly from any requested path, with corresponding support in canonical build handling where required.
+- **Verification criteria:** Serve the built error document with HTTP 404 at both shallow and nested missing URLs; its styles, scripts and images must load, and Home/Contact must navigate to valid root routes. Verify actual hosting behavior separately.
+
+### [P1-03] Non-date form errors retain a dark red foreground in dark mode
+
+- **Classification:** Defect
+- **Affected area:** Contact validation feedback, theme accessibility
+- **Evidence:** `css/modules/components.css:182-188`; `css/modules/tokens.css:131-137`; `css/modules/base.css` — `body::before`; `contact.html:231`, `contact.html:237`, `contact.html:252`, `contact.html:293`.
+- **Current behavior:** `.form__error` always uses `#b91c1c`. Only errors inside the date fieldset use the theme-aware error token. After an empty submission in dark-mode Chromium, `#err-name` rendered in `#b91c1c` over a sampled `#0a0d11` background: approximately 3.01:1 for normal-size text. Other non-fieldset errors share the same fixed color declaration; their individual rendered ratios were not measured.
+- **Impact:** Users in dark mode receive low-contrast text explaining why a required form field prevents submission, despite the date errors having a separate theme-aware treatment.
+- **Recommended direction:** Provide an appropriate semantic error foreground for each actual form surface in both themes, including errors outside the date fieldset.
+- **Verification criteria:** Trigger all implemented errors in light and dark themes and confirm at least 4.5:1 for their normal-size text against the rendered backgrounds, while preserving field/error associations and focus behavior.
+
+## 6. P2 — Minor refinements
+
+### [P2-01] Enhanced guest validation accepts fractional and out-of-range values
+
+- **Classification:** Defect
+- **Affected area:** Inquiry form, numeric validation
+- **Evidence:** `contact.html:274`; `js/features/form.js:123-127`, `js/features/form.js:202-203`, `js/features/form.js:223`, `js/features/form.js:243`.
+- **Current behavior:** `parseInt` validates a truncated number while the raw input is submitted with native validation disabled. Chromium accepted `6.5`, set `aria-invalid="false"`, and reached a locally intercepted POST containing `guests=6.5`, despite `stepMismatch` and `rangeOverflow` both being true.
+- **Impact:** The inquiry can carry values that violate its explicit whole-person range of 1–6. Its demonstrational scope limits the business impact, but enhancement weakens the native constraint.
+- **Recommended direction:** Validate the complete numeric value and its integer/range constraints before submission, without truncating the value being checked.
+- **Verification criteria:** Reject fractional, empty and out-of-range values; accept integers 1–6. Rejected input must expose its error and send no POST in the enhanced path.
+
+### [P2-02] The focused skip link has insufficient text contrast
+
+- **Classification:** Defect
+- **Affected area:** Shared skip navigation, keyboard accessibility
+- **Evidence:** `css/modules/utilities.css:28-43`; `css/modules/tokens.css:24`; `index.html` — `.skip-link`.
+- **Current behavior:** The visible focused link uses white text on `#2dc7a6`. A focused-state axe check measured 2.13:1 at approximately 17.4px text size, below 4.5:1. The shared rule applies across the site's pages.
+- **Impact:** The first keyboard shortcut to main content is harder to read precisely when a visitor focuses it. The navigation action itself remains available.
+- **Recommended direction:** Pair the skip link's foreground and solid background with sufficient contrast while retaining its visible focus placement.
+- **Verification criteria:** Focus the link through keyboard navigation in both themes and confirm normal-size text contrast of at least 4.5:1 and successful movement to main content.
+
+### [P2-03] Dark-theme offer badges keep white text on the mint primary color
+
+- **Classification:** Defect
+- **Affected area:** Offer information, dark-theme text contrast
+- **Evidence:** `css/modules/components.css:743-755`; `css/modules/tokens.css:18`, `css/modules/tokens.css:32`, `css/modules/tokens.css:131-137`; `offers.html` — `.offer-card__badge`.
+- **Current behavior:** The badge background becomes `#34d1b2` in dark mode while `--primary-contrast` remains white. Axe measured 1.92:1 for all six offer-page discount badges. Homepage badges use the same component rule.
+- **Impact:** Small discount labels lose readability in the supported dark theme; this is localized to demonstrational offer information.
+- **Recommended direction:** Use a foreground/background pair suitable for the badge surface in each theme. Check other consumers before changing a shared contrast token.
+- **Verification criteria:** All offer badges meet at least 4.5:1 in both themes without reducing contrast in other components using the same tokens.
+
+### [P2-04] Several responsive-image width descriptors disagree with the actual image files
+
+- **Classification:** Contract mismatch
+- **Affected area:** Responsive images, browser resource selection
+- **Evidence:** `index.html:532-551` and the following five homepage gallery pictures; `index.html:331`; `rooms.html:252`; `gallery.html:308-326`; corresponding files under `assets/img/optimized/`.
+- **Current behavior:** Read-only Sharp metadata shows homepage gallery images declared as 320w/480w/640w/800w are actually 640/960/1280/1600 pixels wide, across AVIF, WebP and JPEG. The Deluxe JPEG declared as 1208w is 1280px wide, and the fourth gallery room image declared as 1600w is 1536px wide in all three formats. These measurements use binary metadata rather than filenames.
+- **Impact:** The browser receives incorrect intrinsic-width information when choosing a candidate. The factor-of-two homepage mismatch can select unnecessarily large resources; no loading-time or Core Web Vitals regression was measured.
+- **Recommended direction:** Align canonical HTML width descriptors with measured asset widths. If different physical sizes are intended, regenerate through the existing image workflow and update the associated references coherently.
+- **Verification criteria:** Every HTML `srcset` width descriptor agrees with the corresponding decoded image width, and representative viewport/DPR checks select appropriate candidates.
+
+### [P2-05] The sitemap includes pages intentionally marked noindex
+
+- **Classification:** Contract mismatch
+- **Affected area:** Sitemap, indexing policy
+- **Evidence:** `sitemap.xml:18-26`; `cookies.html:11`; `polityka-prywatnosci.html:10`; `regulamin.html:10`.
+- **Current behavior:** Cookies, privacy policy and terms are included in the submitted URL inventory while all three documents explicitly use `noindex,follow`.
+- **Impact:** The sitemap does not consistently represent the intended indexable route set. This is a configuration inconsistency, not evidence of an indexing or ranking outcome.
+- **Recommended direction:** Align sitemap membership with the existing intentional noindex policy for legal pages.
+- **Verification criteria:** Sitemap entries resolve to the intended indexable canonical pages; legal routes retain their approved noindex behavior.
+
+## 7. Extra quality improvements
+
+None detected.
+
+## 8. Current readiness conclusion
+
+**Status:** Needs important fixes
+
+The source site supports continued development and local review, and its existing checks pass within their configured scope. Resolve the three P1 findings before final public presentation or handoff, then verify the affected states and a fresh production package. The five P2 findings are narrower refinements. This assessment does not establish current deployment success, real inquiry delivery, offline reliability or accessibility conformance.
+
+## 9. Senior rating
+
+**Rating:** 7/10
+
+The modular source, progressive-enhancement baseline, explicit distribution ownership and executable regression checks are sound foundations for this static demonstration. The score reflects reproducible navigation and error-route defects, a validation-feedback contrast problem, and narrower constraint/metadata inconsistencies that the current test scenarios miss. Production and cross-browser verification remain outside the evidence collected here; the absence of unrelated application features does not reduce the rating.
