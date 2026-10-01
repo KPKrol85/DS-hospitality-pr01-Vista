@@ -46,6 +46,7 @@ All significant changes to this project are documented in this file.
 
 ### Fixed
 
+- Made custom 404 assets, JSON-LD payloads and navigation/recovery links resolve from the domain root at missing URLs, including theme icons and 404 production-bundle references; preserved same-document skip navigation and `noindex,follow`. Added a focused local HTTP 404 regression with and without JavaScript.
 - Reset mobile navigation state on entry to desktop layout, preserving visible navigation and ordinary keyboard traversal; restricted mobile interactions to the mobile breakpoint and added a focused source-browser regression.
 - Balanced fixed-count room, offer, testimonial and gallery grids across responsive widths while preserving card minimum widths.
 - Aligned section headings, intros, gallery and brand copy, highlight content, and testimonial cards with the existing content grid from 760 px.

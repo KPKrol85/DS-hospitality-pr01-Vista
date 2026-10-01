@@ -82,7 +82,8 @@ function summarizeViolations(label, violations) {
 }
 
 async function runAxe(page) {
-  await page.addScriptTag({ content: axeSource });
+  // Inject test instrumentation through Playwright without weakening the page's CSP.
+  await page.evaluate(axeSource);
   return page.evaluate(async () => {
     return window.axe.run(document, {
       resultTypes: ['violations'],
@@ -99,11 +100,11 @@ async function runScenario(page, baseUrl, spec) {
   if (spec.beforeLoad) {
     await spec.beforeLoad(page);
   }
-  await page.goto(targetUrl, { waitUntil: 'networkidle' });
+  const response = await page.goto(targetUrl, { waitUntil: 'networkidle' });
   await page.waitForLoadState('domcontentloaded');
 
   if (spec.setup) {
-    await spec.setup(page);
+    await spec.setup(page, response);
   }
 
   const result = await runAxe(page);
@@ -207,7 +208,140 @@ function galleryFragmentScenario(fragment, filter, exerciseControls = false) {
   };
 }
 
+function custom404Scenario() {
+  const missingPaths = ['/missing-vista-page', '/missing-vista/nested/page', '/missing-vista/nested/'];
+  let trace;
+
+  async function prepare(page) {
+    const html = await readFile(path.join(rootDir, '404.html'), 'utf8');
+    const headers = await readFile(path.join(rootDir, 'netlify/_headers'), 'utf8');
+    const csp = headers.match(/^\s+Content-Security-Policy: (.+)$/m)?.[1].trim();
+    assert.ok(csp, 'Use the current source CSP in the local 404 fixture');
+    await page.route((url) => missingPaths.includes(url.pathname), (route) => route.fulfill({
+      status: 404, contentType: 'text/html; charset=utf-8', body: html,
+      headers: { 'Content-Security-Policy': csp }
+    }));
+    const observed = { requests: [], responses: [], errors: [] };
+    page.on('request', (request) => observed.requests.push(request));
+    page.on('response', (response) => observed.responses.push(response));
+    page.on('requestfailed', (request) => observed.errors.push(`${request.url()}: ${request.failure()?.errorText}`));
+    page.on('pageerror', (error) => observed.errors.push(error.message));
+    return observed;
+  }
+
+  async function verify(page, response, observed, missingPath, javaScriptEnabled) {
+    const origin = new URL(page.url()).origin;
+    assert.equal(response.status(), 404, 'Missing document must retain HTTP 404');
+    assert.equal(page.url(), origin + missingPath, 'Fixture must preserve the requested URL');
+    assert.equal(await page.locator('meta[name="robots"]').getAttribute('content'), 'noindex,follow');
+    assert.equal(await page.locator('meta[name="ld-json"]').getAttribute('content'), '/assets/seo/ld-404.json');
+    assert.equal(await page.locator('#not-found-heading').isVisible(), true);
+    assert.match(await page.locator('#not-found-heading').innerText(), /Nie znaleziono strony/);
+    assert.equal(await page.locator('body').evaluate((el) => getComputedStyle(el).marginTop), '0px',
+      'Source stylesheet must be applied');
+
+    if (javaScriptEnabled) {
+      await page.locator('#projectBannerAccept').click();
+      await page.locator('#projectBanner').waitFor({ state: 'hidden' });
+      assert.equal(await page.locator('html').getAttribute('class'), 'js');
+      assert.match(await page.locator('[data-year]').innerText(), /^\d{4}$/);
+      const initialTheme = await page.locator('html').getAttribute('data-theme');
+      await page.locator('#theme-toggle').click();
+      assert.notEqual(await page.locator('html').getAttribute('data-theme'), initialTheme);
+      await page.locator('#theme-toggle').click();
+      assert.equal(await page.locator('html').getAttribute('data-theme'), initialTheme);
+    } else {
+      assert.equal(await page.locator('html').getAttribute('class'), 'no-js');
+      assert.equal(await page.locator('#site-nav').isVisible(), true, 'No-JS mobile navigation must remain visible');
+      const navLinks = page.locator('#site-nav a');
+      await navLinks.first().focus();
+      await page.keyboard.press('Tab');
+      assert.equal(await navLinks.nth(1).evaluate((el) => el === document.activeElement), true);
+    }
+
+    await page.locator('.footer__brand-img').scrollIntoViewIfNeeded();
+    await page.waitForFunction(() => [...document.images].every((img) => img.complete && img.naturalWidth > 0));
+    const links = await page.locator('a[href]').evaluateAll((anchors) => anchors
+      .filter((a) => a.origin === location.origin && !a.getAttribute('href').startsWith('#'))
+      .map((a) => ({ raw: a.getAttribute('href'), url: a.href })));
+    for (const { raw, url } of links) {
+      assert.ok(raw.startsWith('/') && !raw.startsWith('//'), `Root-safe link required: ${raw}`);
+      assert.equal((await page.request.get(url)).status(), 200, `Valid local route required: ${url}`);
+    }
+    for (const [selector, expected] of [
+      ['.not-found__actions a:first-child', '/index.html'],
+      ['.not-found__actions a:last-child', '/contact.html'],
+      ['#site-nav li:first-child a', '/index.html'],
+      ['#site-nav .btn', '/contact.html#form'],
+      ['.footer__legal li:first-child a', '/polityka-prywatnosci.html']
+    ]) {
+      assert.equal(await page.locator(selector).evaluate((el) => el.href), origin + expected);
+    }
+
+    const skip = page.locator('.skip-link');
+    assert.equal(await skip.getAttribute('href'), '#main');
+    const documentRequests = observed.requests.filter((request) => request.isNavigationRequest()).length;
+    await skip.focus();
+    await page.keyboard.press('Enter');
+    await page.waitForURL(origin + missingPath + '#main');
+    await page.keyboard.press('Tab');
+    assert.equal(await page.locator('.not-found__actions a:first-child').evaluate((el) => el === document.activeElement), true,
+      'Native skip navigation must move keyboard traversal into main');
+    assert.equal(observed.requests.filter((request) => request.isNavigationRequest()).length, documentRequests,
+      'Skip link must not load another document');
+
+    await page.waitForLoadState('networkidle');
+    const required = ['/css/style.css', '/assets/img/logo/logo-128x128.svg', '/assets/img/logo/logo-160x160.svg',
+      '/assets/img/icons/sun-40x40.svg'];
+    if (javaScriptEnabled) required.push('/js/theme-init.js', '/js/script.js', '/assets/seo/ld-404.json', '/assets/img/icons/moon-40x40.svg');
+    for (const asset of required) {
+      assert.ok(observed.responses.some((item) => new URL(item.url()).pathname === asset && item.status() === 200),
+        `Expected successful root asset response: ${asset}`);
+    }
+    for (const request of observed.requests.filter((item) => !item.isNavigationRequest())) {
+      const url = new URL(request.url());
+      assert.equal(url.origin, origin, '404 assets must stay same-origin');
+      assert.match(url.pathname, /^\/(css|js|assets)\//, `Unexpected asset path: ${url.pathname}`);
+    }
+    assert.deepEqual(observed.responses.filter((item) => !item.request().isNavigationRequest() && item.status() >= 400)
+      .map((item) => item.url()), [], 'No failed local asset responses');
+    assert.deepEqual(observed.errors, [], 'No script errors or failed requests');
+    console.log(`404 routing assertions passed: ${missingPath} (${javaScriptEnabled ? 'JS' : 'no-JS'}).`);
+  }
+
+  return {
+    label: '404.html (missing-path recovery)',
+    path: missingPaths[0].slice(1),
+    beforeLoad: async (page) => { trace = await prepare(page); },
+    setup: async (page, firstResponse) => {
+      const origin = new URL(page.url()).origin;
+      for (const [index, missingPath] of missingPaths.entries()) {
+        if (index > 0) {
+          trace.requests.length = trace.responses.length = trace.errors.length = 0;
+        }
+        const response = index === 0 ? firstResponse : await page.goto(origin + missingPath, { waitUntil: 'networkidle' });
+        // Exercise real notice dismissal on each JS document.
+        await verify(page, response, trace, missingPath, true);
+        await page.evaluate(() => localStorage.removeItem('vista_project_banner_accepted'));
+      }
+      const context = await page.context().browser().newContext({ javaScriptEnabled: false, viewport: { width: 390, height: 844 } });
+      try {
+        for (const missingPath of missingPaths) {
+          const noJsPage = await context.newPage();
+          const observed = await prepare(noJsPage);
+          const response = await noJsPage.goto(origin + missingPath, { waitUntil: 'networkidle' });
+          await verify(noJsPage, response, observed, missingPath, false);
+          await noJsPage.close();
+        }
+      } finally {
+        await context.close();
+      }
+    }
+  };
+}
+
 const scenarios = [
+  custom404Scenario(),
   { label: 'index.html (baseline)', path: 'index.html' },
   {
     label: 'index.html (nav breakpoint transition)',
@@ -317,8 +451,11 @@ const scenarios = [
     path: 'index.html',
     setup: async (page) => {
       await page.setViewportSize({ width: 390, height: 844 });
-      await page.getByRole('button', { name: 'Akceptuję' }).click();
-      await page.locator('#projectBanner').waitFor({ state: 'hidden' });
+      const banner = page.locator('#projectBanner');
+      if (await banner.isVisible()) {
+        await page.locator('#projectBannerAccept').click();
+        await banner.waitFor({ state: 'hidden' });
+      }
       await page.getByRole('button', { name: 'Otwórz menu' }).click();
       await page.locator('#site-nav.is-open').waitFor({ state: 'visible' });
     }

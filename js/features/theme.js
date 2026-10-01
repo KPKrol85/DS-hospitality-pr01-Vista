@@ -1,8 +1,8 @@
 const STORAGE_KEY = "theme-pref";
 const PREFS = new Set(["auto", "light", "dark"]);
 const ICONS = {
-  light: "assets/img/icons/sun-40x40.svg",
-  dark: "assets/img/icons/moon-40x40.svg",
+  light: "/assets/img/icons/sun-40x40.svg",
+  dark: "/assets/img/icons/moon-40x40.svg",
 };
 
 function getStoredPref() {

@@ -117,20 +117,24 @@ async function rewriteHtmlFile(htmlFileName, passthroughImageCopies) {
   let html = await readFile(sourcePath, "utf8");
 
   const htmlTag = /<html\b[^>]*>/gi;
-  const sourceCss = /href="css\/style\.css"/g;
-  const sourceScript = /<script\b[^>]*src="js\/script\.js\?vista-dev-1"[^>]*><\/script>/g;
+  // The error document is served at arbitrary URLs; other pages keep their source contract.
+  const rootPrefix = htmlFileName === "404.html" ? "/" : "";
+  const sourceCss = new RegExp(`href="${rootPrefix}css/style\\.css"`, "g");
+  const sourceScript = new RegExp(`<script\\b[^>]*src="${rootPrefix}js/script\\.js\\?vista-dev-1"[^>]*><\\/script>`, "g");
   if (
     [...html.matchAll(htmlTag)].length !== 1 ||
     html.includes('data-vista-build=') ||
     [...html.matchAll(sourceCss)].length !== 1 ||
-    [...html.matchAll(sourceScript)].length !== 1
+    [...html.matchAll(sourceScript)].length !== 1 ||
+    [...html.matchAll(/href="\/?css\/style(?:\.min)?\.css"/g)].length !== 1 ||
+    [...html.matchAll(/src="\/?js\/script(?:\.min)?\.js[^"]*"/g)].length !== 1
   ) {
     throw new Error(`Expected one HTML root, source stylesheet, and source script in ${htmlFileName}`);
   }
 
   html = html.replace(/<html\b/i, '<html data-vista-build="production"');
-  html = html.replace(sourceCss, 'href="css/style.min.css"');
-  html = html.replace(sourceScript, '<script defer src="js/script.min.js"></script>');
+  html = html.replace(sourceCss, `href="${rootPrefix}css/style.min.css"`);
+  html = html.replace(sourceScript, `<script defer src="${rootPrefix}js/script.min.js"></script>`);
 
   html = html.replace(/(\.?\/)?assets\/img\/src\/([^\s"',)>\]]+)/g, (match, prefix = "", relativePath) => {
     const normalizedPrefix = prefix === "./" ? "./" : "";
@@ -146,7 +150,7 @@ async function rewriteHtmlFile(htmlFileName, passthroughImageCopies) {
     return normalizedPrefix + (pathExistsSync(optimizedFsPath) ? optimizedTarget : copyPassthroughAsset(sourceFsPath, relativePath, passthroughImageCopies, passthroughTarget));
   });
 
-  if (html.includes('href="css/style.css"') || html.includes('src="js/script.js') || html.includes("assets/img/src/")) {
+  if (/href="\/?css\/style\.css"/.test(html) || /src="\/?js\/script\.js/.test(html) || html.includes("assets/img/src/")) {
     throw new Error(`Production rewrite incomplete for ${htmlFileName}`);
   }
 
@@ -253,12 +257,15 @@ async function verifyDistribution(htmlPages) {
 
   for (const htmlPage of htmlPages) {
     const html = await readFile(path.join(DIST_DIR, htmlPage), "utf8");
+    const rootPrefix = htmlPage === "404.html" ? "/" : "";
     if (
       !html.includes('data-vista-build="production"') ||
-      !html.includes('href="css/style.min.css"') ||
-      !html.includes('src="js/script.min.js"') ||
-      html.includes('href="css/style.css"') ||
-      html.includes('src="js/script.js') ||
+      !html.includes(`href="${rootPrefix}css/style.min.css"`) ||
+      !html.includes(`src="${rootPrefix}js/script.min.js"`) ||
+      [...html.matchAll(/href="\/?css\/style\.min\.css"/g)].length !== 1 ||
+      [...html.matchAll(/src="\/?js\/script\.min\.js"/g)].length !== 1 ||
+      /href="\/?css\/style\.css"/.test(html) ||
+      /src="\/?js\/script\.js/.test(html) ||
       html.includes("assets/img/src/")
     ) {
       throw new Error(`Invalid production asset references in ${htmlPage}`);
