@@ -371,6 +371,217 @@ function contactValidationScenario(preference, colorScheme) {
   };
 }
 
+function contactGuestScenario() {
+  const label = 'contact.html (guest count validation)';
+  const invalidValues = ['', '0', '7', '1.5', '6.5'];
+  const validValues = ['1', '2', '3', '4', '5', '6'];
+  const nativeFlags = {
+    '': { valueMissing: true },
+    '0': { rangeUnderflow: true },
+    '7': { rangeOverflow: true },
+    '1.5': { stepMismatch: true },
+    '6.5': { rangeOverflow: true, stepMismatch: true }
+  };
+  const offerMessage = 'Zapytanie dotyczy oferty: Rodzinny city break.';
+  const otherIds = ['name', 'email', 'phone', 'checkin', 'checkout', 'consent'];
+  const submitName = { name: 'Wyślij zapytanie', exact: true };
+
+  function localISO(offsetDays) {
+    const date = new Date();
+    date.setDate(date.getDate() + offsetDays);
+    return [date.getFullYear(), date.getMonth() + 1, date.getDate()].map((part) => String(part).padStart(2, '0')).join('-');
+  }
+
+  function expectedValidity(value) {
+    const flags = nativeFlags[value] ?? {};
+    const valid = !(value in nativeFlags);
+    return {
+      value, valueMissing: false, rangeUnderflow: false, rangeOverflow: false, stepMismatch: false, badInput: false,
+      ...flags, valid, formValid: valid
+    };
+  }
+
+  async function nativeValidity(guests) {
+    return guests.evaluate((element) => {
+      const { valueMissing, rangeUnderflow, rangeOverflow, stepMismatch, badInput, valid } = element.validity;
+      return {
+        value: element.value, valueMissing, rangeUnderflow, rangeOverflow, stepMismatch, badInput, valid,
+        formValid: element.form.checkValidity()
+      };
+    });
+  }
+
+  async function dismissNotice(page) {
+    const banner = page.locator('#projectBanner');
+    if (await banner.isVisible()) {
+      await page.locator('#projectBannerAccept').click();
+      await banner.waitFor({ state: 'hidden' });
+    }
+  }
+
+  // Leaves #guests as the only control under test; phone stays optional and empty.
+  async function fillValidFields(page) {
+    const dates = { checkin: localISO(7), checkout: localISO(9) };
+    await page.locator('#name').fill('Jan Kowalski');
+    await page.locator('#email').fill('jan.kowalski@example.com');
+    await page.locator('#phone').fill('');
+    await page.locator('#checkin').fill(dates.checkin);
+    await page.locator('#checkout').fill(dates.checkout);
+    await page.locator('#consent').check();
+    return dates;
+  }
+
+  // Fulfils only the Vista form action locally; embedded Google Maps POSTs are not inquiries.
+  async function interceptFormPosts(page, formAction) {
+    const posts = [];
+    await page.route((url) => url.origin === formAction.origin && url.pathname === formAction.pathname, (route) => {
+      const request = route.request();
+      if (request.method() !== 'POST') return route.fallback();
+      posts.push(new URLSearchParams(request.postData() ?? ''));
+      return route.fulfill({ status: 200, contentType: 'text/html; charset=utf-8', body: '<!doctype html><title>Intercepted</title>' });
+    });
+    return posts;
+  }
+
+  // The submit handler validates synchronously: a rejected value has moved focus when click()
+  // resolves, while an accepted one would have left it on the button and started a POST.
+  async function submitRejected(page, value) {
+    const submit = page.locator('form[data-form]').getByRole('button', submitName);
+    await submit.focus();
+    await submit.click();
+    assert.equal(await page.evaluate(() => document.activeElement?.id ?? ''), 'guests',
+      `"${value}": rejected submission must move focus from the button to guests`);
+  }
+
+  async function openEnhancedForm(page, url) {
+    await page.goto(url, { waitUntil: 'networkidle' });
+    await dismissNotice(page);
+    await page.waitForFunction(() => document.querySelector('form[data-form]')?.noValidate === true);
+  }
+
+  async function assertGuestRejected(page, value, trigger) {
+    const guests = page.locator('#guests');
+    const error = page.locator('#err-guests');
+    assert.equal(await guests.inputValue(), value, `${trigger} "${value}": guest value must not be rewritten`);
+    assert.equal(await guests.getAttribute('aria-invalid'), 'true', `${trigger} "${value}": guests must be invalid`);
+    assert.equal(await error.isVisible(), true, `${trigger} "${value}": err-guests must be visible`);
+    assert.ok((await error.innerText()).trim(), `${trigger} "${value}": err-guests must contain feedback`);
+  }
+
+  async function assertGuestAccepted(page, value) {
+    assert.equal(await page.locator('#guests').getAttribute('aria-invalid'), 'false', `"${value}": guests must be valid`);
+    assert.equal(await page.locator('#err-guests').isVisible(), false, `"${value}": err-guests must be hidden`);
+  }
+
+  async function assertNativeContract(page, contactUrl, formAction) {
+    const context = await page.context().browser().newContext({ javaScriptEnabled: false, viewport: { width: 1280, height: 720 } });
+    try {
+      const noJsPage = await context.newPage();
+      const posts = await interceptFormPosts(noJsPage, formAction);
+      await noJsPage.goto(contactUrl, { waitUntil: 'domcontentloaded' });
+      const form = noJsPage.locator('form[name="booking"]');
+      const guests = noJsPage.locator('#guests');
+      assert.equal(await form.evaluate((element) => element.noValidate), false, 'Native validation must stay active without JavaScript');
+      await fillValidFields(noJsPage);
+      for (const value of [...invalidValues, ...validValues]) {
+        await guests.fill(value);
+        assert.deepEqual(await nativeValidity(guests), expectedValidity(value), `No-JS native validity for "${value}"`);
+      }
+      for (const value of invalidValues) {
+        await guests.fill(value);
+        await form.getByRole('button', submitName).focus();
+        await form.getByRole('button', submitName).click();
+        assert.equal(await guests.evaluate((element) => element === document.activeElement), true,
+          `No-JS "${value}": native validation must focus guests`);
+        assert.equal(noJsPage.url(), contactUrl, `No-JS "${value}": invalid submission must remain on contact.html`);
+      }
+      assert.equal(posts.length, 0, 'Native validation must block every invalid guest count');
+    } finally {
+      await context.close();
+    }
+  }
+
+  return {
+    label,
+    path: 'contact.html?oferta=family',
+    setup: async (page) => {
+      await dismissNotice(page);
+      await page.waitForFunction(() => document.querySelector('form[data-form]')?.noValidate === true);
+      const contactUrl = page.url();
+      const form = page.locator('form[data-form]');
+      const guests = page.locator('#guests');
+      const submit = form.getByRole('button', submitName);
+      const formAction = new URL(await form.evaluate((element) => element.action));
+      assert.equal(formAction.origin, new URL(contactUrl).origin, 'Vista form action must remain same-origin');
+      assert.deepEqual(await guests.evaluate((element) => ({
+        type: element.type, min: element.min, max: element.max, step: element.step, required: element.required,
+        describedBy: element.getAttribute('aria-describedby')
+      })), { type: 'number', min: '1', max: '6', step: '1', required: true, describedBy: 'hint-guests err-guests' });
+
+      await assertNativeContract(page, contactUrl, formAction);
+
+      const posts = await interceptFormPosts(page, formAction);
+      await fillValidFields(page);
+      for (const value of invalidValues) {
+        await guests.fill('2');
+        await assertGuestAccepted(page, '2');
+        // Assign without an input event, so only the submit handler can reject the value.
+        await guests.evaluate((element, next) => { element.value = next; }, value);
+        assert.deepEqual(await nativeValidity(guests), expectedValidity(value), `Enhanced page native validity for "${value}"`);
+        assert.equal(await guests.getAttribute('aria-invalid'), 'false', `"${value}": no input-driven validation before submit`);
+        await submitRejected(page, value);
+        await assertGuestRejected(page, value, 'Submit');
+        for (const id of otherIds) {
+          assert.equal(await page.locator(`#${id}`).getAttribute('aria-invalid'), 'false', `"${value}": ${id} must stay valid`);
+        }
+        assert.equal(page.url(), contactUrl, `"${value}": invalid submission must remain on contact.html`);
+        assert.equal(await form.locator('.form__success').isVisible(), false, `"${value}": invalid submission must not show success`);
+        assert.equal(posts.length, 0, `"${value}": invalid submission must not POST to the Vista form action`);
+
+        await guests.fill('2');
+        await guests.fill(value);
+        await assertGuestRejected(page, value, 'Input');
+      }
+
+      // Recover from a rejected fractional value and submit through the real path.
+      await guests.fill('1.5');
+      await submitRejected(page, '1.5');
+      await assertGuestRejected(page, '1.5', 'Recovery');
+      await guests.fill('2');
+      await assertGuestAccepted(page, '2');
+      await Promise.all([page.waitForURL(formAction.href), submit.click()]);
+      assert.equal(posts.length, 1, 'Recovered submission must POST exactly once');
+      assert.deepEqual(posts[0].getAll('guests'), ['2']);
+
+      for (const value of validValues) {
+        await openEnhancedForm(page, contactUrl);
+        assert.equal(await page.locator('#message').inputValue(), offerMessage, 'Offer prefill must remain unchanged');
+        const dates = await fillValidFields(page);
+        await guests.fill(value);
+        await assertGuestAccepted(page, value);
+        assert.deepEqual(await nativeValidity(guests), expectedValidity(value), `Enhanced page native validity for "${value}"`);
+        assert.equal(await form.getAttribute('name'), 'booking', 'Form name must remain booking');
+        const count = posts.length;
+        await Promise.all([page.waitForURL(formAction.href), submit.click()]);
+        assert.equal(posts.length, count + 1, `"${value}": valid submission must POST exactly once`);
+        const body = posts.at(-1);
+        assert.deepEqual(body.getAll('guests'), [value], `"${value}": submitted guest value must be exact`);
+        assert.deepEqual(body.getAll('form-name'), ['booking'], `"${value}": form-name must remain booking`);
+        assert.equal(body.get('checkin'), dates.checkin);
+        assert.equal(body.get('checkout'), dates.checkout);
+        assert.equal(body.get('message'), offerMessage);
+      }
+
+      // Leave the enhanced guest error visible for the scenario's axe pass.
+      await openEnhancedForm(page, contactUrl);
+      await guests.fill('6.5');
+      await assertGuestRejected(page, '6.5', 'Final');
+      console.log(`${label}: enhanced and no-JS rejection of ${invalidValues.map((v) => `"${v}"`).join(', ')}, ` +
+        `recovery and exact intercepted POSTs for ${validValues.join(', ')} passed.`);
+    }
+  };
+}
+
 function custom404Scenario() {
   const missingPaths = ['/missing-vista-page', '/missing-vista/nested/page', '/missing-vista/nested/'];
   let trace;
@@ -656,6 +867,7 @@ const scenarios = [
   contactValidationScenario('dark', 'light'),
   contactValidationScenario('auto', 'light'),
   contactValidationScenario('auto', 'dark'),
+  contactGuestScenario(),
   { label: 'regulamin.html (baseline)', path: 'regulamin.html' }
 ];
 

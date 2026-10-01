@@ -121,8 +121,10 @@ export function initForm() {
   }
 
   function validateGuests() {
-    const n = parseInt(guests.value || "0", 10);
-    const valid = n >= 1 && n <= 6;
+    // Check the complete value against required/min/max/step; never truncate 1.5 or 6.5 into range.
+    const value = guests.value.trim();
+    const n = Number(value);
+    const valid = value !== "" && Number.isInteger(n) && n >= 1 && n <= 6;
     setError(guests, "err-guests", !valid);
     return valid;
   }

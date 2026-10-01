@@ -69,12 +69,13 @@ Planning used static repository inspection and one read-only Sharp metadata chec
 
 **Goal:** Correct the five remaining P2 findings within their existing source contracts.
 
-- [ ] **PH2-01 — Validate the complete guest-count value**
-  - [ ] Make the shared input/submit validator reject empty, invalid, fractional and out-of-range values without truncation; agree with the number field's integer range of 1–6.
-  - [ ] Extend the contact regression with empty input, 0, 7, 1.5 and 6.5, plus every allowed integer. Invalid cases must expose `err-guests`, set `aria-invalid` and send no POST; valid cases must retain their exact value in a locally intercepted submission.
-  - [ ] Confirm native validation still enforces the same range and step when JavaScript is disabled. Preserve offer prefill, arrival/departure validation and the `booking` submission identity.
+- [x] **PH2-01 — Validate the complete guest-count value**
+  - [x] Make the shared input/submit validator reject empty, invalid, fractional and out-of-range values without truncation; agree with the number field's integer range of 1–6.
+  - [x] Extend the contact regression with empty input, 0, 7, 1.5 and 6.5, plus every allowed integer. Invalid cases must expose `err-guests`, set `aria-invalid` and send no POST; valid cases must retain their exact value in a locally intercepted submission.
+  - [x] Confirm native validation still enforces the same range and step when JavaScript is disabled. Preserve offer prefill, arrival/departure validation and the `booking` submission identity.
   - **Completion condition:** Enhanced validation accepts only integers 1–6 and cannot submit a value rejected by the field's guest-count constraints; error recovery remains usable.
   - **Sources:** `contact.html` (`#guests`), `js/features/form.js` (`validateGuests`, `form.noValidate`, submit handler), `scripts/a11y-axe.mjs`. **Audit:** `AUDIT.md` P2-01.
+  - **Verification (2026-10-01):** Enhanced and native validation now accept only integer guest counts 1–6; focused regression covers invalid/fractional values, recovery, exact `booking` POST values and no-JavaScript constraints. Required focused checks passed.
 
 - [ ] **PH2-02 — Make the focused skip link readable**
   - [ ] Give the shared skip link a foreground/background pair with sufficient contrast; preserve its focused placement and visible focus indicator. Check other consumers before changing a shared token.

@@ -46,6 +46,7 @@ All significant changes to this project are documented in this file.
 
 ### Fixed
 
+- Made enhanced guest-count validation check the complete value, rejecting empty, fractional and out-of-range input such as 1.5 and 6.5 without truncation, in agreement with the field's native 1–6 integer constraints. Added a focused regression for exact invalid and valid guest values, error recovery, locally intercepted `booking` submissions and native no-JavaScript validity.
 - Made contact-form error text theme-aware across light, dark and Auto settings while retaining the date-fieldset styling. Extended the focused regression to all seven errors, optional-phone validation, focus/ARIA/submission checks and rendered-background contrast measurement with a 4.5:1 minimum.
 - Made custom 404 assets, JSON-LD payloads and navigation/recovery links resolve from the domain root at missing URLs, including theme icons and 404 production-bundle references; preserved same-document skip navigation and `noindex,follow`. Added a focused local HTTP 404 regression with and without JavaScript.
 - Reset mobile navigation state on entry to desktop layout, preserving visible navigation and ordinary keyboard traversal; restricted mobile interactions to the mobile breakpoint and added a focused source-browser regression.
