@@ -18,7 +18,8 @@
     "check:syntax": "node scripts/qa-syntax.mjs",
     "check:booking-date": "node scripts/check-booking-date.mjs",
     "check:jsonld": "node scripts/check-jsonld-pairs.mjs",
-    "qa:fast": "npm run check:links && npm run check:syntax && npm run check:booking-date && npm run check:jsonld",
+    "check:image-descriptors": "node scripts/check-image-descriptors.mjs",
+    "qa:fast": "npm run check:links && npm run check:syntax && npm run check:booking-date && npm run check:jsonld && npm run check:image-descriptors",
     "test:a11y": "node scripts/a11y-axe.mjs"
   },
   "keywords": [

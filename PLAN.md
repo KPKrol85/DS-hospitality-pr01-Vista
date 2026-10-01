@@ -91,12 +91,13 @@ Planning used static repository inspection and one read-only Sharp metadata chec
   - **Sources:** `css/modules/components.css`, `css/modules/tokens.css`, `offers.html`, `index.html`, `scripts/a11y-axe.mjs`. **Audit:** `AUDIT.md` P2-03.
   - **Verification (2026-10-01):** Offer badges now meet >=4.5:1 contrast on offers.html and index.html across light, dark and Auto resolution (5.19:1 light, 8.06:1 dark); shared primary-button contrast behavior remains unchanged. Required focused checks passed.
 
-- [ ] **PH2-04 — Match responsive-image descriptors to actual widths**
-  - [ ] Correct all formats in the six homepage gallery pictures: declared 320/480/640/800 widths currently refer to 640/960/1280/1600 px files.
-  - [ ] Correct the Deluxe JPEG descriptor from 1208 to its measured 1280 px in `index.html` and `rooms.html`, and the fourth gallery-room image from 1600 to 1536 px in AVIF, WebP and JPEG in `gallery.html`. Preserve valid `sizes`, links and layout.
-  - [ ] Repeat a read-only binary-metadata comparison of every source HTML width descriptor, then inspect representative mobile/desktop and DPR 1/2 candidate selection in a browser. Use measured widths rather than filenames as evidence.
+- [x] **PH2-04 — Match responsive-image descriptors to actual widths**
+  - [x] Correct all formats in the six homepage gallery pictures: declared 320/480/640/800 widths currently refer to 640/960/1280/1600 px files.
+  - [x] Correct the Deluxe JPEG descriptor from 1208 to its measured 1280 px in `index.html` and `rooms.html`, and the fourth gallery-room image from 1600 to 1536 px in AVIF, WebP and JPEG in `gallery.html`. Preserve valid `sizes`, links and layout.
+  - [x] Repeat a read-only binary-metadata comparison of every source HTML width descriptor, then inspect representative mobile/desktop and DPR 1/2 candidate selection in a browser. Use measured widths rather than filenames as evidence.
   - **Completion condition:** Every width descriptor equals the referenced image's actual width; affected pictures load and select candidates consistent with their declared sizes and viewport/DPR, without changing their intended layout.
   - **Sources:** `index.html`, `rooms.html`, `gallery.html`; referenced variants under `assets/img/optimized/gallery/`, `assets/img/optimized/rooms/` and `assets/img/optimized/subpage-gallery/pokoje/`; `scripts/optimize-images.mjs` for generation ownership. **Audit:** `AUDIT.md` P2-04.
+  - **Verification (2026-10-01):** All 421 source `srcset` width descriptors now match decoded image metadata (`check:image-descriptors`, added to `qa:fast`); representative mobile/desktop DPR 1/2 checks select candidates consistent with rendered sizes. Homepage gallery `<source>` elements received their `<img>` `sizes` after Chromium showed a `100vw` fallback. Required focused checks passed.
 
 - [ ] **PH2-05 — Align sitemap membership with the noindex policy**
   - [ ] Remove the cookies, privacy-policy and terms URLs from `sitemap.xml`; preserve their existing `noindex,follow` directives and public navigation access.

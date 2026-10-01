@@ -151,7 +151,7 @@ The project is released under proprietary KP_Code terms (`LICENSE`), not an open
 ## Testing and verification
 
 - **`npm test`:** a placeholder that exits with an error; use the focused verification commands documented in [settings](settings.md).
-- **`npm run qa:fast`:** the everyday gate for local links, JavaScript/JSON syntax, executable booking-date regression, and JSON-LD pair equivalence. It stops at the first failure, launches no browser, and runs no build. The exact chain belongs to `package.json`; individual check usage is maintained in [settings](settings.md).
+- **`npm run qa:fast`:** the everyday gate for local links, JavaScript/JSON syntax, executable booking-date regression, JSON-LD pair equivalence, and responsive-image width descriptors against decoded image widths. It stops at the first failure, launches no browser, and runs no build. The exact chain belongs to `package.json`; individual check usage is maintained in [settings](settings.md).
 - **Syntax coverage:** a new non-module browser script must be added to `CLASSIC_SCRIPTS` in `scripts/qa-syntax.mjs`.
 - **`npm run test:a11y`:** the separate browser check runs configured regression scenarios and axe-core rules on source pages, not `dist/`. Dependencies and setup are documented in [settings](settings.md).
 - `npm run build` also checks the integrity of the production package.

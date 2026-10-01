@@ -82,7 +82,7 @@ npm run qa:fast
 npm run test:a11y
 ```
 
-`qa:fast` to szybka kontrola do codziennej pracy. Uruchamia kolejno `check:links`, `check:syntax`, `check:booking-date` i `check:jsonld`: sprawdza lokalne odwołania, składnię JavaScript i JSON, walidację daty przez lokalne wykonanie Edge Function oraz zgodność par JSON-LD. Nie uruchamia przeglądarki ani buildu i zatrzymuje się na pierwszym błędzie. Każdą kontrolę można uruchomić osobno. Źródłem prawdy dla komend i ich kolejności jest `package.json`; szczegóły opisuje utrzymywany [przewodnik workflow](docs/settings.md).
+`qa:fast` to szybka kontrola do codziennej pracy. Uruchamia kolejno `check:links`, `check:syntax`, `check:booking-date`, `check:jsonld` i `check:image-descriptors`: sprawdza lokalne odwołania, składnię JavaScript i JSON, walidację daty przez lokalne wykonanie Edge Function, zgodność par JSON-LD oraz zgodność deskryptorów szerokości `srcset` z rzeczywistą szerokością obrazów. Nie uruchamia przeglądarki ani buildu i zatrzymuje się na pierwszym błędzie. Każdą kontrolę można uruchomić osobno. Źródłem prawdy dla komend i ich kolejności jest `package.json`; szczegóły opisuje utrzymywany [przewodnik workflow](docs/settings.md).
 
 `test:a11y` to osobna, wolniejsza kontrola w przeglądarce. Serwuje strony źródłowe i uruchamia reguły axe-core w Chromium przez Playwright dla skonfigurowanych scenariuszy. Korzysta z wersji `playwright` i `axe-core` zapisanych w `package-lock.json` i zainstalowanych przez `npm ci`; nie pobiera pakietów podczas uruchomienia. Wymaga przeglądarki Chromium dla Playwright, którą można zainstalować poleceniem `npx playwright install chromium`. Skrypt `npm test` jest placeholderem, który kończy się błędem.
 
@@ -200,7 +200,7 @@ npm run qa:fast
 npm run test:a11y
 ```
 
-`qa:fast` is the fast check for everyday work. It runs `check:links`, `check:syntax`, `check:booking-date`, and `check:jsonld` in order: local references, JavaScript and JSON syntax, date validation by executing the Edge Function locally, and JSON-LD pair equivalence. It launches no browser or build and stops at the first failure. Each check can also be run separately. `package.json` is authoritative for commands and their order; details are in the maintained [workflow guide](docs/settings.md).
+`qa:fast` is the fast check for everyday work. It runs `check:links`, `check:syntax`, `check:booking-date`, `check:jsonld`, and `check:image-descriptors` in order: local references, JavaScript and JSON syntax, date validation by executing the Edge Function locally, JSON-LD pair equivalence, and `srcset` width descriptors against decoded image widths. It launches no browser or build and stops at the first failure. Each check can also be run separately. `package.json` is authoritative for commands and their order; details are in the maintained [workflow guide](docs/settings.md).
 
 `test:a11y` is a separate, slower browser check. It serves the source pages and runs axe-core rules in Chromium through Playwright for the configured scenarios. It uses the `playwright` and `axe-core` versions recorded in `package-lock.json` and installed by `npm ci`; it does not download packages at run time. It requires a Playwright Chromium browser, which can be installed with `npx playwright install chromium`. The `npm test` script is a placeholder that exits with an error.
 
