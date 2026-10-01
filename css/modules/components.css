@@ -748,7 +748,7 @@ body.has-project-modal {
   padding: 0 var(--space-sm);
   margin-left: auto;
   background: var(--primary);
-  color: var(--primary-contrast);
+  color: var(--offer-badge-text);
   border-radius: var(--radius-full);
   font-weight: 500;
   font-size: var(--fs-200);

@@ -16,6 +16,7 @@
   --primary: var(--primary-light);
   --primary-alt: #0a5ca0;
   --primary-contrast: #ffffff;
+  --offer-badge-text: var(--primary-contrast);
 
   /* Colors alert */
   --danger: #ef4444;
@@ -137,6 +138,7 @@ html[data-theme="dark"] {
   --text: var(--text-dark);
   --muted: var(--muted-dark);
   --primary: var(--primary-dark);
+  --offer-badge-text: var(--text-light);
   --border: var(--border-dark);
   --bg-gradients: var(--bg-gradients-dark);
 }
@@ -151,6 +153,7 @@ html[data-theme="dark"] {
     --text: var(--text-dark);
     --muted: var(--muted-dark);
     --primary: var(--primary-dark);
+    --offer-badge-text: var(--text-light);
     --border: var(--border-dark);
     --bg-gradients: var(--bg-gradients-dark);
   }

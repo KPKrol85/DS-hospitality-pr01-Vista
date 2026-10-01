@@ -847,6 +847,131 @@ function skipLinkScenario() {
   };
 }
 
+function offerBadgeScenario(preference, colorScheme) {
+  const effective = preference === 'auto' ? colorScheme : preference;
+  const label = `index.html + offers.html (offer badges) [${preference}, OS ${colorScheme}]`;
+  // Light keeps the shared white --primary-contrast; dark pairs the mint primary with the existing dark text color.
+  const expected = effective === 'dark'
+    ? { foreground: [31, 36, 48, 255], background: [52, 209, 178, 255] }
+    : { foreground: [255, 255, 255, 255], background: [15, 111, 191, 255] };
+
+  async function assertBadges(page, file, count) {
+    const banner = page.locator('#projectBanner');
+    if (await banner.isVisible()) {
+      await page.locator('#projectBannerAccept').click();
+      await banner.waitFor({ state: 'hidden' });
+    }
+    const state = await page.evaluate(() => {
+      // Normalize computed colors through canvas, as assertErrorContrast() does.
+      const toRgba = (color) => {
+        const ctx = document.createElement('canvas').getContext('2d');
+        ctx.fillStyle = color;
+        ctx.fillRect(0, 0, 1, 1);
+        return [...ctx.getImageData(0, 0, 1, 1).data];
+      };
+      return {
+        stored: localStorage.getItem('theme-pref'),
+        effective: document.documentElement.dataset.theme,
+        osDark: matchMedia('(prefers-color-scheme: dark)').matches,
+        primaryContrast: getComputedStyle(document.documentElement).getPropertyValue('--primary-contrast').trim(),
+        primaryButtons: [...document.querySelectorAll('.btn--primary')].map((button) => toRgba(getComputedStyle(button).color)),
+        badges: [...document.querySelectorAll('.offer-card__badge')].map((badge) => {
+          const style = getComputedStyle(badge);
+          const rect = badge.getBoundingClientRect();
+          const opaqueAncestors = [];
+          for (let node = badge; node; node = node.parentElement) {
+            opaqueAncestors.push(getComputedStyle(node).opacity === '1');
+          }
+          return {
+            text: badge.innerText.trim(),
+            visible: rect.width > 0 && rect.height > 0 && badge.checkVisibility({ visibilityProperty: true }),
+            foreground: toRgba(style.color),
+            background: toRgba(style.backgroundColor),
+            backgroundImage: style.backgroundImage,
+            opaque: opaqueAncestors.every(Boolean)
+          };
+        })
+      };
+    });
+    assert.equal(state.stored, preference === 'auto' ? null : preference);
+    assert.equal(state.effective, effective, `${file}: effective theme`);
+    assert.equal(state.osDark, colorScheme === 'dark');
+    // The badge correction must stay local: primary buttons keep the shared white foreground.
+    assert.equal(state.primaryContrast, '#ffffff', `${file}: shared --primary-contrast must remain unchanged`);
+    assert.ok(state.primaryButtons.length > 0 &&
+      state.primaryButtons.every((color) => color.join() === '255,255,255,255'),
+    `${file}: primary buttons must keep the shared white foreground`);
+
+    assert.equal(state.badges.length, count, `${file}: badge count`);
+    const ratios = [];
+    for (const [index, badge] of state.badges.entries()) {
+      const name = `${file} badge ${index + 1} (${badge.text || 'empty'})`;
+      assert.ok(badge.visible && badge.text, `${name}: badge must be visible with text`);
+      assert.ok(badge.opaque && badge.foreground[3] === 255 && badge.background[3] === 255 && badge.backgroundImage === 'none',
+        `${name}: contrast measurement requires opaque text on a solid surface`);
+      assert.deepEqual({ foreground: badge.foreground, background: badge.background }, expected,
+        `${name}: ${effective} theme color pair`);
+      const text = luminance(badge.foreground.slice(0, 3));
+      const surface = luminance(badge.background.slice(0, 3));
+      const ratio = (Math.max(text, surface) + 0.05) / (Math.min(text, surface) + 0.05);
+      assert.ok(ratio >= 4.5, `${name}: contrast ${ratio.toFixed(3)}:1 must reach 4.5:1`);
+      ratios.push(ratio);
+    }
+
+    // Offer cards are solid surfaces that axe resolves in every theme, unlike the transparent page
+    // background (see below). Keep axe's own color-contrast verdict on each badge in this state.
+    await page.evaluate(axeSource);
+    const scoped = await page.evaluate(async () => {
+      const result = await window.axe.run('.offer-card', {
+        runOnly: { type: 'tag', values: ['wcag2a', 'wcag2aa', 'best-practice'] }
+      });
+      const contrast = result.passes.find((rule) => rule.id === 'color-contrast')?.nodes ?? [];
+      return {
+        violations: result.violations.map((rule) => `${rule.id}: ${rule.nodes.map((node) => node.target.join(' ')).join(', ')}`),
+        badgePasses: contrast.filter((node) => node.html.includes('offer-card__badge')).length
+      };
+    });
+    assert.deepEqual(scoped.violations, [], `${file}: offer cards must have no axe violations in the ${effective} theme`);
+    // axe stacks index.html's transformed card grid beneath its ancestors and leaves those badges
+    // incomplete (bgOverlap); the computed checks above remain authoritative there.
+    if (file === 'offers.html') {
+      assert.equal(scoped.badgePasses, count, `${file}: axe color-contrast must pass every badge`);
+    }
+    console.log(`${label}: ${file} ${count} badges rgb(${expected.foreground.slice(0, 3)}) on ` +
+      `rgb(${expected.background.slice(0, 3)}), minimum ${Math.min(...ratios).toFixed(3)}:1 (required 4.5:1); ` +
+      `scoped axe: 0 violations, ${scoped.badgePasses}/${count} badge contrast passes.`);
+  }
+
+  // Loads a fresh document with the given stored preference.
+  async function open(page, file, pref) {
+    await page.evaluate((value) => {
+      if (value === 'auto') localStorage.removeItem('theme-pref');
+      else localStorage.setItem('theme-pref', value);
+    }, pref);
+    await page.goto(new URL(file, page.url()).href, { waitUntil: 'networkidle' });
+  }
+
+  return {
+    label,
+    path: 'index.html',
+    beforeLoad: (page) => page.emulateMedia({ colorScheme, reducedMotion: 'reduce' }),
+    setup: async (page) => {
+      await open(page, 'index.html', preference);
+      await assertBadges(page, 'index.html', 4);
+      await open(page, 'offers.html', preference);
+      await assertBadges(page, 'offers.html', 6);
+      if (effective === 'dark') {
+        // Full-page axe resolves dark transparent surfaces against white (see contactValidationScenario),
+        // so the unchanged full-page pass checks offers.html in the light theme; dark badges are covered above.
+        await open(page, 'offers.html', 'light');
+        assert.equal(await page.evaluate(() => document.documentElement.dataset.theme), 'light');
+      }
+      // The runner shares a context; do not leave this preference for unrelated scenarios.
+      await page.evaluate(() => localStorage.removeItem('theme-pref'));
+    }
+  };
+}
+
 const scenarios = [
   custom404Scenario(),
   { label: 'index.html (baseline)', path: 'index.html' },
@@ -981,6 +1106,10 @@ const scenarios = [
       }
     }
   },
+  offerBadgeScenario('light', 'dark'),
+  offerBadgeScenario('dark', 'light'),
+  offerBadgeScenario('auto', 'light'),
+  offerBadgeScenario('auto', 'dark'),
   { label: 'gallery.html (baseline)', path: 'gallery.html', setup: (page) => assertGalleryFilter(page, 'all') },
   galleryFragmentScenario('#wellness', 'wellness'),
   galleryFragmentScenario('#foo"bar', 'all', true),

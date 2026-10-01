@@ -84,11 +84,12 @@ Planning used static repository inspection and one read-only Sharp metadata chec
   - **Sources:** `css/modules/utilities.css` (`.skip-link`), `css/modules/tokens.css` (`--focus`), shared root-page skip links, `scripts/a11y-axe.mjs`. **Audit:** `AUDIT.md` P2-02.
   - **Verification (2026-10-01):** Focused skip navigation now meets 7.26:1 text contrast in light and dark themes (required 4.5:1); keyboard regression confirms visible focus and navigation to `#main`. Required focused checks passed.
 
-- [ ] **PH2-03 — Correct offer-badge contrast in dark mode**
-  - [ ] Use a theme-appropriate foreground/background pair for `.offer-card__badge`. Inspect primary-button and other token consumers before changing `--primary-contrast`; keep the correction local if a shared change would reduce their contrast.
-  - [ ] Verify every badge on `offers.html` and `index.html` in light and dark themes, including Auto resolution, and add the missing dark-offer state to the existing accessibility scenarios.
+- [x] **PH2-03 — Correct offer-badge contrast in dark mode**
+  - [x] Use a theme-appropriate foreground/background pair for `.offer-card__badge`. Inspect primary-button and other token consumers before changing `--primary-contrast`; keep the correction local if a shared change would reduce their contrast.
+  - [x] Verify every badge on `offers.html` and `index.html` in light and dark themes, including Auto resolution, and add the missing dark-offer state to the existing accessibility scenarios.
   - **Completion condition:** All offer badges have at least 4.5:1 normal-size text contrast, with no contrast regression in other components affected by a shared-token change.
   - **Sources:** `css/modules/components.css`, `css/modules/tokens.css`, `offers.html`, `index.html`, `scripts/a11y-axe.mjs`. **Audit:** `AUDIT.md` P2-03.
+  - **Verification (2026-10-01):** Offer badges now meet >=4.5:1 contrast on offers.html and index.html across light, dark and Auto resolution (5.19:1 light, 8.06:1 dark); shared primary-button contrast behavior remains unchanged. Required focused checks passed.
 
 - [ ] **PH2-04 — Match responsive-image descriptors to actual widths**
   - [ ] Correct all formats in the six homepage gallery pictures: declared 320/480/640/800 widths currently refer to 640/960/1280/1600 px files.
