@@ -173,6 +173,7 @@ html[data-theme="dark"] {
 }
 
 /* -- Fonts -- */
+
 @font-face {
   font-family: "Inter";
   src: url("../../assets/fonts/inter-v-var-400.woff2") format("woff2");
@@ -180,6 +181,7 @@ html[data-theme="dark"] {
   font-style: normal;
   font-display: swap;
 }
+
 @font-face {
   font-family: "Inter";
   src: url("../../assets/fonts/inter-v-var-500.woff2") format("woff2");
@@ -187,6 +189,7 @@ html[data-theme="dark"] {
   font-style: normal;
   font-display: swap;
 }
+
 @font-face {
   font-family: "Manrope";
   src: url("../../assets/fonts/manrope-v-var-600.woff2") format("woff2");
@@ -194,6 +197,7 @@ html[data-theme="dark"] {
   font-style: normal;
   font-display: swap;
 }
+
 @font-face {
   font-family: "Manrope";
   src: url("../../assets/fonts/manrope-v-var-700.woff2") format("woff2");

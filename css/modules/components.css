@@ -16,12 +16,14 @@
     transform 0.2s,
     box-shadow 0.25s;
 }
+
 .theme-toggle:hover {
   transform: translateY(-1px);
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.16);
   filter: brightness(1.1);
   border-color: color-mix(in oklab, var(--primary) 35%, var(--border));
 }
+
 .theme-toggle__icon {
   width: 20px;
   height: 20px;
@@ -61,10 +63,12 @@
     box-shadow 0.25s ease,
     color 0.25s ease;
 }
+
 .btn:hover {
   transform: translateY(-1px);
   filter: brightness(1.05);
 }
+
 .btn:active {
   transform: translateY(0);
 }
@@ -74,13 +78,17 @@
 .btn--primary {
   --btn-bg: linear-gradient(135deg, var(--primary) 0%, var(--primary-alt) 100%);
   --btn-color: var(--primary-contrast);
-  --btn-border: transparent;
+  border: 0;
+  padding-block: calc(var(--space-sm) + 1px);
+  padding-inline: calc(var(--space-md) + 1px);
   box-shadow: 0 4px 12px color-mix(in oklab, var(--primary-alt) 35%, transparent);
 }
+
 .btn--primary:hover {
   filter: brightness(1.1);
   box-shadow: 0 6px 16px color-mix(in oklab, var(--primary) 30%, transparent);
 }
+
 .btn--primary:active {
   filter: brightness(0.95);
   box-shadow: none;
@@ -93,10 +101,12 @@
   --btn-border: color-mix(in oklab, var(--border) 60%, var(--primary) 40%);
   --btn-color: var(--text);
 }
+
 .btn--secondary:hover {
   --btn-bg: color-mix(in oklab, var(--bg-elev) 90%, var(--primary) 10%);
   filter: none;
 }
+
 .btn--secondary:active {
   --btn-bg: color-mix(in oklab, var(--bg-elev) 88%, var(--primary) 12%);
   filter: none;
@@ -110,10 +120,12 @@
   --btn-color: var(--ghost-accent);
   --btn-border: color-mix(in oklab, var(--ghost-accent) 45%, transparent);
 }
+
 .btn--ghost:hover {
   --btn-bg: color-mix(in oklab, var(--ghost-accent) 10%, transparent);
   filter: none;
 }
+
 .btn--ghost:active {
   --btn-bg: color-mix(in oklab, var(--ghost-accent) 14%, transparent);
   filter: none;
@@ -129,6 +141,7 @@
   padding: var(--space-2xs) var(--space-xs);
   filter: none;
 }
+
 .btn--link:hover {
   text-decoration: underline;
   transform: none;
@@ -140,14 +153,17 @@
   max-inline-size: 28rem;
   margin: var(--space-lg) auto;
 }
+
 .form {
   display: grid;
   gap: var(--space-xl);
 }
+
 .form__field {
   display: grid;
   gap: var(--space-2xs);
 }
+
 .form__field :is(input, textarea, select) {
   inline-size: 100%;
   padding: var(--space-sm) var(--space-sm);
@@ -163,43 +179,53 @@
     border-color 120ms ease,
     outline-color 120ms ease;
 }
+
 .form__field :is(input, textarea, select):focus-visible {
   border-color: var(--focus-ring-color);
 }
+
 .form__field :is(input, textarea)::placeholder {
   opacity: 0.7;
   color: var(--muted);
 }
+
 .form__field textarea {
   resize: vertical;
   min-block-size: 6rem;
 }
+
 .form__field :is(input, textarea, select)[aria-invalid="true"] {
   border-color: var(--danger);
   outline: 2px solid var(--danger);
   outline-offset: 2px;
 }
+
 .form__error {
   color: var(--form-error-text);
   margin: 0;
 }
+
 fieldset.form__field .form__error {
   color: var(--form-error-text-elevated, #b91c1c);
 }
+
 .form__success {
   color: var(--success);
   margin: 0;
 }
+
 .form__note {
   margin: var(--space-md) auto;
   max-width: 36ch;
   font-size: var(--fs-200);
 }
+
 .form__hint {
   margin: 0;
   font-size: var(--fs-100);
   color: var(--muted);
 }
+
 .form__field > label,
 .form__field .grid-2 label,
 fieldset.form__field legend {
@@ -207,38 +233,46 @@ fieldset.form__field legend {
   color: var(--muted);
   font-weight: 500;
 }
+
 .form__field :is(input, textarea, select):disabled {
   opacity: 0.7;
   cursor: not-allowed;
 }
+
 .form__field :is(input, textarea, select)[readonly] {
   background: color-mix(in oklab, var(--bg-elev) 85%, transparent);
 }
+
 .form__field input:-webkit-autofill {
   -webkit-text-fill-color: var(--text);
   box-shadow: 0 0 0 1000px var(--bg-elev) inset;
   transition: background-color 9999s;
 }
+
 .form__field--checkbox .checkbox {
   display: grid;
   grid-template-columns: 20px 1fr;
   align-items: start;
   gap: var(--space-xs);
 }
+
 .form__field--checkbox input[type="checkbox"] {
   inline-size: 18px;
   block-size: 18px;
   margin-top: var(--space-2xs);
 }
+
 fieldset.form__field {
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
   padding: var(--space-sm);
   background: color-mix(in oklab, var(--bg-elev) 90%, transparent);
 }
+
 fieldset.form__field legend {
   padding: 0 var(--space-2xs);
 }
+
 .form__actions {
   display: flex;
   justify-content: center;
@@ -255,11 +289,13 @@ fieldset.form__field legend {
   max-inline-size: 36rem;
   margin-inline: auto;
 }
+
 .map__frame {
   position: relative;
   inline-size: 100%;
   aspect-ratio: 16 / 9;
 }
+
 .map :is(img, iframe) {
   display: block;
   inline-size: 100%;
@@ -268,34 +304,42 @@ fieldset.form__field legend {
   border: 1px solid var(--border);
   box-shadow: var(--elev);
 }
+
 .map iframe {
   border: 0;
 }
+
 .map__fallback[hidden] {
   display: none;
 }
+
 .map--embed iframe[hidden] {
   display: none;
 }
+
 .map--embed iframe {
   position: absolute;
   inset: 0;
 }
+
 .map--embed iframe[aria-hidden="true"] {
   opacity: 0;
   pointer-events: none;
 }
+
 .map__caption {
   margin-block: var(--space-xs);
   font-size: var(--fs-200);
   color: var(--muted);
 }
+
 .map__caption a {
   color: var(--text);
   text-decoration: none;
   font-weight: 500;
   transition: color 0.2s ease;
 }
+
 .map__caption a:hover {
   color: var(--primary);
 }
@@ -305,6 +349,7 @@ fieldset.form__field legend {
 .lightbox[hidden] {
   display: none !important;
 }
+
 .lightbox {
   position: fixed;
   inset: 0;
@@ -313,11 +358,13 @@ fieldset.form__field legend {
   place-items: center;
   padding: var(--space-sm);
 }
+
 .lightbox__backdrop {
   position: absolute;
   inset: 0;
   background: rgba(0, 0, 0, 0.55);
 }
+
 .lightbox__dialog {
   position: relative;
   background: var(--bg-elev);
@@ -332,6 +379,7 @@ fieldset.form__field legend {
   gap: var(--space-sm);
   overflow: hidden;
 }
+
 .lightbox__figure {
   margin: 0;
   min-height: 0;
@@ -339,6 +387,7 @@ fieldset.form__field legend {
   grid-template-rows: 1fr auto;
   gap: var(--space-xs);
 }
+
 .lightbox__caption {
   font-size: var(--fs-200);
   color: color-mix(in oklab, var(--text) 80%, var(--muted) 20%);
@@ -347,6 +396,7 @@ fieldset.form__field legend {
   max-width: 90%;
   margin-inline: auto;
 }
+
 .lightbox__img {
   width: 100%;
   height: auto;

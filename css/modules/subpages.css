@@ -444,6 +444,7 @@
   min-block-size: 45vh;
   text-align: center;
 }
+
 :is(.page--404, .page--offline, .page--thank-you) .section-title {
   margin-bottom: var(--space-md);
   font-size: var(--fs-700);
@@ -451,19 +452,23 @@
   line-height: var(--lh-normal);
   text-wrap: balance;
 }
+
 .not-found__text {
   text-wrap: balance;
 }
+
 .not-found__text--note {
   margin-top: var(--space-sm);
   color: var(--muted);
   font-size: var(--fs-300);
 }
+
 .not-found__actions {
   display: grid;
   gap: var(--space-md);
   margin-top: var(--space-xl);
 }
+
 @media (min-width: 480px) {
   .not-found__actions {
     grid-auto-columns: 1fr;
