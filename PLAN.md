@@ -1,10 +1,10 @@
 # Vista — Development Plan
 
-**Last reviewed:** 2026-10-01
+**Last reviewed:** 2026-10-02
 
 **Project:** Demonstrational static multi-page hospitality website; HTML, modular CSS, vanilla JavaScript, Node.js tooling and Netlify configuration
 
-**Status:** Open — eight source corrections and one integration-verification objective
+**Status:** Completed — eight source corrections and one integration-verification objective verified
 
 **Basis:** Current canonical sources and `AUDIT.md` dated 2026-09-30
 
@@ -30,7 +30,7 @@ Complete the important corrections in Phase 1 before final presentation or hando
 
 The earlier completed plans remain preserved in [the 2026-09-23 plan](docs/archive/plans/PLAN-2026-09-23.md) and [the 2026-09-24 plan](docs/archive/plans/PLAN-2026-09-24.md). Their checkboxes and verification records are historical; their identifiers must be qualified by archive filename when referenced. This active cycle does not recast those milestones or reopen resolved work solely because it was not retested today. The current breakpoint defect is distinct from the earlier closed-mobile-menu correction.
 
-Current inspection confirms the source/production build separation, reveal fallback, native-validation baseline, arrival-date gate and demonstrational content attribution. These existing mechanisms are preservation constraints, not newly completed tasks. `PH1-01` is complete with local source verification; the remaining active-cycle items are open.
+Current inspection confirms the source/production build separation, reveal fallback, native-validation baseline, arrival-date gate and demonstrational content attribution. These existing mechanisms are preservation constraints, not newly completed tasks. All active-cycle PH1–PH3 objectives are complete with their recorded verification boundaries.
 
 Planning used static repository inspection and one read-only Sharp metadata check: 381 distinct image URL/width-descriptor pairs were inspected, with 76 mismatches across the three groups in `PH2-04`. Other audit findings were checked against their current source causes; the audit's browser and contrast results were not rerun. `dist/` is absent. No build, browser suite, deployment or live form delivery was verified during planning. These limits do not create speculative defects or block source corrections. No optional or deferred work is supported by the current scope.
 
@@ -110,11 +110,13 @@ Planning used static repository inspection and one read-only Sharp metadata chec
 
 **Goal:** Establish that the combined source corrections survive production bundling and packaging.
 
-- [ ] **PH3-01 — Verify corrected states in a fresh distribution**
-  - [ ] After the source corrections and their focused checks, run `npm run qa:fast` and the updated `npm run test:a11y`. Keep failures actionable; do not treat the placeholder `npm test` as a verification gate.
-  - [ ] Run one full `npm run build` from the corrected sources, inspect its package-verification result and use `npm run preview` for the generated output. Confirm rewritten assets, production marker, current worker/precache references and packaged sitemap/descriptors.
-  - [ ] Run focused packaged-page checks for the breakpoint transition, nested 404 response, invalid/valid guest values, error/skip-link/badge contrast and representative image selection. Use local POST interception for valid inquiries and an explicit 404 fixture for missing routes. Keep source and production browser state isolated.
-  - [ ] Record the actual results and remaining limits in this plan when its update is authorized; update affected audit statuses only within an explicitly permitted documentation scope.
+- [x] **PH3-01 — Verify corrected states in a fresh distribution**
+  - [x] After the source corrections and their focused checks, run `npm run qa:fast` and the updated `npm run test:a11y`. Keep failures actionable; do not treat the placeholder `npm test` as a verification gate.
+  - [x] Run one full `npm run build` from the corrected sources, inspect its package-verification result and use `npm run preview` for the generated output. Confirm rewritten assets, production marker, current worker/precache references and packaged sitemap/descriptors.
+  - [x] Run focused packaged-page checks for the breakpoint transition, nested 404 response, invalid/valid guest values, error/skip-link/badge contrast and representative image selection. Use local POST interception for valid inquiries and an explicit 404 fixture for missing routes. Keep source and production browser state isolated.
+  - [x] Record the actual results and remaining limits in this plan when its update is authorized; update affected audit statuses only within an explicitly permitted documentation scope.
   - **Depends on:** `PH1-01`–`PH1-03` and `PH2-01`–`PH2-05`.
   - **Completion condition:** The fast checks, updated source scenarios, full build and focused production-package checks pass for the final combined sources. No generated file is manually patched. Local results remain explicitly distinct from live Netlify behavior, inquiry delivery and broader accessibility conformance.
   - **Sources:** `package.json`, `scripts/build-dist.mjs`, `scripts/verify-build.mjs`, `scripts/preview-dist.mjs`, `js/script.js`, `pwa/service-worker.js`, `docs/settings.md`, `docs/dist-notes.md`; `AUDIT.md` section 8.
+  - **Verification (2026-10-02):** `npm run qa:fast` and all 26 updated source accessibility scenarios passed; one fresh `npm run build` passed CSS/JS and package verification for 12 HTML pages. Read-only inspection of the generated package confirmed the production marker and single minified CSS/JS references on every page (root-prefixed in `404.html`, no other line changed), no development-only paths, worker cache version `44ff9ecc613d` with 16 existing precache entries, a byte-identical six-entry sitemap, and 421 matching width descriptors when the existing checker ran inside `dist/`. Twenty-one focused Chromium scenarios against `npm run preview`, each in a fresh context, passed for root worker registration and precache installation, navigation breakpoint recovery, the nested 404 fixture with JavaScript enabled and disabled, all seven form errors (minimum 5.855:1 light / 6.432:1 dark), guest rejection with six locally intercepted exact-value submissions, the skip link (7.265:1), offer badges (5.190:1 light / 8.061:1 dark) and DPR 1/2 image selection, including the Deluxe 1280w and fourth room-gallery 1536w candidates. cssnano shortens the `--primary-contrast` literal to `#fff`; the resolved color is unchanged. No source, build or generated file was modified.
+  - **Verification boundary:** Local Chromium only. The preview does not emulate Netlify catch-all redirects, headers, Forms or Edge Functions, so live hosting, real inquiry delivery, offline behavior beyond precache installation, other browsers, assistive technologies and WCAG conformance remain unverified. `AUDIT.md` statuses were not updated.
