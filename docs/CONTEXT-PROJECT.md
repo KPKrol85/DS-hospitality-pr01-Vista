@@ -54,7 +54,7 @@ The project is released under proprietary KP_Code terms (`LICENSE`), not an open
 - **Generated and untracked:** `dist/` (gitignored). Source-tree `css/style.min.css` and `js/script.min.js` are obsolete and ignored.
 - **Service worker template:** `pwa/service-worker.js` must contain exactly one `const CACHE_VERSION = "SOURCE_ONLY";` and one `const STATIC_ASSETS = [];`. The build replaces them. In source form the worker logic is inert.
 - **JSON-LD pairs:** each page embeds a fallback `<script type="application/ld+json" data-seo-jsonld="fallback">`. It also points `<meta name="ld-json">` to `assets/seo/ld-<page>.json`. `js/features/seo-jsonld.js` fetches that file and replaces the fallback. Both copies are hand-maintained and must stay semantically identical.
-- **Hardcoded public origin:** `https://hospitality-pr01-vista.netlify.app` appears in canonical links, Open Graph and Twitter metadata, JSON-LD, `sitemap.xml`, and `robots.txt`.
+- **Hardcoded public origin:** `https://ds-hospitality-pr01-vista.netlify.app` appears in canonical links, Open Graph and Twitter metadata, JSON-LD, `sitemap.xml`, and `robots.txt`.
 
 ## Project structure
 

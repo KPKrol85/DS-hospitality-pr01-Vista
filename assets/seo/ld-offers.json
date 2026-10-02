@@ -3,31 +3,31 @@
   "@graph": [
     {
       "@type": "WebSite",
-      "@id": "https://hospitality-pr01-vista.netlify.app/#website",
-      "url": "https://hospitality-pr01-vista.netlify.app/",
+      "@id": "https://ds-hospitality-pr01-vista.netlify.app/#website",
+      "url": "https://ds-hospitality-pr01-vista.netlify.app/",
       "name": "Vista",
       "alternateName": "Vista — Hotels & Travel",
       "inLanguage": "pl-PL"
     },
     {
       "@type": "CollectionPage",
-      "@id": "https://hospitality-pr01-vista.netlify.app/offers.html#webpage",
-      "url": "https://hospitality-pr01-vista.netlify.app/offers.html",
+      "@id": "https://ds-hospitality-pr01-vista.netlify.app/offers.html#webpage",
+      "url": "https://ds-hospitality-pr01-vista.netlify.app/offers.html",
       "name": "Vista | Oferty — Hotels & Travel",
       "description": "Przykładowe oferty fikcyjnej marki Vista — Hotels & Travel: weekendy dla dwojga, pakiety biznesowe i sezonowe promocje.",
       "isPartOf": {
-        "@id": "https://hospitality-pr01-vista.netlify.app/#website"
+        "@id": "https://ds-hospitality-pr01-vista.netlify.app/#website"
       },
       "primaryImageOfPage": {
-        "@id": "https://hospitality-pr01-vista.netlify.app/offers.html#primaryimage"
+        "@id": "https://ds-hospitality-pr01-vista.netlify.app/offers.html#primaryimage"
       },
       "inLanguage": "pl-PL"
     },
     {
       "@type": "ImageObject",
-      "@id": "https://hospitality-pr01-vista.netlify.app/offers.html#primaryimage",
-      "url": "https://hospitality-pr01-vista.netlify.app/assets/img/og/og-1200x630.jpg",
-      "contentUrl": "https://hospitality-pr01-vista.netlify.app/assets/img/og/og-1200x630.jpg",
+      "@id": "https://ds-hospitality-pr01-vista.netlify.app/offers.html#primaryimage",
+      "url": "https://ds-hospitality-pr01-vista.netlify.app/assets/img/og/og-1200x630.jpg",
+      "contentUrl": "https://ds-hospitality-pr01-vista.netlify.app/assets/img/og/og-1200x630.jpg",
       "caption": "Nowoczesny hotel nad morzem — Vista — Hotels & Travel"
     }
   ]

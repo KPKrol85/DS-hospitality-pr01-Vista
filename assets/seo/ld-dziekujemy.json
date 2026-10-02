@@ -3,20 +3,20 @@
   "@graph": [
     {
       "@type": "WebSite",
-      "@id": "https://hospitality-pr01-vista.netlify.app/#website",
-      "url": "https://hospitality-pr01-vista.netlify.app/",
+      "@id": "https://ds-hospitality-pr01-vista.netlify.app/#website",
+      "url": "https://ds-hospitality-pr01-vista.netlify.app/",
       "name": "Vista",
       "alternateName": "Vista — Hotels & Travel",
       "inLanguage": "pl-PL"
     },
     {
       "@type": "WebPage",
-      "@id": "https://hospitality-pr01-vista.netlify.app/dziekujemy.html#webpage",
-      "url": "https://hospitality-pr01-vista.netlify.app/dziekujemy.html",
+      "@id": "https://ds-hospitality-pr01-vista.netlify.app/dziekujemy.html#webpage",
+      "url": "https://ds-hospitality-pr01-vista.netlify.app/dziekujemy.html",
       "name": "Vista | Dziękujemy za zapytanie — Hotels & Travel",
       "description": "Potwierdzenie przesłania do KP_Code Digital Studio zapytania o demonstracyjny projekt Vista — Hotels & Travel. Wysłanie formularza nie oznacza rezerwacji noclegu.",
       "isPartOf": {
-        "@id": "https://hospitality-pr01-vista.netlify.app/#website"
+        "@id": "https://ds-hospitality-pr01-vista.netlify.app/#website"
       },
       "inLanguage": "pl-PL"
     }

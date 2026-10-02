@@ -3,31 +3,31 @@
   "@graph": [
     {
       "@type": "WebSite",
-      "@id": "https://hospitality-pr01-vista.netlify.app/#website",
-      "url": "https://hospitality-pr01-vista.netlify.app/",
+      "@id": "https://ds-hospitality-pr01-vista.netlify.app/#website",
+      "url": "https://ds-hospitality-pr01-vista.netlify.app/",
       "name": "Vista",
       "alternateName": "Vista — Hotels & Travel",
       "inLanguage": "pl-PL"
     },
     {
       "@type": "ImageGallery",
-      "@id": "https://hospitality-pr01-vista.netlify.app/gallery.html#webpage",
-      "url": "https://hospitality-pr01-vista.netlify.app/gallery.html",
+      "@id": "https://ds-hospitality-pr01-vista.netlify.app/gallery.html#webpage",
+      "url": "https://ds-hospitality-pr01-vista.netlify.app/gallery.html",
       "name": "Vista | Galeria — Hotels & Travel",
       "description": "Galeria demonstracyjnego projektu Vista — Hotels & Travel — zobacz wnętrza pokoi, lobby, restaurację oraz strefę relaksu.",
       "isPartOf": {
-        "@id": "https://hospitality-pr01-vista.netlify.app/#website"
+        "@id": "https://ds-hospitality-pr01-vista.netlify.app/#website"
       },
       "primaryImageOfPage": {
-        "@id": "https://hospitality-pr01-vista.netlify.app/gallery.html#primaryimage"
+        "@id": "https://ds-hospitality-pr01-vista.netlify.app/gallery.html#primaryimage"
       },
       "inLanguage": "pl-PL"
     },
     {
       "@type": "ImageObject",
-      "@id": "https://hospitality-pr01-vista.netlify.app/gallery.html#primaryimage",
-      "url": "https://hospitality-pr01-vista.netlify.app/assets/img/og/og-1200x630.jpg",
-      "contentUrl": "https://hospitality-pr01-vista.netlify.app/assets/img/og/og-1200x630.jpg",
+      "@id": "https://ds-hospitality-pr01-vista.netlify.app/gallery.html#primaryimage",
+      "url": "https://ds-hospitality-pr01-vista.netlify.app/assets/img/og/og-1200x630.jpg",
+      "contentUrl": "https://ds-hospitality-pr01-vista.netlify.app/assets/img/og/og-1200x630.jpg",
       "caption": "Galeria wnętrz hotelowych i widoków — Vista — Hotels & Travel"
     }
   ]

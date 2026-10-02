@@ -3,20 +3,20 @@
   "@graph": [
     {
       "@type": "WebSite",
-      "@id": "https://hospitality-pr01-vista.netlify.app/#website",
-      "url": "https://hospitality-pr01-vista.netlify.app/",
+      "@id": "https://ds-hospitality-pr01-vista.netlify.app/#website",
+      "url": "https://ds-hospitality-pr01-vista.netlify.app/",
       "name": "Vista",
       "alternateName": "Vista — Hotels & Travel",
       "inLanguage": "pl-PL"
     },
     {
       "@type": "WebPage",
-      "@id": "https://hospitality-pr01-vista.netlify.app/404.html#webpage",
-      "url": "https://hospitality-pr01-vista.netlify.app/404.html",
+      "@id": "https://ds-hospitality-pr01-vista.netlify.app/404.html#webpage",
+      "url": "https://ds-hospitality-pr01-vista.netlify.app/404.html",
       "name": "404 — Nie znaleziono strony | Vista — Hotels & Travel",
       "description": "Strona, której szukasz, nie istnieje lub została przeniesiona.",
       "isPartOf": {
-        "@id": "https://hospitality-pr01-vista.netlify.app/#website"
+        "@id": "https://ds-hospitality-pr01-vista.netlify.app/#website"
       },
       "inLanguage": "pl-PL"
     }
