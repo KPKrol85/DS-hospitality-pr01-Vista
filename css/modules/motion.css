@@ -14,6 +14,9 @@
   .offer-card:hover {
     transform: none;
   }
+  .btn.btn--link:hover {
+    transform: none;
+  }
   * {
     animation: none !important;
     transition: none !important;

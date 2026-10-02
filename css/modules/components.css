@@ -142,9 +142,21 @@
   filter: none;
 }
 
-.btn--link:hover {
-  text-decoration: underline;
-  transform: none;
+/* The doubled class keeps component states above contextual anchor rules such as `.section-header a`. */
+.btn.btn--link {
+  transition:
+    transform 0.25s ease,
+    filter 0.25s ease,
+    color 0.25s ease;
+}
+
+.btn.btn--link:hover {
+  text-decoration: none;
+  transform: translateX(2px);
+}
+
+.btn.btn--link:focus-visible {
+  text-decoration: none;
 }
 
 /* Form */
