@@ -642,6 +642,14 @@ function custom404Scenario() {
       assert.ok(raw.startsWith('/') && !raw.startsWith('//'), `Root-safe link required: ${raw}`);
       assert.equal((await page.request.get(url)).status(), 200, `Valid local route required: ${url}`);
     }
+    const iconRefs = await page.locator('use').evaluateAll((uses) => uses.map((use) => use.getAttribute('href')));
+    assert.ok(iconRefs.length, 'Sprite icon references required');
+    for (const raw of iconRefs) {
+      assert.ok(raw.startsWith('/') && !raw.startsWith('//'), `Root-safe icon reference required: ${raw}`);
+    }
+    for (const url of new Set(iconRefs.map((raw) => new URL(raw.split('#')[0], origin).href))) {
+      assert.equal((await page.request.get(url)).status(), 200, `Valid icon sprite required: ${url}`);
+    }
     for (const [selector, expected] of [
       ['.not-found__actions a:first-child', '/index.html'],
       ['.not-found__actions a:last-child', '/contact.html'],

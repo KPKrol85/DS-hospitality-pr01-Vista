@@ -74,12 +74,37 @@ async function validateLocalReference(sourceFile, rawRef, kind, issues) {
   const cleanRef = stripQueryAndHash(rawRef.trim());
   if (!cleanRef) return;
 
-  const resolvedPath = cleanRef.startsWith('/')
-    ? path.resolve(projectRoot, `.${cleanRef}`)
-    : path.resolve(path.dirname(sourceFile), cleanRef);
+  const resolvedPath = resolveLocalPath(sourceFile, cleanRef);
 
   if (!(await fileExists(resolvedPath))) {
     issues.push(`${toRelative(sourceFile)} -> ${kind}="${rawRef}" (missing: ${toRelative(resolvedPath)})`);
+  }
+}
+
+function resolveLocalPath(sourceFile, cleanRef) {
+  return cleanRef.startsWith('/')
+    ? path.resolve(projectRoot, `.${cleanRef}`)
+    : path.resolve(path.dirname(sourceFile), cleanRef);
+}
+
+const spriteSymbolIds = new Map();
+
+async function validateSymbolReference(sourceFile, rawRef, issues) {
+  const [fileRef, symbolId] = rawRef.trim().split('#');
+  const resolvedPath = fileRef ? resolveLocalPath(sourceFile, fileRef) : '';
+
+  if (!symbolId || !resolvedPath || !(await fileExists(resolvedPath))) {
+    issues.push(`${toRelative(sourceFile)} -> use href="${rawRef}" (expected an existing sprite file and symbol id)`);
+    return;
+  }
+
+  if (!spriteSymbolIds.has(resolvedPath)) {
+    const svg = await fs.readFile(resolvedPath, 'utf8');
+    spriteSymbolIds.set(resolvedPath, new Set([...svg.matchAll(/<symbol\b[^>]*\bid="([^"]+)"/g)].map((match) => match[1])));
+  }
+
+  if (!spriteSymbolIds.get(resolvedPath).has(symbolId)) {
+    issues.push(`${toRelative(sourceFile)} -> use href="${rawRef}" (missing symbol: ${symbolId})`);
   }
 }
 
@@ -112,6 +137,10 @@ async function main() {
 
     for (const ref of refs) {
       await validateLocalReference(htmlFile, ref.value, ref.kind, issues);
+    }
+
+    for (const value of extractTagAttributeValues(html, 'use', 'href')) {
+      await validateSymbolReference(htmlFile, value, issues);
     }
   }
 

@@ -116,8 +116,6 @@
   --header-h: 72px;
   --z-header: 50;
   --z-overlay: 100;
-
-  --footer-icon-filter: none;
 }
 
 html[data-theme="light"] {

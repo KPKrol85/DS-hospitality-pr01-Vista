@@ -29,6 +29,7 @@ const REQUIRED_DIRS = [
 ];
 
 const DIST_STATIC_ASSETS = [
+  "assets/img/icons/sprite.svg",
   "css/style.min.css",
   "js/theme-init.js",
   "js/script.min.js",

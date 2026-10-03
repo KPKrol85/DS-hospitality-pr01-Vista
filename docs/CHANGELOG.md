@@ -43,6 +43,7 @@ All significant changes to this project are documented in this file.
 
 - Consolidated repeated theme colors and gradients into shared palette tokens without changing resolved values or theme selection.
 - Consolidated phone and guest validation into local functions shared by contact-form input and submit handlers.
+- Replaced the header menu, footer social, lightbox, contact-detail and homepage benefit icons repeated as inline SVG across the root pages with `<use>` references to one external sprite, `assets/img/icons/sprite.svg`, whose 15 `currentColor` symbols reuse the existing geometry; a shared `.icon` rule supplies default sizing while components keep their own sizes and colours. The production worker precaches the sprite so cached and offline pages keep their icons, `check:links` validates sprite files and symbol IDs, and the 404 regression requires root-relative sprite references that resolve. Gave the homepage benefit icons the `0 0 24 24` viewBox they lacked, so they scale to their 22 px box instead of being clipped. Removed unreferenced standalone icons (Facebook, GitHub, X, YouTube, e-mail, phone and a duplicate of the contact illustration), dead `.icon--mono` theme rules and the unused `--footer-icon-filter` token; the raster-based theme-toggle images, logos, favicons and the decorative contact illustration remain standalone.
 
 ### Fixed
 

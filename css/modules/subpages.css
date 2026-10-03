@@ -405,7 +405,6 @@
   gap: var(--space-md);
 }
 .contact-row__icon {
-  flex-shrink: 0;
   width: 1.125rem;
   height: 1.125rem;
 }
