@@ -375,13 +375,19 @@ body.is-nav-open {
   margin-top: var(--space-2xl);
 }
 
+/* 32ch one type step down matches the 28ch .footer__text measure, keeping the left edges aligned. */
 .footer__attribution {
-  margin: 0 auto var(--space-xs);
-  max-width: 28ch;
+  margin: var(--space-lg) auto 0;
+  max-width: 32ch;
   font-size: var(--fs-200);
-  line-height: var(--lh-relaxed);
+  line-height: var(--lh-normal);
+  letter-spacing: var(--ls-subtle);
   color: var(--muted);
   text-align: inherit;
+}
+
+.footer__attribution-name {
+  color: var(--footer-text);
 }
 
 .footer__contact .footer__text {
@@ -561,6 +567,9 @@ body.is-nav-open {
   .footer__text {
     font-size: var(--fs-200);
     text-align: left;
+  }
+  .footer__attribution {
+    font-size: var(--fs-100);
   }
   .footer__brand .footer__text {
     inline-size: min(100%, 38ch);
