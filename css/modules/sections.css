@@ -237,6 +237,8 @@
 
 .list {
   font-size: var(--fs-supporting);
+  padding-inline: var(--space-md);
+  margin-inline: var(--space-lg);
 }
 
 .highlight__media img {
@@ -264,12 +266,15 @@
   .highlight__body .btn {
     margin-left: 0;
   }
+  .list {
+    margin-inline: 0;
+  }
 }
 
 @media (min-width: 1024px) {
   .highlight {
     grid-template-columns: 1.1fr 1fr;
-    gap: var(--space-md);
+    gap: var(--space-xl);
   }
 }
 

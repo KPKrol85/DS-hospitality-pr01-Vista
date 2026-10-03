@@ -418,11 +418,13 @@ fieldset.form__field legend {
   display: block;
   margin-inline: auto;
 }
+
 .lightbox__nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
+
 .lightbox__close {
   position: absolute;
   top: 1rem;
@@ -445,22 +447,27 @@ fieldset.form__field legend {
     transform 0.2s ease;
   opacity: 0.6;
 }
+
 .lightbox__close:hover {
   background: color-mix(in oklab, var(--bg-elev) 45%, transparent);
   opacity: 0.9;
 }
+
 .lightbox__close:active {
   transform: scale(0.96);
 }
+
 .lightbox__close svg {
   inline-size: clamp(16px, 1.6vw, 22px);
   block-size: clamp(16px, 1.6vw, 22px);
 }
+
 .lightbox__nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
+
 .lightbox__control {
   display: inline-grid;
   place-items: center;
@@ -476,27 +483,32 @@ fieldset.form__field legend {
     opacity 0.2s ease,
     transform 0.2s ease;
 }
+
 .lightbox__control:hover {
   opacity: 0.88;
 }
+
 .lightbox__control:active {
   transform: scale(0.96);
 }
+
 .lightbox__close:focus-visible,
 .lightbox__control:focus-visible {
   opacity: 1;
 }
+
 .lightbox__control svg {
   inline-size: clamp(28px, 2.2vw, 34px);
   block-size: clamp(28px, 2.2vw, 34px);
   display: block;
   fill: currentColor;
 }
+
 .lightbox__control[disabled] {
   opacity: 0.28;
   pointer-events: none;
 }
-/* Dialog-coloured backing keeps the text legible where short viewports let the image run under the nav. */
+
 .lightbox__counter {
   margin: 0;
   padding: var(--space-2xs) var(--space-xs);
@@ -508,9 +520,11 @@ fieldset.form__field legend {
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }
+
 .lightbox.lightbox--fullscreen {
   padding: 0;
 }
+
 .lightbox.lightbox--fullscreen .lightbox__dialog {
   width: 100vw;
   height: 100dvh;
@@ -522,12 +536,14 @@ fieldset.form__field legend {
   display: flex;
   flex-direction: column;
 }
+
 .lightbox.lightbox--fullscreen .lightbox__figure {
   flex: 1;
   display: grid;
   grid-template-rows: 1fr auto;
   gap: 0;
 }
+
 .lightbox.lightbox--fullscreen .lightbox__img {
   width: 100%;
   height: 100%;
@@ -535,6 +551,7 @@ fieldset.form__field legend {
   object-fit: contain;
   border-radius: 0;
 }
+
 .lightbox.lightbox--fullscreen .lightbox__caption {
   position: absolute;
   left: 0;
@@ -547,11 +564,13 @@ fieldset.form__field legend {
   color: #fff;
   font-size: var(--fs-200);
 }
+
 .lightbox.lightbox--fullscreen .lightbox__close {
   top: 0.6rem;
   right: 0.8rem;
   z-index: 5;
 }
+
 .lightbox.lightbox--fullscreen .lightbox__nav {
   position: absolute;
   inset: 0;
@@ -559,16 +578,19 @@ fieldset.form__field legend {
   align-items: center;
   pointer-events: none;
 }
+
 .lightbox.lightbox--fullscreen .lightbox__nav button {
   pointer-events: all;
 }
+
 .lightbox.lightbox--fullscreen .lightbox__nav button:first-child {
   margin-left: var(--space-sm);
 }
+
 .lightbox.lightbox--fullscreen .lightbox__nav button:last-child {
   margin-right: var(--space-sm);
 }
-/* Top-left corner, vertically centred on the 44px close button opposite. */
+
 .lightbox.lightbox--fullscreen .lightbox__counter {
   position: absolute;
   top: calc(0.6rem + 22px);
@@ -577,12 +599,14 @@ fieldset.form__field legend {
   background: rgba(0, 0, 0, 0.55);
   color: #fff;
 }
+
 @media (max-height: 420px) {
   .lightbox__dialog {
     max-height: 100dvh;
     overflow: auto;
   }
 }
+
 @media (orientation: portrait) {
   .lightbox__nav button:first-child {
     margin-left: var(--space-xs);
@@ -597,9 +621,11 @@ fieldset.form__field legend {
 body.has-project-modal {
   overflow: hidden;
 }
+
 .project-modal[hidden] {
   display: none !important;
 }
+
 .project-modal {
   position: fixed;
   inset: 0;
@@ -608,12 +634,14 @@ body.has-project-modal {
   place-items: center;
   padding: var(--space-sm);
 }
+
 .project-modal__overlay {
   position: absolute;
   inset: 0;
   background: color-mix(in oklab, var(--bg-dark) 56%, transparent);
   backdrop-filter: blur(8px);
 }
+
 .project-modal__content {
   position: relative;
   max-width: 480px;
@@ -625,15 +653,18 @@ body.has-project-modal {
   display: grid;
   gap: var(--space-md);
 }
+
 .project-modal__title {
   margin: 0;
   font-size: var(--fs-500);
   line-height: var(--lh-snug);
 }
+
 .project-modal__text {
   font-size: var(--fs-200);
   color: color-mix(in oklab, var(--text) 88%, var(--muted) 12%);
 }
+
 .project-modal__text a,
 .project-modal__links a {
   color: var(--muted);
@@ -641,10 +672,12 @@ body.has-project-modal {
   text-decoration: none;
   letter-spacing: var(--ls-wide);
 }
+
 .project-modal__text a:hover,
 .project-modal__links a:hover {
   color: var(--primary);
 }
+
 .project-modal__links {
   display: flex;
   flex-wrap: wrap;
@@ -652,14 +685,17 @@ body.has-project-modal {
   margin: 0;
   font-size: var(--fs-100);
 }
+
 .project-modal__actions {
   display: flex;
   justify-content: flex-start;
 }
+
 .project-modal__actions .btn {
   width: 100%;
   min-width: 0;
 }
+
 @media (min-width: 480px) {
   .project-modal {
     padding: var(--space-md);
@@ -672,6 +708,7 @@ body.has-project-modal {
     min-width: 10rem;
   }
 }
+
 @media (min-width: 760px) {
   .project-modal__content {
     padding: clamp(1.5rem, 1.15rem + 0.8vw, 2rem);
@@ -685,6 +722,7 @@ body.has-project-modal {
   display: flex;
   align-items: center;
 }
+
 .breadcrumb {
   border-bottom: 1px solid var(--border);
   padding: 0;
@@ -693,11 +731,13 @@ body.has-project-modal {
   font-weight: 400;
   line-height: var(--lh-snug);
 }
+
 .breadcrumb [aria-current="page"] {
   color: var(--primary);
   font-weight: 500;
   opacity: 0.9;
 }
+
 .breadcrumb ol {
   list-style: none;
   margin: 0;
@@ -707,20 +747,24 @@ body.has-project-modal {
   gap: var(--space-2xs);
   color: color-mix(in oklab, var(--text) 85%, var(--muted) 15%);
 }
+
 .breadcrumb li {
   display: inline-flex;
   align-items: center;
 }
+
 .breadcrumb li + li::before {
   content: "›";
   margin-inline: var(--space-xs);
   color: var(--muted);
   opacity: 0.7;
 }
+
 .breadcrumb a {
   color: inherit;
   text-decoration: none;
 }
+
 .breadcrumb a:hover {
   text-decoration: none;
   color: var(--primary);
@@ -733,6 +777,7 @@ body.has-project-modal {
   grid-template-columns: 1fr;
   gap: var(--space-md);
 }
+
 .gallery-grid__item {
   display: block;
   border: 1px solid var(--border);
@@ -746,22 +791,26 @@ body.has-project-modal {
     border-color 0.2s ease;
   will-change: transform;
 }
+
 .gallery-grid__item:hover {
   transform: translateY(-4px);
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
   border-color: color-mix(in oklab, var(--border) 60%, var(--focus) 40%);
 }
+
 .gallery-grid__item img {
   width: 100%;
   height: auto;
   display: block;
   object-fit: cover;
 }
+
 @media (min-width: 480px) {
   .gallery-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 }
+
 @media (min-width: 760px) {
   .gallery-grid {
     grid-template-columns: repeat(3, 1fr);
@@ -770,6 +819,7 @@ body.has-project-modal {
     grid-template-columns: repeat(2, 1fr);
   }
 }
+
 @media (min-width: 1024px) {
   .gallery-grid--balanced-four {
     grid-template-columns: repeat(4, 1fr);
@@ -793,15 +843,18 @@ body.has-project-modal {
     border-color 0.2s ease;
   will-change: transform;
 }
+
 .offer-card:hover {
   transform: translateY(-4px);
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
   border-color: color-mix(in oklab, var(--border) 60%, var(--focus) 40%);
 }
+
 .offer-card:focus-within {
   outline: var(--focus-ring-width) solid var(--focus-ring-color);
   outline-offset: calc(var(--focus-ring-offset) * 2);
 }
+
 .offer-card__badge {
   display: inline-grid;
   place-items: center;
@@ -817,6 +870,7 @@ body.has-project-modal {
   line-height: var(--lh-tight);
   font-variant-numeric: tabular-nums;
 }
+
 .offer-card__title {
   margin: var(--space-xs) 0;
   font-size: var(--fs-500);
@@ -824,6 +878,7 @@ body.has-project-modal {
   font-weight: 600;
   text-align: center;
 }
+
 .offer-card__text {
   margin: var(--space-xs) 0;
   color: var(--muted);
@@ -831,11 +886,13 @@ body.has-project-modal {
   text-align: center;
   letter-spacing: var(--ls-subtle);
 }
+
 .offer-card .btn {
   margin-top: var(--space-md);
   justify-self: center;
   font-weight: 500;
 }
+
 @media (min-width: 760px) {
   .offer-card__title {
     text-align: left;
