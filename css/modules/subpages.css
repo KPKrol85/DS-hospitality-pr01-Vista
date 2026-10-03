@@ -352,84 +352,138 @@
   }
 }
 
-/* Contakt */
+/* Contact */
 
-.contact-info__title {
-  font-size: var(--fs-500);
-  text-align: center;
-  margin: 0;
-}
-.contact-info__attribution {
-  margin: var(--space-xs) auto 0;
-  max-width: 40ch;
-  font-size: var(--fs-200);
-  line-height: var(--lh-relaxed);
-  color: var(--muted);
-  text-align: center;
-}
-.contact-address {
+.contact-layout {
   display: grid;
-  max-width: 22ch;
-  gap: var(--space-xs);
-  margin: var(--space-md) auto var(--space-lg);
-  font-size: var(--fs-300);
-  text-align: left;
-  justify-items: start;
+  gap: var(--space-2xl);
 }
 .contact-info {
-  position: relative;
-}
-.contact-info__layout {
   display: grid;
-  gap: var(--space-lg);
+  align-content: start;
 }
-.contact-info::after {
-  content: "";
-  position: absolute;
-  left: 130px;
-  top: 520px;
-  width: 160px;
-  height: 160px;
-  background: url("../../assets/img/icons/travel-160x160.svg") no-repeat center / contain;
-  opacity: 0.1;
-  pointer-events: none;
-  z-index: 0;
+.contact-info__title,
+.contact-form__title {
+  margin: 0 0 var(--space-xs);
+  font-size: var(--fs-600);
+  line-height: var(--lh-snug);
 }
-.contact-row {
-  display: flex;
-  align-items: center;
-  gap: var(--space-xs);
+.contact-info__attribution {
+  max-width: 44ch;
+  font-size: var(--fs-meta);
+  line-height: var(--lh-relaxed);
+  color: var(--muted);
+}
+.contact-details {
+  margin-top: var(--space-lg);
+  font-style: normal;
+}
+.contact-details__list {
+  display: grid;
+  gap: var(--space-md);
   margin: 0;
 }
-.contact-address .contact-row {
-  gap: var(--space-md);
+.contact-details__item {
+  position: relative;
+  min-block-size: 2.5rem;
+  padding-inline-start: calc(2.5rem + var(--space-sm));
 }
-.contact-row__icon {
-  width: 1.125rem;
-  height: 1.125rem;
-}
-.contact-address .contact-row:first-of-type {
-  margin-top: var(--space-sm);
-}
-.contact-address a[href^="tel"],
-.contact-address a[href^="mailto"] {
-  color: var(--text);
-  text-decoration: none;
-  font-weight: 400;
-  transition: color 0.2s ease;
-}
-.contact-address a[href^="tel"]:hover,
-.contact-address a[href^="mailto"]:hover {
+.contact-details__icon {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  inline-size: 2.5rem;
+  block-size: 2.5rem;
+  padding: 0.6875rem;
+  border-radius: var(--radius-full);
+  background: color-mix(in oklab, var(--primary) 8%, var(--bg-elev));
   color: var(--primary);
 }
+.contact-details__label {
+  font-size: var(--fs-meta);
+  font-weight: 500;
+  line-height: var(--lh-snug);
+  letter-spacing: var(--ls-wide);
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.contact-details__value {
+  margin: var(--space-2xs) 0 0;
+  font-size: var(--fs-400);
+  line-height: var(--lh-normal);
+  color: var(--text);
+}
+.contact-details__value a {
+  color: inherit;
+  font-weight: 500;
+  text-decoration: none;
+  text-underline-offset: 0.18em;
+  transition: color 0.2s ease;
+}
+.contact-details__value a:hover {
+  color: var(--primary);
+  text-decoration: underline;
+}
+.contact-info__map {
+  margin-top: var(--space-xl);
+}
+.contact-form {
+  position: relative;
+  scroll-margin-top: calc(var(--header-h) + var(--space-lg));
+  padding: var(--space-md);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--bg-elev);
+  box-shadow: var(--elev);
+}
+@media (min-width: 480px) {
+  .contact-form {
+    padding: var(--space-lg);
+  }
+}
 @media (min-width: 760px) {
-  .page--contact .section-header {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding-inline: 0;
+  .contact-info {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+    grid-template-rows: auto auto 1fr;
+    column-gap: var(--space-xl);
+  }
+  .contact-info__map {
+    grid-column: 2;
+    grid-row: 1 / -1;
+    margin-top: 0;
+  }
+  .contact-form {
+    padding: var(--space-xl);
+  }
+  /* Decorative postmark beside the panel heading; the 48ch form note leaves its corner free. */
+  .contact-form::after {
+    content: "";
+    position: absolute;
+    inset-block-start: var(--space-sm);
+    inset-inline-end: var(--space-sm);
+    inline-size: clamp(4.5rem, 7vw, 7rem);
+    aspect-ratio: 1;
+    background: url("../../assets/img/icons/travel-160x160.svg") no-repeat center / contain;
+    opacity: 0.1;
+    pointer-events: none;
+  }
+}
+@media (min-width: 1024px) {
+  .contact-layout {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  }
+  .contact-info {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: none;
+    padding-top: var(--space-xl);
+  }
+  .contact-info__map {
+    grid-column: auto;
+    grid-row: auto;
+    margin-top: var(--space-xl);
+  }
+  .contact-info__map .map__frame {
+    aspect-ratio: 1;
   }
 }
 

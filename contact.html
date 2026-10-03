@@ -142,32 +142,49 @@
           <div class="section-header">
             <h1 id="contact-heading" class="section-title">Kontakt</h1>
           </div>
-          <!-- contact info-->
-          <div class="grid-2">
+          <p class="section-intro">Zadzwoń, napisz e-mail lub wyślij zapytanie przez formularz — chętnie odpowiemy na pytania dotyczące projektu Vista.</p>
+          <!-- contact layout -->
+          <div class="contact-layout">
+            <!-- contact info-->
             <article class="contact-info">
               <h2 class="contact-info__title">Dane kontaktowe</h2>
               <p class="contact-info__attribution">Dane kontaktowe autora projektu KP_Code Digital Studio.</p>
 
-              <address class="contact-address" translate="no">
-                ul. Marynarki Wojennej 12/31,
-                <br />
-                33-100 Tarnów,
-                <br />
-                Polska
-                <!-- tel -->
-                <span class="contact-row">
-                  <svg class="icon contact-row__icon" aria-hidden="true"><use href="assets/img/icons/sprite.svg#icon-phone" /></svg>
-                  <a href="tel:+48533537091">+48 533 537 091</a>
-                </span>
-                <!-- email -->
-                <span class="contact-row">
-                  <svg class="icon contact-row__icon" aria-hidden="true"><use href="assets/img/icons/sprite.svg#icon-email" /></svg>
-                  <a href="mailto:kontakt@kp-code.pl">kontakt@kp-code.pl</a>
-                </span>
+              <address class="contact-details">
+                <dl class="contact-details__list">
+                  <!-- address -->
+                  <div class="contact-details__item">
+                    <dt class="contact-details__label">
+                      <svg class="icon contact-details__icon" aria-hidden="true"><use href="assets/img/icons/sprite.svg#icon-location" /></svg>
+                      Adres
+                    </dt>
+                    <dd class="contact-details__value" translate="no">
+                      ul. Marynarki Wojennej 12/31
+                      <br />
+                      33-100 Tarnów, Polska
+                    </dd>
+                  </div>
+                  <!-- tel -->
+                  <div class="contact-details__item">
+                    <dt class="contact-details__label">
+                      <svg class="icon contact-details__icon" aria-hidden="true"><use href="assets/img/icons/sprite.svg#icon-phone" /></svg>
+                      Telefon
+                    </dt>
+                    <dd class="contact-details__value" translate="no"><a href="tel:+48533537091">+48 533 537 091</a></dd>
+                  </div>
+                  <!-- email -->
+                  <div class="contact-details__item">
+                    <dt class="contact-details__label">
+                      <svg class="icon contact-details__icon" aria-hidden="true"><use href="assets/img/icons/sprite.svg#icon-email" /></svg>
+                      E-mail
+                    </dt>
+                    <dd class="contact-details__value" translate="no"><a href="mailto:kontakt@kp-code.pl">kontakt@kp-code.pl</a></dd>
+                  </div>
+                </dl>
               </address>
 
               <!-- map -->
-              <figure class="map map--embed" aria-label="Mapa adresu kontaktowego autora projektu" data-map-embed>
+              <figure class="map map--embed contact-info__map" aria-label="Mapa adresu kontaktowego autora projektu" data-map-embed>
                 <div class="map__frame">
                   <div class="map__fallback" data-map-fallback>
                     <img
@@ -201,14 +218,13 @@
                     aria-label="Otwórz adres kontaktowy autora projektu w Google Maps (otwiera się w nowej karcie)">
                     Otwórz w Google Maps
                   </a>
-                  .
                 </figcaption>
               </figure>
             </article>
 
             <!-- form -->
             <article id="form" class="contact-form">
-              <h2 class="contact-info__title">Formularz kontaktowy</h2>
+              <h2 class="contact-form__title">Formularz kontaktowy</h2>
               <form class="form" name="booking" method="POST" action="/dziekujemy.html" data-netlify="true" netlify-honeypot="website" data-form aria-describedby="form-note">
                 <input type="hidden" name="form-name" value="booking" />
                 <input type="text" name="website" class="visually-hidden" aria-hidden="true" tabindex="-1" autocomplete="off" />
@@ -221,13 +237,13 @@
                   <p class="form__error" id="err-name" aria-live="polite" hidden>Podaj imię i nazwisko.</p>
                 </div>
                 <!-- e-mail -->
-                <div class="form__field">
+                <div class="form__field form__field--half">
                   <label for="email">E-mail *</label>
                   <input id="email" name="email" type="email" required autocomplete="email" placeholder="kontakt@kp-code.pl" aria-describedby="err-email" />
                   <p class="form__error" id="err-email" aria-live="polite" hidden>Podaj poprawny adres e-mail.</p>
                 </div>
                 <!-- telefon -->
-                <div class="form__field">
+                <div class="form__field form__field--half">
                   <label for="phone">Telefon (opcjonalnie)</label>
                   <input
                     id="phone"
@@ -242,16 +258,16 @@
                   <p class="form__error" id="err-phone" aria-live="polite" hidden>Podaj poprawny numer telefonu lub pozostaw to pole puste.</p>
                 </div>
                 <!-- termin pobytu -->
-                <fieldset class="form__field">
+                <fieldset class="form__group">
                   <legend>Termin pobytu *</legend>
                   <!-- data przyjazdu i wyjazdu -->
-                  <div class="grid-2">
-                    <div>
+                  <div class="form__group-fields">
+                    <div class="form__field">
                       <label for="checkin">Przyjazd</label>
                       <input id="checkin" name="checkin" type="date" required aria-describedby="err-checkin" />
                       <p class="form__error" id="err-checkin" aria-live="polite" hidden>Wybierz datę przyjazdu.</p>
                     </div>
-                    <div>
+                    <div class="form__field">
                       <label for="checkout">Wyjazd</label>
                       <input id="checkout" name="checkout" type="date" required aria-describedby="err-checkout" />
                       <p class="form__error" id="err-checkout" aria-live="polite" hidden>Wybierz datę wyjazdu (co najmniej dzień po przyjeździe).</p>
@@ -259,7 +275,7 @@
                   </div>
                 </fieldset>
                 <!-- liczba osob -->
-                <div class="form__field">
+                <div class="form__field form__field--short">
                   <label for="guests">Liczba osób *</label>
                   <input id="guests" name="guests" type="number" min="1" max="6" step="1" required value="2" aria-describedby="hint-guests err-guests" />
                   <p class="form__hint" id="hint-guests">Zakres 1–6.</p>

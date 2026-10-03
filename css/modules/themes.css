@@ -1,5 +1,5 @@
 
-[data-theme="dark"] .contact-info::after {
+[data-theme="dark"] .contact-form::after {
   filter: invert(1) brightness(1.2) contrast(1.05);
   opacity: 0.25;
 }

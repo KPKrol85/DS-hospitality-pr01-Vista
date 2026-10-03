@@ -161,18 +161,17 @@
 
 /* Form */
 
-.contact-form {
-  max-inline-size: 28rem;
-  margin: var(--space-lg) auto;
-}
-
 .form {
+  --form-control-bg: color-mix(in oklab, var(--bg-elev) 55%, var(--bg));
+  --form-control-border: color-mix(in oklab, var(--border) 75%, var(--muted));
+  --form-checkbox-size: 1.125rem;
   display: grid;
-  gap: var(--space-xl);
+  gap: var(--space-lg) var(--space-md);
 }
 
 .form__field {
   display: grid;
+  align-content: start;
   gap: var(--space-2xs);
 }
 
@@ -180,8 +179,8 @@
   inline-size: 100%;
   padding: var(--space-sm) var(--space-sm);
   border-radius: var(--radius-md);
-  border: 1px solid var(--border);
-  background: var(--bg-elev);
+  border: 1px solid var(--form-control-border);
+  background: var(--form-control-bg);
   color: var(--text);
   font-size: var(--fs-400);
   font-weight: 400;
@@ -190,6 +189,10 @@
   transition:
     border-color 120ms ease,
     outline-color 120ms ease;
+}
+
+.form__field :is(input, textarea, select):hover {
+  border-color: color-mix(in oklab, var(--primary) 40%, var(--form-control-border));
 }
 
 .form__field :is(input, textarea, select):focus-visible {
@@ -203,21 +206,29 @@
 
 .form__field textarea {
   resize: vertical;
-  min-block-size: 6rem;
+  min-block-size: 7.5rem;
 }
 
-.form__field :is(input, textarea, select)[aria-invalid="true"] {
+/* A doubled invalid border leaves the outline free for the shared focus ring. */
+.form__field :is(input:not([type="checkbox"]), textarea, select)[aria-invalid="true"] {
   border-color: var(--danger);
+  box-shadow: inset 0 0 0 1px var(--danger);
+}
+
+.form__field input[type="checkbox"][aria-invalid="true"] {
   outline: 2px solid var(--danger);
   outline-offset: 2px;
 }
 
 .form__error {
-  color: var(--form-error-text);
   margin: 0;
+  color: var(--form-error-text);
+  font-size: var(--fs-300);
+  font-weight: 500;
+  line-height: var(--lh-normal);
 }
 
-fieldset.form__field .form__error {
+.form__group .form__error {
   color: var(--form-error-text-elevated, #b91c1c);
 }
 
@@ -227,23 +238,24 @@ fieldset.form__field .form__error {
 }
 
 .form__note {
-  margin: var(--space-md) auto;
-  max-width: 36ch;
-  font-size: var(--fs-200);
+  max-inline-size: 48ch;
+  color: var(--muted);
+  font-size: var(--fs-supporting);
 }
 
 .form__hint {
   margin: 0;
-  font-size: var(--fs-100);
+  font-size: var(--fs-meta);
+  line-height: var(--lh-normal);
   color: var(--muted);
 }
 
 .form__field > label,
-.form__field .grid-2 label,
-fieldset.form__field legend {
-  font-size: var(--fs-200);
-  color: var(--muted);
+.form__group legend {
+  font-size: var(--fs-300);
+  color: color-mix(in oklab, var(--text) 85%, var(--muted));
   font-weight: 500;
+  line-height: var(--lh-normal);
 }
 
 .form__field :is(input, textarea, select):disabled {
@@ -257,64 +269,128 @@ fieldset.form__field legend {
 
 .form__field input:-webkit-autofill {
   -webkit-text-fill-color: var(--text);
-  box-shadow: 0 0 0 1000px var(--bg-elev) inset;
+  box-shadow: 0 0 0 1000px var(--form-control-bg) inset;
   transition: background-color 9999s;
+}
+
+.form__field--short :is(input, select) {
+  max-inline-size: 10rem;
+}
+
+.form__field--checkbox {
+  padding-block-start: var(--space-lg);
+  border-block-start: 1px solid var(--border);
 }
 
 .form__field--checkbox .checkbox {
   display: grid;
-  grid-template-columns: 20px 1fr;
+  grid-template-columns: var(--form-checkbox-size) minmax(0, 1fr);
   align-items: start;
-  gap: var(--space-xs);
+  gap: var(--space-sm);
+  font-weight: 400;
 }
 
 .form__field--checkbox input[type="checkbox"] {
-  inline-size: 18px;
-  block-size: 18px;
-  margin-top: var(--space-2xs);
+  inline-size: var(--form-checkbox-size);
+  block-size: var(--form-checkbox-size);
+  margin: 0.15em 0 0;
+  accent-color: var(--primary);
+  cursor: pointer;
 }
 
-fieldset.form__field {
+.form__field--checkbox .checkbox a {
+  color: var(--primary);
+  text-underline-offset: 0.18em;
+}
+
+.form__field--checkbox .checkbox a:hover {
+  text-decoration-thickness: 2px;
+}
+
+.form__field--checkbox .form__error {
+  padding-inline-start: calc(var(--form-checkbox-size) + var(--space-sm));
+}
+
+.form__group {
+  min-inline-size: 0;
+  margin: 0;
+  padding: var(--space-xs) var(--space-md) var(--space-md);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
-  padding: var(--space-sm);
-  background: color-mix(in oklab, var(--bg-elev) 90%, transparent);
+  background: color-mix(in oklab, var(--bg) 45%, var(--bg-elev));
 }
 
-fieldset.form__field legend {
+.form__group legend {
   padding: 0 var(--space-2xs);
+}
+
+.form__group-fields {
+  display: grid;
+  gap: var(--space-md);
 }
 
 .form__actions {
   display: flex;
-  justify-content: center;
   align-items: center;
   gap: var(--space-sm);
   flex-wrap: wrap;
-  margin-top: var(--space-md);
+}
+
+.form__actions .btn {
+  inline-size: 100%;
+}
+
+@media (min-width: 480px) {
+  .form__group-fields {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .form__actions .btn {
+    inline-size: auto;
+  }
+}
+
+@media (min-width: 760px) {
+  .form {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .form > * {
+    grid-column: 1 / -1;
+  }
+  .form > .form__field--half {
+    grid-column: auto;
+  }
 }
 
 /* Map */
 
 .map {
   inline-size: 100%;
-  max-inline-size: 36rem;
-  margin-inline: auto;
+  margin: 0;
 }
 
 .map__frame {
   position: relative;
   inline-size: 100%;
-  aspect-ratio: 16 / 9;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--bg-elev);
+  box-shadow: var(--elev);
 }
 
-.map :is(img, iframe) {
+.map__fallback {
+  block-size: 100%;
+}
+
+.map__frame :is(img, iframe) {
   display: block;
   inline-size: 100%;
   block-size: 100%;
-  border-radius: var(--radius-md);
-  border: 1px solid var(--border);
-  box-shadow: var(--elev);
+}
+
+.map__fallback img {
+  object-fit: cover;
 }
 
 .map iframe {
@@ -340,20 +416,24 @@ fieldset.form__field legend {
 }
 
 .map__caption {
-  margin-block: var(--space-xs);
+  display: grid;
+  justify-items: start;
+  gap: var(--space-2xs);
+  margin-block-start: var(--space-sm);
   font-size: var(--fs-200);
+  line-height: var(--lh-relaxed);
   color: var(--muted);
 }
 
 .map__caption a {
-  color: var(--text);
+  color: var(--primary);
   text-decoration: none;
+  text-underline-offset: 0.18em;
   font-weight: 500;
-  transition: color 0.2s ease;
 }
 
 .map__caption a:hover {
-  color: var(--primary);
+  text-decoration: underline;
 }
 
 /* Lightbox */
