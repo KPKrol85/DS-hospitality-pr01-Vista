@@ -446,6 +446,8 @@
 
 .contact-details__item {
   position: relative;
+  display: grid;
+  align-content: center;
   min-block-size: 2.5rem;
   padding-inline-start: calc(2.5rem + var(--space-sm));
 }
@@ -462,17 +464,8 @@
   color: var(--primary);
 }
 
-.contact-details__label {
-  font-size: var(--fs-meta);
-  font-weight: 500;
-  line-height: var(--lh-snug);
-  letter-spacing: var(--ls-wide);
-  text-transform: uppercase;
-  color: var(--muted);
-}
-
 .contact-details__value {
-  margin: var(--space-2xs) 0 0;
+  margin: 0;
   font-size: var(--fs-400);
   line-height: var(--lh-normal);
   color: var(--text);
