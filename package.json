@@ -1,5 +1,5 @@
 {
-  "name": "pr-01-vista-hotels-and-travel",
+  "name": "vista",
   "version": "1.0.0",
   "description": "Profesjonalna, dostępna i responsywna wersja projektu „Vista — Hotels & Travel” w czystym HTML/CSS/JS. Projekt zawiera tryby Light/Dark/Auto, PWA, lekkie animacje, modularny JS oraz konfigurację Netlify z nagłówkami bezpieczeństwa.",
   "scripts": {
