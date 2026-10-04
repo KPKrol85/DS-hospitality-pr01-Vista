@@ -221,7 +221,7 @@
 .legal-card a {
   font-weight: 500;
   color: var(--primary);
-  text-decoration: underline;
+  text-decoration: none;
   text-underline-offset: 0.18em;
   overflow-wrap: anywhere;
 }
