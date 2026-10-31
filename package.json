@@ -1,7 +1,15 @@
 {
   "name": "vista",
   "version": "1.0.0",
-  "description": "Profesjonalna, dostępna i responsywna wersja projektu „Vista — Hotels & Travel” w czystym HTML/CSS/JS. Projekt zawiera tryby Light/Dark/Auto, PWA, lekkie animacje, modularny JS oraz konfigurację Netlify z nagłówkami bezpieczeństwa.",
+  "private": true,
+  "description": "A responsive hospitality demonstration website built with HTML, CSS, and vanilla JavaScript, featuring accessibility, PWA, SEO, and light/dark themes.",
+  "author": "Kamil Król — KP_Code Digital Studio",
+  "license": "SEE LICENSE IN LICENSE",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KPKrol85/DS-hospitality-pr01-Vista.git"
+  },
+  "homepage": "https://ds-hospitality-pr01-vista.netlify.app/",
   "scripts": {
     "dev": "node scripts/dev-server.mjs",
     "preview": "node scripts/preview-dist.mjs",
@@ -22,17 +30,6 @@
     "qa:fast": "npm run check:links && npm run check:syntax && npm run check:booking-date && npm run check:jsonld && npm run check:image-descriptors",
     "test:a11y": "node scripts/a11y-axe.mjs"
   },
-  "keywords": [
-    "frontend",
-    "css",
-    "html",
-    "js",
-    "pwa",
-    "tourism",
-    "portfolio"
-  ],
-  "author": "Kamil Król — KP_Code Digital Studio",
-  "license": "SEE LICENSE IN LICENSE",
   "devDependencies": {
     "autoprefixer": "^10.4.27",
     "axe-core": "^4.10.3",
