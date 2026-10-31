@@ -45,6 +45,7 @@ For each implementation task, determine `Changelog: yes` or `Changelog: no`. Add
 - Restricted service worker registration to production builds and scoped development cache cleanup.
 - Added local development with live reload and production-package preview servers.
 - Introduced `qa:fast` validation for links, syntax, structured data, image descriptors, and booking-date behavior.
+- Added GitHub Actions CI running `qa:fast` and production builds for `main`, with accessibility checks on pull requests and manual runs.
 
 ### Changed
 
