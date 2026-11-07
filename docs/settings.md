@@ -1,6 +1,6 @@
 # settings.md
 
-This is the maintained detailed developer workflow guide. [`package.json`](../package.json) is authoritative for available npm scripts and their exact command chains. See the [project context maintenance rules](CONTEXT-PROJECT.md#maintenance-rules) for documentation ownership and the update path when scripts or root HTML pages change.
+This is the maintained detailed developer workflow guide. [`package.json`](../package.json) is authoritative for available npm scripts and their exact command chains.
 
 Root HTML, `css/style.css` with `css/modules/`, and `js/script.js` with `js/features/` are the editable development sources. A local HTTP server can serve these files directly. Production bundles are generated only in `dist/`; the full build marks packaged HTML with `data-vista-build="production"` for service worker registration. Root `netlify.toml` runs `npm run build` and publishes `dist/`.
 
