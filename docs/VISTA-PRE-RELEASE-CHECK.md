@@ -1,0 +1,129 @@
+# Vista — PRE-RELEASE CHECK
+
+**Project:** DS-hospitality-pr01-Vista
+**Version:** 1.0.0
+**Owner:** Kamil Król — KP_Code Digital Studio
+**Verification date:** 2026-11-07
+**Production URL:** https://ds-hospitality-pr01-vista.netlify.app/
+**Status:** IN PROGRESS
+
+**Verification rule:** Confirm each item using current project evidence and final checks. Mark non-applicable items as `N/A` with a brief reason. Unresolved release-blocking issues prevent release approval.
+
+---
+
+## 1. Project Scope & Completeness
+
+- [ ] All required pages, sections, and planned features are implemented.
+- [ ] The project structure and delivered functionality match the approved scope.
+- [ ] No unfinished components, placeholder content, test data, or unintended dummy interactions remain.
+- [ ] Shared components, including navigation, headers, footers, and common UI elements, are consistent across relevant pages.
+- [ ] Required supporting pages and states, including 404, success, empty, and offline states, are available where applicable.
+- [ ] No essential feature or project requirement has been accidentally omitted.
+
+## 2. Frontend, UX & Responsiveness
+
+- [ ] The homepage, key subpages, navigation, and internal links function correctly.
+- [ ] Calls to action, galleries, menus, dialogs, FAQ sections, and other implemented interactions behave as intended.
+- [ ] Layouts display correctly on mobile, tablet, and desktop viewports.
+- [ ] Images, icons, fonts, and other visual assets load and display correctly.
+- [ ] Supported light, dark, and system themes function consistently, where applicable.
+- [ ] No significant layout defects, unwanted horizontal scrolling, or visual regressions remain.
+- [ ] No critical JavaScript errors appear in the browser console.
+
+## 3. Accessibility & Performance
+
+- [ ] Keyboard navigation and visible focus indicators function correctly.
+- [ ] Interactive elements have accessible names, labels, and appropriate states.
+- [ ] Headings, landmarks, image alternatives, and form feedback are accessible.
+- [ ] Text contrast and reduced-motion behavior meet the project's accessibility requirements.
+- [ ] Available accessibility checks pass without unresolved critical findings.
+- [ ] Performance results and Core Web Vitals meet the project's accepted release criteria.
+
+## 4. Content & KP_Code Standards
+
+- [ ] Public content, branding, authorship, and contact information are accurate and current.
+- [ ] The **KP_Code Digital Studio — Demonstration Content & Contact Standard** is implemented where required.
+- [ ] Fictional brands are clearly identified, with appropriate authorship and demonstration disclosures.
+- [ ] Contact destinations, calls to action, FAQ content, and user-facing messages reflect the project's actual purpose.
+- [ ] No unsupported claims, fictional qualifications presented as real, or misleading service descriptions remain.
+- [ ] Shared disclosures and project-specific content are consistent across all relevant pages.
+
+## 5. Forms & Integrations
+
+- [ ] Implemented forms contain the required fields, labels, and validation rules.
+- [ ] Form submission, error handling, and success feedback behave correctly.
+- [ ] Required privacy acknowledgements, spam protection, and anti-bot mechanisms are configured correctly.
+- [ ] Forms direct submissions to the intended recipient or service.
+- [ ] Required external integrations, APIs, and third-party services are configured and functional.
+- [ ] No unintended data collection, inactive integration references, or misleading submission behavior remains.
+
+## 6. SEO & Discoverability
+
+- [ ] Page titles, meta descriptions, canonical URLs, and social-sharing metadata are accurate.
+- [ ] Indexing directives, `robots.txt`, and `sitemap.xml` reflect the intended published pages.
+- [ ] Structured data is valid and consistent with visible content, where implemented.
+- [ ] Public URLs, internal references, and social-preview assets are valid and current.
+- [ ] Utility and demonstration-only pages use appropriate indexing policies.
+
+## 7. PWA & Offline Support
+
+- [ ] The PWA manifest, application icons, shortcuts, and screenshots are valid and current, where applicable.
+- [ ] PWA installation and launch behavior work correctly on supported devices.
+- [ ] Service Worker registration, caching, and application updates work as intended.
+- [ ] Offline fallback and connection recovery function within the supported scope.
+- [ ] No unresolved Service Worker or cache-related errors remain.
+
+## 8. Security, Privacy & Legal
+
+- [ ] Required HTTPS, security headers, and Content Security Policy rules are configured correctly.
+- [ ] Redirects, error handling, and hosting configuration match the deployment requirements.
+- [ ] No secrets, credentials, sensitive test data, or unintended development artifacts are exposed.
+- [ ] Privacy Policy, Cookies Policy, Terms of Service, and other required legal content reflect actual project behavior.
+- [ ] Project licensing, third-party notices, and asset attributions are complete and accurate.
+
+## 9. Build, Testing & Documentation
+
+- [ ] Dependency installation completes successfully.
+- [ ] Linting and automated tests pass.
+- [ ] The production build completes without errors.
+- [ ] Production artifacts contain the required files, and available source and release integrity checks pass.
+- [ ] Required functional, accessibility, and performance verification results are acceptable.
+- [ ] Generated assets and build outputs are consistent with their canonical sources.
+- [ ] README, CHANGELOG, and essential technical instructions are accurate and current.
+
+## 10. Deployment & Release
+
+- [ ] All approved release changes have been committed, and the Git working tree is clean.
+- [ ] The intended release commit and version have been confirmed.
+- [ ] GitHub Actions or the configured CI pipeline reports SUCCESS for the intended release commit.
+- [ ] The approved production build has been deployed from the correct source revision.
+- [ ] The production website is accessible over HTTPS and loads essential resources correctly.
+- [ ] A production smoke test confirms the functionality of critical pages and interactions.
+- [ ] Production-dependent functionality, including form delivery and spam protection, has been verified where applicable.
+- [ ] Hosting configuration, redirects, and security headers have been verified in production.
+- [ ] No unresolved release-blocking issues remain.
+- [ ] The project owner has approved the release.
+- [ ] The Git tag has been created for the approved version and correct commit.
+- [ ] The tag has been pushed and verified in the remote repository.
+
+---
+
+## Final Release Status
+
+**Result:** PENDING
+**Version:** 1.0.0
+**Release commit:** PENDING
+**Git tag:** PENDING
+**Production URL:** https://ds-hospitality-pr01-vista.netlify.app/
+**Release date:** PENDING
+
+**Notes / exceptions:**
+
+- Final release verification has not yet been completed.
+- Current `main` commit before release verification: `c0d54f3c37cff8b272f60b662f8f148d9f6ec103`.
+- Existing historical tag `v1.0.0` was created on 2026-10-04 and points to an earlier commit. Its removal and replacement are deferred until the final release workflow.
+- Release commit, production deployment, final tag, and owner approval remain pending.
+
+---
+
+*KP_Code Digital System — Quality. Consistency. Release Readiness.*
