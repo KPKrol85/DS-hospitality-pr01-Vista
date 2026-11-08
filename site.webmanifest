@@ -68,7 +68,7 @@
       "icons": [{ "src": "assets/img/shortcuts/pokoje.png", "sizes": "96x96" }]
     },
     {
-      "name": "Kontakt & Rezerwacje",
+      "name": "Kontakt z autorem",
       "short_name": "Kontakt",
       "url": "contact.html",
       "icons": [{ "src": "assets/img/shortcuts/kontakt.png", "sizes": "96x96" }]

@@ -300,11 +300,6 @@ function contactValidationScenario(preference, colorScheme) {
       }, preference);
     },
     setup: async (page) => {
-      const banner = page.locator('#projectBanner');
-      if (await banner.isVisible()) {
-        await page.locator('#projectBannerAccept').click();
-        await banner.waitFor({ state: 'hidden' });
-      }
       const form = page.locator('form[data-form]');
       await page.waitForFunction(() => document.querySelector('form[data-form]')?.noValidate === true);
       assert.equal(await form.evaluate((element) => element.noValidate), true,
@@ -411,14 +406,6 @@ function contactGuestScenario() {
     });
   }
 
-  async function dismissNotice(page) {
-    const banner = page.locator('#projectBanner');
-    if (await banner.isVisible()) {
-      await page.locator('#projectBannerAccept').click();
-      await banner.waitFor({ state: 'hidden' });
-    }
-  }
-
   // Leaves #guests as the only control under test; phone stays optional and empty.
   async function fillValidFields(page) {
     const dates = { checkin: localISO(7), checkout: localISO(9) };
@@ -455,7 +442,6 @@ function contactGuestScenario() {
 
   async function openEnhancedForm(page, url) {
     await page.goto(url, { waitUntil: 'networkidle' });
-    await dismissNotice(page);
     await page.waitForFunction(() => document.querySelector('form[data-form]')?.noValidate === true);
   }
 
@@ -505,7 +491,6 @@ function contactGuestScenario() {
     label,
     path: 'contact.html?oferta=family',
     setup: async (page) => {
-      await dismissNotice(page);
       await page.waitForFunction(() => document.querySelector('form[data-form]')?.noValidate === true);
       const contactUrl = page.url();
       const form = page.locator('form[data-form]');
@@ -614,9 +599,16 @@ function custom404Scenario() {
     assert.equal(await page.locator('body').evaluate((el) => getComputedStyle(el).marginTop), '0px',
       'Source stylesheet must be applied');
 
+    const disclosure = page.locator('.site-footer .footer__disclosure');
+    assert.equal(await disclosure.count(), 1, 'Exactly one permanent footer disclosure is required');
+    assert.equal(await disclosure.isVisible(), true, 'Disclosure must remain visible with and without JavaScript');
+    const disclosureText = await disclosure.innerText();
+    assert.match(disclosureText, /Vista Hotels & Travel to fikcyjna marka/);
+    assert.match(disclosureText, /demonstracyjnym projektem portfolio autorstwa KP_Code Digital Studio/);
+    assert.match(disclosureText, /usługi, oferty, ceny i historia firmy mają charakter przykładowy/);
+    assert.equal(await page.getByRole('dialog').count(), 0, '404 content must be available without dismissing a dialog');
+
     if (javaScriptEnabled) {
-      await page.locator('#projectBannerAccept').click();
-      await page.locator('#projectBanner').waitFor({ state: 'hidden' });
       assert.equal(await page.locator('html').getAttribute('class'), 'js');
       assert.match(await page.locator('[data-year]').innerText(), /^\d{4}$/);
       const initialTheme = await page.locator('html').getAttribute('data-theme');
@@ -702,9 +694,7 @@ function custom404Scenario() {
           trace.requests.length = trace.responses.length = trace.errors.length = 0;
         }
         const response = index === 0 ? firstResponse : await page.goto(origin + missingPath, { waitUntil: 'networkidle' });
-        // Exercise real notice dismissal on each JS document.
         await verify(page, response, trace, missingPath, true);
-        await page.evaluate(() => localStorage.removeItem('vista_project_banner_accepted'));
       }
       const context = await page.context().browser().newContext({ javaScriptEnabled: false, viewport: { width: 390, height: 844 } });
       try {
@@ -769,11 +759,6 @@ function skipLinkScenario() {
     await page.evaluate((value) => localStorage.setItem('theme-pref', value), theme);
     await page.goto(url, { waitUntil: 'networkidle' });
     assert.equal(await page.evaluate(() => document.documentElement.dataset.theme), theme, `${theme}: effective theme`);
-    const banner = page.locator('#projectBanner');
-    if (await banner.isVisible()) {
-      await page.locator('#projectBannerAccept').click();
-      await banner.waitFor({ state: 'hidden' });
-    }
 
     const skip = page.locator('.skip-link');
     assert.equal(await skip.getAttribute('href'), '#main');
@@ -864,11 +849,6 @@ function offerBadgeScenario(preference, colorScheme) {
     : { foreground: [255, 255, 255, 255], background: [15, 111, 191, 255] };
 
   async function assertBadges(page, file, count) {
-    const banner = page.locator('#projectBanner');
-    if (await banner.isVisible()) {
-      await page.locator('#projectBannerAccept').click();
-      await banner.waitFor({ state: 'hidden' });
-    }
     const state = await page.evaluate(() => {
       // Normalize computed colors through canvas, as assertErrorContrast() does.
       const toRgba = (color) => {
@@ -1010,11 +990,6 @@ const scenarios = [
         assert.equal(await nav.isVisible(), !mobile || open, 'Navigation visibility must match layout and state');
       };
 
-      const banner = page.locator('#projectBanner');
-      if (await banner.isVisible()) {
-        await page.locator('#projectBannerAccept').click();
-        await banner.waitFor({ state: 'hidden' });
-      }
       await assertState(true, false);
       await toggle.click();
       await assertState(true, true);
@@ -1091,11 +1066,6 @@ const scenarios = [
     path: 'index.html',
     setup: async (page) => {
       await page.setViewportSize({ width: 390, height: 844 });
-      const banner = page.locator('#projectBanner');
-      if (await banner.isVisible()) {
-        await page.locator('#projectBannerAccept').click();
-        await banner.waitFor({ state: 'hidden' });
-      }
       await page.getByRole('button', { name: 'Otwórz menu' }).click();
       await page.locator('#site-nav.is-open').waitFor({ state: 'visible' });
     }

@@ -483,6 +483,13 @@ body.is-nav-open {
   line-height: var(--lh-snug);
 }
 
+.footer__bottom .footer__disclosure {
+  max-inline-size: 76ch;
+  font-size: var(--fs-200);
+  line-height: var(--lh-relaxed);
+  text-align: center;
+}
+
 .footer__nav .footer__list a[aria-current="page"],
 .footer__legal .footer__list a[aria-current="page"] {
   color: var(--primary);

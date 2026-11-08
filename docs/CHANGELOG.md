@@ -49,6 +49,8 @@ For each implementation task, determine `Changelog: yes` or `Changelog: no`. Add
 
 ### Changed
 
+- Replaced the automatic project modal with permanent footer disclosures identifying the fictional brand, illustrative content, and KP_Code authorship.
+- Clarified contact CTAs and the PWA shortcut to distinguish project inquiries from hotel reservations.
 - Consolidated theme colours and gradients into shared palette tokens.
 - Replaced repeated inline SVG icons with a cached, reusable 15-symbol sprite.
 - Redesigned the contact page with a responsive two-column layout, integrated map, and clearer form hierarchy.
@@ -58,6 +60,7 @@ For each implementation task, determine `Changelog: yes` or `Changelog: no`. Add
 
 ### Fixed
 
+- Corrected footer contact addresses and identified Kamil Król as the data controller.
 - Excluded `noindex` legal pages from the sitemap while retaining their public routes and canonical URLs.
 - Corrected responsive-image width and `sizes` descriptors to match generated assets and rendered layouts.
 - Improved offer-badge, skip-link, and form-error contrast across supported themes.

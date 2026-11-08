@@ -112,7 +112,7 @@ Strony używają obrazów `picture`/`srcset` w formatach AVIF, WebP i formacie z
 
 ### Dane i trwałość stanu
 
-`localStorage` przechowuje preferencję motywu (`theme-pref`) i zamknięcie informacji o charakterze projektu (`vista_project_banner_accepted`). Service worker korzysta z Cache Storage dla zasobów i stron HTML. Formularz nie zapisuje rezerwacji w aplikacji; jest skonfigurowany jako zapytanie dla Netlify Forms.
+`localStorage` przechowuje preferencję motywu (`theme-pref`). Service worker korzysta z Cache Storage dla zasobów i stron HTML. Formularz nie zapisuje rezerwacji w aplikacji; jest skonfigurowany jako zapytanie dla Netlify Forms.
 
 ### Licencja
 
@@ -230,7 +230,7 @@ Pages use `picture`/`srcset` images in AVIF, WebP, and fallback formats, while t
 
 ### Data and State Persistence
 
-`localStorage` stores the theme preference (`theme-pref`) and dismissal of the project notice (`vista_project_banner_accepted`). The service worker uses Cache Storage for assets and HTML pages. The form does not save reservations in the application; it is configured as a Netlify Forms inquiry.
+`localStorage` stores the theme preference (`theme-pref`). The service worker uses Cache Storage for assets and HTML pages. The form does not save reservations in the application; it is configured as a Netlify Forms inquiry.
 
 ### License
 

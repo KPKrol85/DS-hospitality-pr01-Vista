@@ -111,7 +111,7 @@
             <li><a href="contact.html" data-nav>Kontakt</a></li>
           </ul>
           <div class="site-nav__extras">
-            <a class="btn btn--primary" href="contact.html#form">Rezerwuj</a>
+            <a class="btn btn--primary" href="contact.html#form">Zapytaj o projekt</a>
           </div>
         </nav>
       </div>
@@ -182,13 +182,13 @@
               <p>W zależności od ich funkcji technologie przechowywania danych mogą należeć do następujących kategorii:</p>
               <h3>Technologie niezbędne</h3>
               <p>Umożliwiają prawidłowe i bezpieczne funkcjonowanie Serwisu albo dostarczenie funkcjonalności wyraźnie żądanej przez Użytkownika.</p>
-              <p>W aktualnej wersji obejmują zapamiętanie technicznego stanu informacji o projekcie oraz zapewnienie działania wybranych zasobów w trybie offline.</p>
+              <p>W aktualnej wersji obejmują zapewnienie działania wybranych zasobów w trybie offline.</p>
               <h3>Technologie funkcjonalne</h3>
               <p>Pozwalają zapamiętać ustawienia wybrane przez Użytkownika. W Serwisie dotyczy to wyboru jasnego lub ciemnego motywu.</p>
               <p>Technologie funkcjonalne, które nie są konieczne do dostarczenia funkcji wyraźnie żądanej przez Użytkownika, są uruchamiane dopiero po uzyskaniu wymaganej zgody.</p>
               <p>Ze względu na czas przechowywania pliki cookies i podobne technologie mogą mieć charakter sesyjny – do zakończenia sesji przeglądarki – albo trwały – przez określony czas lub do usunięcia przez Użytkownika. Własne mechanizmy wykazane poniżej mają charakter trwały; ich okresy przechowywania opisano w tabeli.</p>
               <h3 id="technology-inventory-heading">Wykaz technologii stosowanych w Serwisie</h3>
-              <p>Aktualna wersja Serwisu wykorzystuje następujące technologie przechowywania danych:</p>
+              <p>Service Worker jest rejestrowany tylko przez strony z pakietu produkcyjnego, również w jego lokalnym podglądzie. W nazwach pamięci Cache Storage {hash} oznacza wspólny, generowany podczas budowania pakietu 12-znakowy szesnastkowy skrót jego treści.</p>
               <p class="legal-table-hint">Na węższych ekranach tabelę można przewijać poziomo.</p>
               <div class="legal-table-scroll" role="region" aria-labelledby="technology-inventory-heading" tabindex="0">
                 <table class="legal-table">
@@ -212,15 +212,7 @@
                       <td>Do usunięcia danych witryny albo przywrócenia ustawienia automatycznego.</td>
                     </tr>
                     <tr>
-                      <th scope="row"><code>vista_project_banner_accepted</code></th>
-                      <td><code>localStorage</code></td>
-                      <td>Operator</td>
-                      <td>niezbędna</td>
-                      <td>Zapamiętanie zamknięcia informacji o demonstracyjnym charakterze projektu.</td>
-                      <td>Do usunięcia danych witryny przez Użytkownika.</td>
-                    </tr>
-                    <tr>
-                      <th scope="row"><code>th-static-v1.2.1</code></th>
+                      <th scope="row"><code>vista-static-{hash}</code></th>
                       <td>Cache Storage</td>
                       <td>Operator</td>
                       <td>niezbędna</td>
@@ -228,7 +220,7 @@
                       <td>Do usunięcia danych witryny lub zastąpienia przy zmianie wersji pamięci podręcznej.</td>
                     </tr>
                     <tr>
-                      <th scope="row"><code>th-html-v1.2.1</code></th>
+                      <th scope="row"><code>vista-html-{hash}</code></th>
                       <td>Cache Storage</td>
                       <td>Operator</td>
                       <td>niezbędna</td>
@@ -254,7 +246,7 @@
               <ul>
                 <li>zapewnienia prawidłowego funkcjonowania Serwisu,</li>
                 <li>dostarczenia funkcjonalności wyraźnie żądanych przez Użytkownika,</li>
-                <li>zapamiętania wybranego motywu i stanu informacji o projekcie,</li>
+                <li>zapamiętania wybranego motywu,</li>
                 <li>zapewnienia działania wybranych zasobów w trybie offline.</li>
               </ul>
               <p>Technologie nie są wykorzystywane do celów, które nie zostały opisane w niniejszym dokumencie lub w przekazanym Użytkownikowi mechanizmie zarządzania zgodą.</p>
@@ -329,7 +321,7 @@
               <p>Operator udziela odpowiedzi w możliwie najkrótszym terminie, z uwzględnieniem charakteru zgłoszenia oraz obowiązujących przepisów prawa.</p>
             </section>
 
-            <p class="legal-updated"><strong>Data ostatniej aktualizacji:</strong> <time datetime="2026-09-20">20.09.2026</time></p>
+            <p class="legal-updated"><strong>Data ostatniej aktualizacji:</strong> <time datetime="2026-11-07">07.11.2026</time></p>
           </article>
         </div>
       </section>
@@ -379,7 +371,7 @@
             <section class="footer__col footer__contact" aria-labelledby="footer-contact">
               <h3 id="footer-contact" class="footer__heading">KONTAKT</h3>
               <address class="footer__text" translate="no">
-                ul. Marynarki Wojennej 12
+                ul. Marynarki Wojennej 12/31
                 <br />
                 33-100 Tarnów
                 <br />
@@ -401,23 +393,23 @@
               <h3 id="footer-social" class="footer__heading">SOCIAL MEDIA</h3>
               <div class="footer__social-links">
                 <!-- facebook -->
-                <a href="https://www.facebook.com/kpkrol85" target="_blank" rel="me noopener noreferrer" aria-label="Facebook — Vista">
+                <a href="https://www.facebook.com/kpkrol85" target="_blank" rel="me noopener noreferrer" aria-label="Facebook — KP_Code Digital Studio">
                   <svg class="icon" aria-hidden="true"><use href="assets/img/icons/sprite.svg#icon-facebook" /></svg>
                 </a>
                 <!-- x -->
-                <a href="https://x.com/KP_Code_85" target="_blank" rel="me noopener noreferrer" aria-label="X — Vista">
+                <a href="https://x.com/KP_Code_85" target="_blank" rel="me noopener noreferrer" aria-label="X — KP_Code Digital Studio">
                   <svg class="icon" aria-hidden="true"><use href="assets/img/icons/sprite.svg#icon-x" /></svg>
                 </a>
                 <!-- github -->
-                <a href="https://github.com/KPKrol85" target="_blank" rel="me noopener noreferrer" aria-label="GitHub — Vista">
+                <a href="https://github.com/KPKrol85" target="_blank" rel="me noopener noreferrer" aria-label="GitHub — KP_Code Digital Studio">
                   <svg class="icon" aria-hidden="true"><use href="assets/img/icons/sprite.svg#icon-github" /></svg>
                 </a>
                 <!-- linkedin -->
-                <a href="https://www.linkedin.com/in/kp-code/" target="_blank" rel="me noopener noreferrer" aria-label="LinkedIn — Vista">
+                <a href="https://www.linkedin.com/in/kp-code/" target="_blank" rel="me noopener noreferrer" aria-label="LinkedIn — KP_Code Digital Studio">
                   <svg class="icon" aria-hidden="true"><use href="assets/img/icons/sprite.svg#icon-linkedin" /></svg>
                 </a>
                 <!-- instagram -->
-                <a href="https://www.instagram.com/kp_code_/" target="_blank" rel="me noopener noreferrer" aria-label="Instagram — Vista">
+                <a href="https://www.instagram.com/kp_code_/" target="_blank" rel="me noopener noreferrer" aria-label="Instagram — KP_Code Digital Studio">
                   <svg class="icon" aria-hidden="true"><use href="assets/img/icons/sprite.svg#icon-instagram" /></svg>
                 </a>
               </div>
@@ -430,37 +422,13 @@
               <span data-year></span>
               KP_Code Digital Studio | Wszelkie prawa zastrzeżone.
             </p>
+            <p class="footer__disclosure">
+              Vista Hotels &amp; Travel to fikcyjna marka. Ta witryna jest demonstracyjnym projektem portfolio autorstwa KP_Code Digital Studio. Przedstawione usługi, oferty, ceny i historia firmy mają charakter przykładowy.
+            </p>
           </div>
         </div>
       </div>
     </footer>
-
-    <div
-      id="projectBanner"
-      class="project-modal"
-      role="dialog"
-      aria-modal="true"
-      aria-hidden="true"
-      aria-labelledby="projectInfoTitle"
-      aria-describedby="projectInfoDesc"
-      hidden>
-      <div class="project-modal__overlay" aria-hidden="true"></div>
-      <div class="project-modal__content" role="document" tabindex="-1">
-        <h2 id="projectInfoTitle" class="project-modal__title">Informacja o projekcie</h2>
-        <p id="projectInfoDesc" class="project-modal__text">
-          Serwis "Vista Hotels &amp; Travel" ma charakter demonstracyjny i został przygotowany przez
-          <strong>KP_Code Digital Studio</strong> jako przykładowa strona internetowa dla branży hotelarskiej i turystycznej.
-          Korzystając z serwisu akceptujesz <a href="regulamin.html"><strong>Regulamin</strong></a>.
-        </p>
-        <p class="project-modal__links">
-          <a href="polityka-prywatnosci.html">Polityka prywatności</a>
-          <a href="cookies.html">Cookies</a>
-        </p>
-        <div class="project-modal__actions">
-          <button id="projectBannerAccept" class="btn btn--primary" type="button">Akceptuję</button>
-        </div>
-      </div>
-    </div>
 
     <!-- Script -->
     <script type="module" defer src="js/script.js?vista-dev-1"></script>
