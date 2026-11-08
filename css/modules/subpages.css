@@ -409,6 +409,13 @@
 
 /* Contact */
 
+@media (max-width: 960px) {
+  /* The expanded no-JS menu is taller than the form's sticky-header offset. */
+  .no-js .page--contact .site-header {
+    position: static;
+  }
+}
+
 .contact-layout {
   display: grid;
   gap: var(--space-2xl);
