@@ -403,6 +403,14 @@ h1.section-title {
   font-size: var(--fs-300);
 }
 
+.section-disclosure {
+  margin-top: var(--space-md);
+  font-size: var(--fs-meta);
+  line-height: var(--lh-relaxed);
+  color: var(--muted);
+  text-align: left;
+}
+
 .section-header {
   display: flex;
   flex-direction: column;

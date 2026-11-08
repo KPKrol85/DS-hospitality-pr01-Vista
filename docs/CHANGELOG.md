@@ -49,6 +49,7 @@ For each implementation task, determine `Changelog: yes` or `Changelog: no`. Add
 
 ### Changed
 
+- Identified testimonials and offers as fictional demonstration content and broadened contact messaging to all KP_Code Digital Studio projects.
 - Replaced the automatic project modal with permanent footer disclosures identifying the fictional brand, illustrative content, and KP_Code authorship.
 - Clarified contact CTAs and the PWA shortcut to distinguish project inquiries from hotel reservations.
 - Consolidated theme colours and gradients into shared palette tokens.
