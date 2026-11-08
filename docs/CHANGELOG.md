@@ -76,6 +76,7 @@ For each implementation task, determine `Changelog: yes` or `Changelog: no`. Add
 - Updated image cache revalidation to prevent stale same-URL assets after deployment.
 - Made one-shot image optimization report processing failures through a non-zero exit status.
 - Aligned contact landmarks and structured data with the site's demonstrational scope.
+- Added the missing footer current-page indicator on the about page for accessibility without JavaScript.
 
 ### Testing
 
