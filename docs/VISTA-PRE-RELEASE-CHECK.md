@@ -23,7 +23,7 @@
 ## 2. Frontend, UX & Responsiveness
 
 - [x] The homepage, key subpages, navigation, and internal links function correctly.
-- [ ] Calls to action, galleries, menus, dialogs, FAQ sections, and other implemented interactions behave as intended.
+- [x] Calls to action, galleries, menus, dialogs, FAQ sections, and other implemented interactions behave as intended.
 - [ ] Layouts display correctly on mobile, tablet, and desktop viewports.
 - [ ] Images, icons, fonts, and other visual assets load and display correctly.
 - [ ] Supported light, dark, and system themes function consistently, where applicable.
