@@ -27,8 +27,8 @@
 - [x] Layouts display correctly on mobile, tablet, and desktop viewports.
 - [x] Images, icons, fonts, and other visual assets load and display correctly.
 - [x] Supported light, dark, and system themes function consistently, where applicable.
-- [ ] No significant layout defects, unwanted horizontal scrolling, or visual regressions remain.
-- [ ] No critical JavaScript errors appear in the browser console.
+- [x] No significant layout defects, unwanted horizontal scrolling, or visual regressions remain.
+- [x] No critical JavaScript errors appear in the browser console.
 
 ## 3. Accessibility & Performance
 
