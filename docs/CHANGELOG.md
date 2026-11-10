@@ -89,4 +89,5 @@ For each implementation task, determine `Changelog: yes` or `Changelog: no`. Add
 - Added responsive-image descriptor validation and browser candidate-selection coverage.
 - Added focused regression coverage for form validation, theme contrast, navigation, dialogs, and 404 behavior.
 - Added reduced-motion regression coverage for gallery category scrolling.
+- Fixed the navigation breakpoint accessibility scenario to verify the current cross-page contact CTA instead of a removed in-page anchor.
 - Verified clean production builds and eight Playwright/axe accessibility scenarios without reported violations.

@@ -1004,6 +1004,21 @@ const scenarios = [
         }, { mobile, open });
         assert.equal(await nav.isVisible(), !mobile || open, 'Navigation visibility must match layout and state');
       };
+      const cta = nav.locator('a[href="contact.html#form"]');
+      // Navigation links are cross-page, so cancel the default action after the menu's own
+      // click handler; asserting on the same document prevents a reload concealing stale state.
+      const clickWithoutLeaving = async (link) => {
+        await page.evaluate(() => {
+          window.__navProbe = { pending: true };
+          document.addEventListener('click', (event) => {
+            window.__navProbe = { pending: false, appPrevented: event.defaultPrevented };
+            event.preventDefault();
+          }, { once: true });
+        });
+        await link.click();
+        assert.deepEqual(await page.evaluate(() => window.__navProbe),
+          { pending: false, appPrevented: false }, 'Link selection must not cancel native navigation');
+      };
 
       await assertState(true, false);
       await toggle.click();
@@ -1029,8 +1044,7 @@ const scenarios = [
       await page.keyboard.press('Escape');
       await assertState(false, false);
       await assertFocused(first, 'Desktop Escape must not restore mobile focus');
-      // Use the existing in-page link so a reload cannot conceal a stale close state.
-      await nav.locator('a[href="#book"]').click();
+      await clickWithoutLeaving(cta);
       await assertState(false, false);
 
       await page.setViewportSize({ width: 390, height: 844 });
@@ -1046,10 +1060,9 @@ const scenarios = [
       await assertState(true, false);
       await assertFocused(toggle, 'Mobile Escape must restore focus to the toggle');
       await toggle.click();
-      await nav.locator('a[href="#book"]').click();
+      await clickWithoutLeaving(cta);
       await assertState(true, false);
-      // Native fragment navigation may move focus after the menu's close handler.
-      assert.equal(new URL(page.url()).hash, '#book', 'Mobile link selection must retain its destination');
+      await assertFocused(toggle, 'Mobile link selection must restore focus to the toggle');
       await toggle.click();
       await toggle.click();
       await assertState(true, false);
@@ -1073,6 +1086,14 @@ const scenarios = [
       } finally {
         await noJsContext.close();
       }
+
+      const indexUrl = page.url();
+      await toggle.click();
+      await assertState(true, true);
+      await cta.click();
+      await page.waitForURL((url) => url.pathname.endsWith('/contact.html') && url.hash === '#form');
+      // Return to the scenario page so the axe pass still covers index.html.
+      await page.goto(indexUrl, { waitUntil: 'networkidle' });
       console.log('Navigation breakpoint, desktop/mobile keyboard and no-JS assertions passed.');
     }
   },
