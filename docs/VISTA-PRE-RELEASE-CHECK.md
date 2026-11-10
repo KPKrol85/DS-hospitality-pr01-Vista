@@ -35,7 +35,7 @@
 - [x] Keyboard navigation and visible focus indicators function correctly.
 - [x] Interactive elements have accessible names, labels, and appropriate states.
 - [x] Headings, landmarks, image alternatives, and form feedback are accessible.
-- [ ] Text contrast and reduced-motion behavior meet the project's accessibility requirements.
+- [x] Text contrast and reduced-motion behavior meet the project's accessibility requirements.
 - [ ] Available accessibility checks pass without unresolved critical findings.
 - [ ] Performance results and Core Web Vitals meet the project's accepted release criteria.
 
