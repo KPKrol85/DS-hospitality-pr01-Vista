@@ -76,7 +76,7 @@
 /* btn--primary */
 
 .btn--primary {
-  --btn-bg: linear-gradient(135deg, var(--primary) 0%, var(--primary-alt) 100%);
+  --btn-bg: linear-gradient(135deg, var(--btn-primary-start) 0%, var(--primary-alt) 100%);
   --btn-color: var(--primary-contrast);
   border: 0;
   padding-block: calc(var(--space-sm) + 1px);
@@ -84,8 +84,9 @@
   box-shadow: 0 4px 12px color-mix(in oklab, var(--primary-alt) 35%, transparent);
 }
 
+/* Stronger brightening would drop the light gradient start below 4.5:1 against white text. */
 .btn--primary:hover {
-  filter: brightness(1.1);
+  filter: brightness(1.05);
   box-shadow: 0 6px 16px color-mix(in oklab, var(--primary) 30%, transparent);
 }
 
@@ -199,8 +200,9 @@
   border-color: var(--focus-ring-color);
 }
 
+/* Full opacity keeps muted placeholders at 4.5:1; entered values use the stronger --text. */
 .form__field :is(input, textarea)::placeholder {
-  opacity: 0.7;
+  opacity: 1;
   color: var(--muted);
 }
 

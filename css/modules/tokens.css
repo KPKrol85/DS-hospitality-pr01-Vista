@@ -17,6 +17,8 @@
   --primary-alt: #0a5ca0;
   --primary-contrast: #ffffff;
   --offer-badge-text: var(--primary-contrast);
+  /* Primary button gradient start; dark themes use a deeper mint so white text keeps 4.5:1. */
+  --btn-primary-start: var(--primary);
 
   /* Colors alert */
   --danger: #ef4444;
@@ -137,6 +139,7 @@ html[data-theme="dark"] {
   --muted: var(--muted-dark);
   --primary: var(--primary-dark);
   --offer-badge-text: var(--text-light);
+  --btn-primary-start: #0b7564;
   --border: var(--border-dark);
   --bg-gradients: var(--bg-gradients-dark);
 }
@@ -152,6 +155,7 @@ html[data-theme="dark"] {
     --muted: var(--muted-dark);
     --primary: var(--primary-dark);
     --offer-badge-text: var(--text-light);
+    --btn-primary-start: #0b7564;
     --border: var(--border-dark);
     --bg-gradients: var(--bg-gradients-dark);
   }

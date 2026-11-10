@@ -68,6 +68,8 @@ For each implementation task, determine `Changelog: yes` or `Changelog: no`. Add
 - Excluded `noindex` legal pages from the sitemap while retaining their public routes and canonical URLs.
 - Corrected responsive-image width and `sizes` descriptors to match generated assets and rendered layouts.
 - Improved offer-badge, skip-link, and form-error contrast across supported themes.
+- Raised primary-button and contact-form placeholder contrast to WCAG AA across light, dark, and auto themes, including hover and active states.
+- Made gallery category scrolling jump immediately when reduced motion is requested.
 - Enforced integer guest counts from 1 to 6 and restored native form validation without JavaScript.
 - Corrected past-arrival date rejection and valid Netlify Forms inquiry submission.
 - Improved first-invalid-field focus, live validation feedback, and error recovery.
@@ -86,4 +88,5 @@ For each implementation task, determine `Changelog: yes` or `Changelog: no`. Add
 - Added JSON-LD fallback equivalence and Warsaw-relative booking-date Edge Function checks.
 - Added responsive-image descriptor validation and browser candidate-selection coverage.
 - Added focused regression coverage for form validation, theme contrast, navigation, dialogs, and 404 behavior.
+- Added reduced-motion regression coverage for gallery category scrolling.
 - Verified clean production builds and eight Playwright/axe accessibility scenarios without reported violations.

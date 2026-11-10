@@ -4,6 +4,9 @@ export function initGalleryFilters() {
   const sections = document.querySelectorAll(".gallery-section");
   if (!filters.length || !items.length) return;
 
+  // Read on each click so a changed system preference applies without reloading.
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
   function applyFilter(cat) {
     items.forEach((el) => {
       const match = cat === "all" || el.getAttribute("data-cat-item") === cat;
@@ -60,13 +63,16 @@ export function initGalleryFilters() {
       applyFilter(filter);
       syncUrl(a.hash);
 
+      // "auto" jumps immediately; the stylesheets define no smooth scroll-behavior.
+      const scrollOptions = {
+        behavior: reducedMotion.matches ? "auto" : "smooth",
+        block: "start",
+      };
+
       if (filter === "all") {
         const galleryHeading = document.getElementById("gallery-heading");
 
-        galleryHeading?.scrollIntoView({
-          behavior: "smooth",
-          block: "start",
-        });
+        galleryHeading?.scrollIntoView(scrollOptions);
 
         return;
       }
@@ -74,10 +80,7 @@ export function initGalleryFilters() {
       const targetSection = document.getElementById(filter);
       const targetTitle = targetSection?.querySelector(".gallery-section__title");
 
-      targetTitle?.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      });
+      targetTitle?.scrollIntoView(scrollOptions);
     });
   });
 }

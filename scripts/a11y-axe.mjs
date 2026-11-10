@@ -140,13 +140,17 @@ async function assertGalleryFilter(page, filter) {
   assert.ok(state.itemsMatch && state.sectionsMatch, 'Only matching sections, items and images must be visible');
 }
 
-function galleryFragmentScenario(fragment, filter, exerciseControls = false) {
+function galleryFragmentScenario(fragment, filter, exerciseControls = false, reducedMotion = 'no-preference') {
   const errors = [];
+  const reduce = reducedMotion === 'reduce';
+  // Reduced motion requests an immediate jump; otherwise category scrolling stays smooth.
+  const behavior = reduce ? 'auto' : 'smooth';
   return {
-    label: `gallery.html${fragment} (fragment restoration)`,
+    label: `gallery.html${fragment} (fragment restoration)${reduce ? ' [reduced motion]' : ''}`,
     path: `gallery.html${fragment}`,
     beforeLoad: async (page) => {
       page.on('pageerror', (error) => errors.push(error.message));
+      await page.emulateMedia({ reducedMotion });
       await page.addInitScript(() => {
         // Observe the real DEV branch after initGalleryFilters(), without registering a production worker.
         window.gallerySwScopes = [];
@@ -172,6 +176,17 @@ function galleryFragmentScenario(fragment, filter, exerciseControls = false) {
         assert.equal(new URL(page.url()).hash, '#foo%22bar', 'Chromium percent-encodes the literal quote');
         const historyLength = await page.evaluate(() => history.length);
         await page.locator('#gallery-filters [data-filter="wellness"]').click();
+        if (reduce) {
+          // Compare the target, not scrollY: the compact header may later re-anchor scrollY without moving content.
+          const titleTop = () => page.evaluate(() =>
+            document.querySelector('#wellness .gallery-section__title').getBoundingClientRect().top);
+          const immediate = await titleTop();
+          await page.waitForTimeout(600);
+          const settled = await titleTop();
+          const viewportHeight = await page.evaluate(() => window.innerHeight);
+          assert.ok(immediate >= 0 && immediate < viewportHeight / 2 && Math.abs(settled - immediate) < 1,
+            `Reduced-motion category scrolling must reach its target immediately (${immediate} -> ${settled})`);
+        }
         await assertGalleryFilter(page, 'wellness');
         assert.equal(new URL(page.url()).hash, '#wellness');
         assert.equal(await page.evaluate(() => history.length), historyLength, 'Category clicks must replace history');
@@ -201,8 +216,8 @@ function galleryFragmentScenario(fragment, filter, exerciseControls = false) {
         assert.equal(new URL(page.url()).hash, '#wszystkie');
         assert.equal(await page.evaluate(() => history.length), historyBeforeAll);
         assert.deepEqual(await page.evaluate(() => window.galleryScrollCalls), [
-          { id: 'wellness-heading', options: { behavior: 'smooth', block: 'start' } },
-          { id: 'gallery-heading', options: { behavior: 'smooth', block: 'start' } }
+          { id: 'wellness-heading', options: { behavior, block: 'start' } },
+          { id: 'gallery-heading', options: { behavior, block: 'start' } }
         ], 'Category clicks must retain their scroll targets; hashchange must not add scripted scrolling');
       }
 
@@ -1091,6 +1106,7 @@ const scenarios = [
   { label: 'gallery.html (baseline)', path: 'gallery.html', setup: (page) => assertGalleryFilter(page, 'all') },
   galleryFragmentScenario('#wellness', 'wellness'),
   galleryFragmentScenario('#foo"bar', 'all', true),
+  galleryFragmentScenario('#foo"bar', 'all', true, 'reduce'),
   galleryFragmentScenario('#\\wellness', 'all'),
   galleryFragmentScenario('#%E0%A4%A', 'all'),
   galleryFragmentScenario('#main', 'all'),
