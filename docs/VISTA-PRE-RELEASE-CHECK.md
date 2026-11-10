@@ -37,7 +37,7 @@
 - [x] Headings, landmarks, image alternatives, and form feedback are accessible.
 - [x] Text contrast and reduced-motion behavior meet the project's accessibility requirements.
 - [x] Available accessibility checks pass without unresolved critical findings.
-- [ ] Performance results and Core Web Vitals meet the project's accepted release criteria.
+- [x] Performance results and Core Web Vitals meet the project's accepted release criteria.
 
 ## 4. Content & KP_Code Standards
 

@@ -84,6 +84,7 @@ For each implementation task, determine `Changelog: yes` or `Changelog: no`. Add
 - Added the missing footer current-page indicator on the about page for accessibility without JavaScript.
 - Removed the initial mobile header layout shift by applying the JavaScript-enhanced layout before first paint.
 - Aligned the homepage Hero image preload with its AVIF source to prevent a redundant WebP download.
+- Corrected the homepage Luxury Room image aspect ratio to match its 16:9 sources and prevent distorted rendering.
 
 ### Testing
 
