@@ -1,4 +1,6 @@
 (() => {
+  // Apply JS-enhanced layout before first paint to avoid a header layout shift when the deferred bundle starts.
+  document.documentElement.classList.replace("no-js", "js");
   const KEY = "theme-pref";
   let pref = "auto";
   try {

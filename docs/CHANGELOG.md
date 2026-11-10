@@ -82,6 +82,8 @@ For each implementation task, determine `Changelog: yes` or `Changelog: no`. Add
 - Made one-shot image optimization report processing failures through a non-zero exit status.
 - Aligned contact landmarks and structured data with the site's demonstrational scope.
 - Added the missing footer current-page indicator on the about page for accessibility without JavaScript.
+- Removed the initial mobile header layout shift by applying the JavaScript-enhanced layout before first paint.
+- Aligned the homepage Hero image preload with its AVIF source to prevent a redundant WebP download.
 
 ### Testing
 
