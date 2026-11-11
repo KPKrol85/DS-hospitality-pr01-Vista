@@ -102,7 +102,7 @@
   padding: clamp(var(--space-lg), 3vw, var(--space-xl));
   border-radius: var(--radius-md);
   background: var(--bg-elev);
-  box-shadow: var(--elev-soft, 0 18px 40px rgba(15, 23, 42, 0.18));
+  box-shadow: var(--elev-high);
   border: 1px solid color-mix(in oklab, var(--border) 70%, transparent);
 }
 
@@ -315,14 +315,6 @@
   color: var(--muted);
 }
 
-.brand__media {
-  overflow: hidden;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  background: var(--bg-elev);
-  box-shadow: var(--elev);
-}
-
 .brand__media img {
   display: block;
   width: 100%;
@@ -335,15 +327,14 @@
   margin: var(--space-2xl) 0 var(--space-md);
 }
 
-.brand__card,
-.brand__stat {
+/* Ground: principles read as ruled columns on the page. */
+.brand__card {
   display: grid;
+  align-content: start;
   gap: var(--space-xs);
-  padding: var(--space-md);
-  background: var(--bg-elev);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  box-shadow: var(--elev);
+  padding-block-start: var(--space-md);
+  padding-inline-end: var(--space-md);
+  border-block-start: 1px solid var(--rule);
 }
 
 .brand__card-title {
@@ -361,11 +352,22 @@
   color: var(--muted);
 }
 
+/* Ground: figures form one quiet line divided by rules instead of three boxes. */
+.brand__section--stats .grid-3 {
+  gap: 0;
+}
+
 .brand__stat {
   display: grid;
+  align-content: center;
   gap: var(--space-xs);
   min-height: 100%;
+  padding: var(--space-md);
   text-align: center;
+}
+
+.brand__stat + .brand__stat {
+  border-block-start: 1px solid var(--rule);
 }
 
 .brand__stat-value {
@@ -402,6 +404,14 @@
   }
   .brand__media {
     height: auto;
+  }
+}
+
+/* Matches the three-column `.grid-3` breakpoint. */
+@media (min-width: 970px) {
+  .brand__stat + .brand__stat {
+    border-block-start: 0;
+    border-inline-start: 1px solid var(--rule);
   }
 }
 
@@ -506,7 +516,7 @@
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
   background: var(--bg-elev);
-  box-shadow: var(--elev);
+  box-shadow: var(--elev-rest);
 }
 
 @media (min-width: 480px) {

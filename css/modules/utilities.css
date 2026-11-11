@@ -39,7 +39,7 @@
   color: var(--text-light);
   font-weight: 600;
   border-radius: var(--radius-full);
-  box-shadow: var(--elev);
+  box-shadow: var(--elev-rest);
 }
 
 .skip-link:focus {

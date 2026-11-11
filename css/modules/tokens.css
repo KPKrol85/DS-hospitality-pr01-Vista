@@ -51,9 +51,18 @@
   --focus-ring-offset: 2px;
 
   /* Decorations */
-  --shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
-  --elev: var(--shadow);
   --bg-gradients: none;
+
+  /* Elevation: reserved for the Surface role (actionable UI, panels, the legal sheet and dialogs). */
+  --elev-rest: 0 10px 30px rgba(0, 0, 0, 0.06);
+  --elev-raised: 0 8px 20px rgba(0, 0, 0, 0.15);
+  --elev-high: 0 18px 40px rgba(15, 23, 42, 0.18);
+  --surface-lift: -3px; /* hover rise of actionable surfaces; reset under reduced motion */
+
+  /* Material roles: Ground dividers and photographic Frames. */
+  --rule: color-mix(in oklab, var(--border) 80%, var(--muted) 20%);
+  --frame-radius: var(--radius-md);
+  --frame-edge: color-mix(in oklab, var(--text) 10%, transparent);
 
   /* Fonts */
   --font-sans: "Inter", system-ui, sans-serif;

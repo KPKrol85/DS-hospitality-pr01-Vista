@@ -136,7 +136,7 @@
 
 .site-nav__list a:not([aria-current="page"]):hover {
   background: var(--bg-elev);
-  box-shadow: var(--elev);
+  box-shadow: var(--elev-rest);
 }
 
 .site-nav__extras {
@@ -148,7 +148,7 @@
 
 .site-nav__list a[aria-current="page"] {
   background: var(--bg-elev);
-  box-shadow: var(--elev);
+  box-shadow: var(--elev-rest);
   color: var(--primary);
 }
 

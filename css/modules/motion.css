@@ -1,18 +1,10 @@
 @media (prefers-reduced-motion: reduce) {
+  :root {
+    --surface-lift: 0px; /* actionable surfaces keep the raised shadow without rising */
+  }
   :where(.reveal-ready) [data-reveal] {
     opacity: 1;
     transform: translateY(0);
-  }
-  .benefit {
-    transition: none;
-    transform: none;
-    box-shadow: var(--elev);
-  }
-  .offer-card {
-    transition: none;
-  }
-  .offer-card:hover {
-    transform: none;
   }
   .btn.btn--link:hover {
     transform: none;

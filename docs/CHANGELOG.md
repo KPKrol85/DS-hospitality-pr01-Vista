@@ -59,6 +59,7 @@ For each implementation task, determine `Changelog: yes` or `Changelog: no`. Add
 - Standardized theme-aware focus rings, form typography, and active navigation and filter states.
 - Consolidated phone and guest validation across contact-form input and submission handlers.
 - Established an editorial type hierarchy with display section titles, a body-size hero statement, unified card titles, tracked offer kickers, and tabular room specifications.
+- Replaced the universal card with Ground, Frame and Surface material roles, reserving elevation tokens and hover lift for actionable components.
 
 ### Fixed
 

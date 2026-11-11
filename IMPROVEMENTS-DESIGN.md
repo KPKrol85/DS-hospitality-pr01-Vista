@@ -146,40 +146,9 @@ Priorities express design value and dependency order, not defect severity. P1 it
 
 ### IMP-DESIGN-02 — Replace the universal card with a three-role material language
 
-- **Status:** Proposed
-- **Priority:** P1
-- **Affected area:** homepage benefits, testimonials, rooms, offers, gallery tiles and CTA panel; `rooms.html` room cards; `onas.html` brand cards and stats; the surface and elevation tokens.
-- **Evidence:**
-  - Runtime: 21 surfaces on `index.html` at every tested width share a border, a radius of 10 px or more and a shadow, across six classes.
-  - Source: the shared surface recipe and the hover-lift rules listed in section 3, the repeated literal hover shadow, and the undefined `--elev-soft` in `.legal-card`.
-  - Visual: uniform white rectangles in every homepage section.
-  - Historical: hover elevation on static cards was ranked lower in the archived 2026-09-30 UI report.
-- **Current state:** informational content, photographs and actionable items share one elevated treatment. Some non-interactive surfaces lift on hover.
-- **Design judgment:** when everything is a card, nothing is featured, and elevation no longer tells visitors what they can use.
-- **Proposed improvement:** assign three material roles:
-  - *Ground*: editorial content set directly on the page and separated by hairline rules and kickers. This covers benefits, testimonials as editorial quotes, intros and about-page principles.
-  - *Frame*: photographs with a consistent radius, a minimal edge and an optional caption.
-  - *Surface*: elevated only for actionable groups and controls, such as offer entries with actions, the form, the filter panel, the header and the lightbox.
-
-  Hover elevation applies only to Surface items. The closing CTA becomes a composed Ground band. Shadows resolve to resting and raised elevation tokens.
-- **Expected value:** clear section hierarchy and calm pages. Photography and type carry the identity, and interactive and informational roles are visually distinct.
-- **Implementation scope:** elevation tokens in `tokens.css`; surface rules in `components.css`, `sections.css` and `subpages.css`. Possible slices: tokens → homepage editorial sections → photo frames → about page and CTA.
-
-  Keep:
-  - DOM order and semantics (`article`, `figure`, `blockquote`);
-  - the focus-ring tokens and the room and offer `:focus-within` outlines;
-  - filter selected states and form surfaces;
-  - the legal card layout and the IMP-UI-05 grid balancing;
-  - the `motion.css` reduced-motion overrides.
-- **Dependencies:** IMP-DESIGN-01 is recommended in the same cycle, because its rules and kickers replace the separation boxes provide.
-- **Acceptance criteria:**
-  - These conditions hold on `index.html`, `rooms.html` and `onas.html` at 390 and 1280 px in light and dark:
-    - Elevated surfaces appear only on elements containing a link, button or form control, or on the header and the lightbox.
-    - No non-interactive element changes its transform or shadow on hover.
-  - Every shadow resolves to a defined elevation token.
-  - Groups remain identifiable without boxes.
-  - Focus is visible at every stop.
-  - `npm run test:a11y` reports no new violations.
+- **Status:** COMPLETED — implemented and verified.
+- **Result:** Benefits, testimonials, "O nas" principles and stats, and the closing CTA sit on the page as Ground, divided by a shared `--rule`; photographs use one Frame radius and hairline edge without shadow. The `--elev-rest`, `--elev-raised` and `--elev-high` tokens and the `--surface-lift` hover rise are reserved for offer cards, homepage room cards (`room-card--surface`), lightbox tiles on hover, filters, the form, the legal sheet and the lightbox; the static hero image no longer zooms on hover.
+- **Verification:** `npm run build:css`, `npm run qa:fast` and `npm run test:a11y` (27 scenarios) passed. Playwright checks of the primary pages at 390 and 1280 px in light and dark found card-level shadows only on elements containing controls, no hover transform or shadow change on static content, a visible ring at every focus stop, no overflow from 320 to 1440 px and no rise under reduced motion. Button, theme-toggle and filter-chip shadows stay as control states, the contact map keeps its resting shadow, and the toggle control, other browsers and assistive technologies were not tested.
 - **Impact:** High
 - **Effort:** Medium
 

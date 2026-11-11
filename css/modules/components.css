@@ -1,3 +1,38 @@
+/* Material roles
+   Ground: editorial content sits on the page, separated by --rule dividers (component rules).
+   Frame: photographs share one radius and a hairline edge, without elevation.
+   Surface: actionable groups rest on --elev-rest and rise only when they can be used. */
+
+:where(.hero__media, .highlight__media, .brand__media, .gallery-grid__item, .room-card) img {
+  border-radius: var(--frame-radius);
+  outline: 1px solid var(--frame-edge);
+  outline-offset: -1px;
+}
+
+:is(.offer-card, .room-card--surface) {
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--elev-rest);
+  overflow: hidden;
+  transition:
+    translate 0.3s ease,
+    box-shadow 0.3s ease,
+    border-color 0.2s ease;
+}
+
+/* `translate` composes with the reveal `transform`, so the rise works on revealed cards too. */
+:is(.offer-card, .room-card--surface):hover {
+  translate: 0 var(--surface-lift);
+  box-shadow: var(--elev-raised);
+  border-color: color-mix(in oklab, var(--border) 60%, var(--focus) 40%);
+}
+
+:is(.offer-card, .room-card--surface):focus-within {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: calc(var(--focus-ring-offset) * 2);
+}
+
 /* Theme toggle */
 
 .theme-toggle {
@@ -378,7 +413,7 @@
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
   background: var(--bg-elev);
-  box-shadow: var(--elev);
+  box-shadow: var(--elev-rest);
 }
 
 .map__fallback {
@@ -464,7 +499,7 @@
   background: var(--bg-elev);
   color: var(--text);
   border-radius: var(--radius-sm);
-  box-shadow: var(--elev);
+  box-shadow: var(--elev-high);
   width: min(96vw, 980px);
   max-height: min(100dvh - 1rem, 820px);
   padding: var(--space-sm);
@@ -761,24 +796,21 @@
   gap: var(--space-md);
 }
 
+/* A Frame that opens the lightbox: flat at rest, raised on hover like other actionable items. */
 .gallery-grid__item {
   display: block;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
+  border-radius: var(--frame-radius);
   overflow: hidden;
-  box-shadow: var(--elev);
   background: var(--bg-elev);
+  cursor: zoom-in;
   transition:
-    transform 0.3s ease,
-    box-shadow 0.3s ease,
-    border-color 0.2s ease;
-  will-change: transform;
+    translate 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
 .gallery-grid__item:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-  border-color: color-mix(in oklab, var(--border) 60%, var(--focus) 40%);
+  translate: 0 var(--surface-lift);
+  box-shadow: var(--elev-raised);
 }
 
 .gallery-grid__item img {
@@ -809,33 +841,12 @@
   }
 }
 
-/* Offers card */
+/* Offers card (Surface role, see Material roles) */
 
 .offer-card {
-  background: var(--bg-elev);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  box-shadow: var(--elev);
-  overflow: hidden;
   display: grid;
   padding: var(--space-md);
   position: relative;
-  transition:
-    transform 0.3s ease,
-    box-shadow 0.3s ease,
-    border-color 0.2s ease;
-  will-change: transform;
-}
-
-.offer-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-  border-color: color-mix(in oklab, var(--border) 60%, var(--focus) 40%);
-}
-
-.offer-card:focus-within {
-  outline: var(--focus-ring-width) solid var(--focus-ring-color);
-  outline-offset: calc(var(--focus-ring-offset) * 2);
 }
 
 .offer-card__badge {
@@ -895,24 +906,10 @@
   text-align: center;
 }
 
+/* A Ground band framed by rules; the primary button is the only raised element. */
 .section--cta .cta-panel {
-  max-width: 100%;
-  margin-inline: auto;
-  padding: var(--space-lg) var(--space-md);
-  background: color-mix(in oklab, var(--bg-elev) 92%, transparent);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  box-shadow: var(--elev);
-  transition:
-    transform 0.3s ease,
-    box-shadow 0.3s ease,
-    border-color 0.2s ease;
-}
-
-.section--cta .cta-panel:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.15);
-  border-color: color-mix(in oklab, var(--border) 60%, var(--focus) 40%);
+  padding: var(--space-2xl) var(--space-md);
+  border-block: 1px solid var(--rule);
 }
 
 .section--cta .section-title {
@@ -927,13 +924,7 @@
 }
 
 .section--cta .btn {
-  margin: var(--space-md) auto;
-}
-
-@media (min-width: 760px) {
-  .section--cta .cta-panel {
-    max-width: 680px;
-  }
+  margin: var(--space-lg) auto 0;
 }
 
 /* Filters */
@@ -942,7 +933,7 @@
   padding: var(--space-2xs);
   border-radius: var(--radius-md);
   background: color-mix(in oklab, var(--bg-elev) 60%, transparent);
-  box-shadow: var(--elev);
+  box-shadow: var(--elev-rest);
   inline-size: fit-content;
   max-inline-size: 100%;
   margin-inline: auto;
@@ -1020,47 +1011,35 @@
   }
 }
 
-/* Room card */
+/* Room card: an informational framed photograph with text on the page.
+   `room-card--surface` marks cards with an action, which take the Surface role. */
 
 .room-card {
-  background: var(--bg-elev);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  box-shadow: var(--elev);
-  overflow: hidden;
   display: grid;
-  transition:
-    transform 0.3s ease,
-    box-shadow 0.3s ease,
-    border-color 0.2s ease;
-  will-change: transform;
-}
-
-.room-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-  border-color: color-mix(in oklab, var(--border) 60%, var(--focus) 40%);
-}
-
-.room-card:focus-within {
-  outline: var(--focus-ring-width) solid var(--focus-ring-color);
-  outline-offset: calc(var(--focus-ring-offset) * 2);
 }
 
 .room-card__img {
   width: 100%;
   aspect-ratio: 3 / 2;
   object-fit: cover;
-  border-radius: var(--radius-md);
+}
+
+/* The card edge already bounds the photograph inside a Surface. */
+.room-card--surface .room-card__img {
+  outline: 0;
 }
 
 .room-card__body {
-  padding: var(--space-md);
+  padding: var(--space-md) 0 0;
   display: grid;
   gap: var(--space-sm);
   grid-auto-rows: min-content;
   text-align: center;
   justify-items: center;
+}
+
+.room-card--surface .room-card__body {
+  padding: var(--space-md);
 }
 
 .room-card__title {
