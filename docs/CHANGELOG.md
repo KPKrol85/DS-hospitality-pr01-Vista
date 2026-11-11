@@ -63,6 +63,7 @@ For each implementation task, determine `Changelog: yes` or `Changelog: no`. Add
 - Replaced the universal card with Ground, Frame and Surface material roles, reserving elevation tokens and hover lift for actionable components.
 - Replaced the homepage hero, room, featured Luxury Room and About photographs with approved imagery, descriptive alt text and correctly sized responsive variants.
 - Replaced the homepage and gallery-page photographs with 26 approved images, descriptive alt text and captions, and correctly sized responsive variants.
+- Replaced the social-sharing graphics with approved branded images identifying the demonstration project, using the landscape version for X cards and accurate image alt text and JSON-LD captions.
 
 ### Fixed
 

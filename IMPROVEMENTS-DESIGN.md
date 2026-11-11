@@ -154,36 +154,9 @@ Priorities express design value and dependency order, not defect severity. P1 it
 
 ### IMP-DESIGN-03 — Define a Vista photography system and asset brief
 
-- **Status:** In progress — Phase 1 (approved photography integration) and Phase 2 (gallery photography) implemented and verified; OG images remain.
-- **Phase 1 result:** Six owner-approved masters replace the homepage hero, the Classic, Deluxe and Luxury Suite photographs on `index.html` and `rooms.html`, the featured Luxury Room and the about image. `npm run img:opt` now centre-crops each listed master to its display ratio (16:9, 3:2, 16:9, 5:4) and exports JPEG, WebP and AVIF widths without upscaling; markup, `alt`, dimensions, the hero preload and the about JSON-LD pair were updated, and the replaced and unused `hero-*` files were removed.
-- **Phase 1 verification:** `npm run img:opt` (idempotent rerun), `qa:fast` including `check:image-descriptors` and `check:links`, `npm run build` and `npm run test:a11y` passed. Playwright Chromium screenshots at 390, 800 and 1280 px in light and dark showed the correct image in each slot, subjects in frame, no overflow and a single hero download matching the preload; other browsers were not tested.
-- **Phase 2 result:** 26 owner-approved 3:2 PNG masters replace the six homepage gallery photographs and the four photographs in each `gallery.html` category, with unchanged category IDs and filters. `npm run img:opt` exports them at 640–1536 px in JPEG, WebP and AVIF; `srcset`, measured `sizes`, 1536 × 1024 dimensions, `alt`, captions and lightbox targets were updated, and the 104 legacy source JPEGs and 315 superseded variants were removed.
-- **Phase 2 verification:** `npm run img:opt` (rerun: 0 generated, 33 skipped), `qa:fast` (421 width descriptors), `npm run build` and `npm run test:a11y` (27 scenarios) passed; all 312 referenced variants exist with matching decoded dimensions and none is unreferenced. Browser-pane checks at 390 px (dark) and 800 and 1280 px (light) showed the correct image in each slot, no overflow, working filters and keyboard lightbox navigation; other browsers were not tested.
-- **Priority:** P1
-- **Affected area:** the hero, room and featured-room images, the homepage gallery, the `gallery.html` categories, the about image and the OG images; the `assets/img/src/` → `npm run img:opt` pipeline.
-- **Evidence:**
-  - Visual: contact sheets of all room, homepage-gallery and gallery-page photographs show mixed white balance, exposure and geography. A staff photograph sits among the interiors. The burned-in badge is confirmed in the sampled source files. The about image is unbadged and has the most coherent warm, soft grade.
-  - Source: fixed crops `.room-card__img` (3:2), `.highlight__media img` (16:9) and `.brand__media img` (5:4); no portrait or wide-opener crops; unused `hero-*` variants.
-- **Current state:** the photographs come from unrelated visual worlds, and most carry a visible mark.
-- **Design judgment:** without a shared light and subject logic, no layout change can make the imagery read as one brand.
-- **Proposed improvement:** an approved photo brief covering:
-  - **Light:** warm, natural and softly directional, with a white balance consistent with the about image.
-  - **Palette:** sand, stone and brass, with deep ink or sea accents.
-  - **Subjects:** for each chosen category, one wide establishing view plus close details (room, table, ritual, material).
-  - **People:** natural and unposed, with representation agreed by the owner.
-  - **Crop set:** 16:9 or wider for openers, 3:2 standard, 4:5 portrait for mobile and editorial use, with focal-point notes per image.
-  - **Clean files:** no burned-in marks or text.
-  - **Themes:** images must hold up against both theme grounds.
-- **Expected value:** one visual world. This is the foundation for IMP-DESIGN-04, -05 and -07.
-- **Implementation scope:** an owner-approved brief, then replacement of the source files, regeneration of the variants, and updates to `srcset`, `sizes`, `width`, `height` and `alt`. Keep the naming conventions and the `check:image-descriptors` contract. Slices: brief → hero and rooms → gallery categories → OG images.
-- **Dependencies:** the narrative decision (section 4), confirmation of rights and provenance, and corrected alt text for replaced images.
-- **Acceptance criteria:**
-  - A side-by-side contact sheet of all published photographs shows one consistent grade, with no burned-in marks.
-  - Each category has at least one establishing view and one detail image.
-  - Focal points stay in frame at 390, 800 and 1280 px.
-  - Every `alt` describes its actual image.
-  - `npm run check:image-descriptors`, `npm run check:links` and `npm run build` pass.
-  - Final balance is approved only with approved assets, not placeholders.
+- **Status:** COMPLETED — implemented and verified.
+- **Result:** Phase 1 replaced the hero, Classic, Deluxe, Luxury Suite, featured Luxury Room and About photographs with six approved masters, which `npm run img:opt` centre-crops to their display ratios and exports as JPEG, WebP and AVIF without upscaling. Phase 2 replaced the six homepage and 20 `gallery.html` photographs with 26 approved 3:2 masters at 640–1536 px, with updated `alt`, captions and lightbox targets, and removed the legacy sources and variants. Phase 3 integrated the approved 1200 × 630 and 1200 × 1200 Open Graph JPEGs: all ten sharing pages carry an accurate `og:image:alt` and a new `twitter:image:alt`, X cards use the landscape graphic because a simulated 2:1 `summary_large_image` crop clipped the square's logo and attribution, and the five JSON-LD `ImageObject` caption pairs match.
+- **Verification:** Phases 1–2: idempotent `npm run img:opt` reruns, `qa:fast` (421 width descriptors), `npm run build` and `npm run test:a11y` (27 scenarios) passed, and browser checks at 390–1280 px in both themes showed correct, in-frame images, no overflow, and working filters and lightbox. Phase 3: `check:links`, `check:jsonld`, `check:syntax` and `npm run build` passed; a `dist/` check confirmed byte-identical JPEGs whose decoded format and dimensions match the metadata, absolute HTTPS image URLs, one alt text on every page and synchronised captions. Live Facebook, LinkedIn and X previews and browsers other than Chromium were not verified.
 - **Impact:** High
 - **Effort:** Large
 
