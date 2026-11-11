@@ -26,9 +26,9 @@
     {
       "@type": "ImageObject",
       "@id": "https://ds-hospitality-pr01-vista.netlify.app/onas.html#primaryimage",
-      "url": "https://ds-hospitality-pr01-vista.netlify.app/assets/img/optimized/about/wnetrze-hotelu-vista.png",
-      "contentUrl": "https://ds-hospitality-pr01-vista.netlify.app/assets/img/optimized/about/wnetrze-hotelu-vista.png",
-      "caption": "Eleganckie wnętrze hotelowe marki Vista"
+      "url": "https://ds-hospitality-pr01-vista.netlify.app/assets/img/optimized/about/hero-about-1280x1024.jpg",
+      "contentUrl": "https://ds-hospitality-pr01-vista.netlify.app/assets/img/optimized/about/hero-about-1280x1024.jpg",
+      "caption": "Słoneczne lobby hotelowe marki Vista z widokiem na ogród"
     }
   ]
 }

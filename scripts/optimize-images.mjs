@@ -10,7 +10,21 @@ const MAX_WIDTH = 2000;
 const WEBP_QUALITY = 80;
 const AVIF_QUALITY = 50;
 const AVIF_EFFORT = 4;
+const JPEG_QUALITY = 80;
 const SUPPORTED_EXTS = new Set([".jpg", ".jpeg", ".png"]);
+
+// Single-master photographs, keyed by path under SRC_ROOT. Each master is centre-cropped to its
+// display ratio and exported as `<name>-<w>x<h>` JPEG/WebP/AVIF variants instead of being copied.
+// Widths must fit inside the cropped master; the build fails rather than upscale.
+const ROOM_CARD = { ratio: [3, 2], widths: [640, 960, 1280, 1536] };
+const RESPONSIVE_MASTERS = new Map([
+  ["hero/hero.png", { ratio: [16, 9], widths: [640, 960, 1200, 1600] }],
+  ["rooms/classic.png", ROOM_CARD],
+  ["rooms/deluxe.png", ROOM_CARD],
+  ["rooms/luxury.png", { ...ROOM_CARD, name: "luxury-suite" }],
+  ["rooms/luxury-room.png", { ratio: [16, 9], widths: [640, 960, 1280, 1536] }],
+  ["about/hero-about.png", { ratio: [5, 4], widths: [640, 960, 1280] }],
+]);
 
 function isSupportedImage(filePath) {
   return SUPPORTED_EXTS.has(path.extname(filePath).toLowerCase());
@@ -41,6 +55,71 @@ function getOutputPaths(inputPath) {
     webpPath: `${outputBase}.webp`,
     avifPath: `${outputBase}.avif`,
   };
+}
+
+function getMasterConfig(inputPath) {
+  const key = path.relative(SRC_ROOT, inputPath).split(path.sep).join("/");
+  return RESPONSIVE_MASTERS.get(key);
+}
+
+function getVariantPaths(inputPath, config) {
+  const parsed = path.parse(path.relative(SRC_ROOT, inputPath));
+  const outputDir = path.join(OUT_ROOT, parsed.dir);
+  const name = config.name ?? parsed.name;
+  const [ratioWidth, ratioHeight] = config.ratio;
+
+  return config.widths.map((width) => {
+    const height = Math.round((width * ratioHeight) / ratioWidth);
+    const outputBase = path.join(outputDir, `${name}-${width}x${height}`);
+    return {
+      width,
+      height,
+      outputDir,
+      files: [`${outputBase}.jpg`, `${outputBase}.webp`, `${outputBase}.avif`],
+    };
+  });
+}
+
+async function processMaster(inputPath, config, stats) {
+  const variants = getVariantPaths(inputPath, config);
+  await fs.mkdir(variants[0].outputDir, { recursive: true });
+
+  const inputMtimeMs = await getMtimeMs(inputPath);
+  const { width, height, orientation = 1 } = await sharp(inputPath).metadata();
+  const [masterWidth, masterHeight] = orientation >= 5 ? [height, width] : [width, height];
+  const [ratioWidth, ratioHeight] = config.ratio;
+  const cropWidth = Math.min(masterWidth, Math.floor((masterHeight * ratioWidth) / ratioHeight));
+
+  const encoders = [
+    (image) => image.jpeg({ quality: JPEG_QUALITY, mozjpeg: true }),
+    (image) => image.webp({ quality: WEBP_QUALITY }),
+    (image) => image.avif({ quality: AVIF_QUALITY, effort: AVIF_EFFORT }),
+  ];
+
+  const tasks = [];
+  for (const variant of variants) {
+    if (variant.width > cropWidth) {
+      throw new Error(
+        `${variant.width}px variant exceeds the ${cropWidth}px ${ratioWidth}:${ratioHeight} crop of the master`
+      );
+    }
+
+    const resized = sharp(inputPath).rotate().resize({
+      width: variant.width,
+      height: variant.height,
+      fit: "cover",
+      position: "centre",
+    });
+
+    for (const [index, outputPath] of variant.files.entries()) {
+      if (await isOutputFresh(outputPath, inputMtimeMs)) continue;
+      tasks.push(encoders[index](resized.clone()).toFile(outputPath));
+    }
+  }
+
+  await Promise.all(tasks);
+  if (tasks.length === 0) stats.skipped += 1;
+  stats.generated += tasks.length;
 }
 
 async function collectInputFiles(rootDir) {
@@ -75,6 +154,12 @@ async function isOutputFresh(outputPath, inputMtimeMs) {
 }
 
 async function processImage(inputPath, stats) {
+  const masterConfig = getMasterConfig(inputPath);
+  if (masterConfig) {
+    await processMaster(inputPath, masterConfig, stats);
+    return;
+  }
+
   const { outputDir, originalPath, webpPath, avifPath } = getOutputPaths(inputPath);
   await fs.mkdir(outputDir, { recursive: true });
 
@@ -191,12 +276,15 @@ async function runOptimization({ watch }) {
 
   watcher.on("unlink", async (filePath) => {
     if (!isSupportedImage(filePath)) return;
-    const { originalPath, webpPath, avifPath } = getOutputPaths(filePath);
-    await Promise.all([
-      fs.rm(originalPath, { force: true }),
-      fs.rm(webpPath, { force: true }),
-      fs.rm(avifPath, { force: true }),
-    ]);
+    const masterConfig = getMasterConfig(filePath);
+    let outputFiles;
+    if (masterConfig) {
+      outputFiles = getVariantPaths(filePath, masterConfig).flatMap((variant) => variant.files);
+    } else {
+      const { originalPath, webpPath, avifPath } = getOutputPaths(filePath);
+      outputFiles = [originalPath, webpPath, avifPath];
+    }
+    await Promise.all(outputFiles.map((outputPath) => fs.rm(outputPath, { force: true })));
     console.log(`[img] removed outputs for ${path.relative(process.cwd(), filePath)}`);
   });
 

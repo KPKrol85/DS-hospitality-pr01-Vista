@@ -41,6 +41,7 @@ For each implementation task, determine `Changelog: yes` or `Changelog: no`. Add
 
 - Established modular CSS and JavaScript sources with PostCSS, esbuild, and reproducible clean `dist/` builds.
 - Added Sharp image optimization and responsive AVIF, WebP, and fallback assets.
+- Extended `img:opt` to crop configured single-image masters to their display ratios and generate responsive widths without upscaling.
 - Configured Netlify to publish `dist/` with rewritten asset references and a content-versioned service worker.
 - Restricted service worker registration to production builds and scoped development cache cleanup.
 - Added local development with live reload and production-package preview servers.
@@ -60,6 +61,7 @@ For each implementation task, determine `Changelog: yes` or `Changelog: no`. Add
 - Consolidated phone and guest validation across contact-form input and submission handlers.
 - Established an editorial type hierarchy with display section titles, a body-size hero statement, unified card titles, tracked offer kickers, and tabular room specifications.
 - Replaced the universal card with Ground, Frame and Surface material roles, reserving elevation tokens and hover lift for actionable components.
+- Replaced the homepage hero, room, featured Luxury Room and About photographs with approved imagery, descriptive alt text and correctly sized responsive variants.
 
 ### Fixed
 

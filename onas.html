@@ -76,9 +76,9 @@
           {
             "@type": "ImageObject",
             "@id": "https://ds-hospitality-pr01-vista.netlify.app/onas.html#primaryimage",
-            "url": "https://ds-hospitality-pr01-vista.netlify.app/assets/img/optimized/about/wnetrze-hotelu-vista.png",
-            "contentUrl": "https://ds-hospitality-pr01-vista.netlify.app/assets/img/optimized/about/wnetrze-hotelu-vista.png",
-            "caption": "Eleganckie wnętrze hotelowe marki Vista"
+            "url": "https://ds-hospitality-pr01-vista.netlify.app/assets/img/optimized/about/hero-about-1280x1024.jpg",
+            "contentUrl": "https://ds-hospitality-pr01-vista.netlify.app/assets/img/optimized/about/hero-about-1280x1024.jpg",
+            "caption": "Słoneczne lobby hotelowe marki Vista z widokiem na ogród"
           }
         ]
       }
@@ -163,9 +163,35 @@
             <!-- media -->
             <figure class="brand__media" data-reveal>
               <picture>
-                <source srcset="assets/img/optimized/about/wnetrze-hotelu-vista.avif" type="image/avif" />
-                <source srcset="assets/img/optimized/about/wnetrze-hotelu-vista.webp" type="image/webp" />
-                <img src="assets/img/optimized/about/wnetrze-hotelu-vista.png" alt="Eleganckie wnętrze hotelowe marki Vista" width="640" height="480" loading="lazy" decoding="async" />
+                <source
+                  type="image/avif"
+                  srcset="
+                    assets/img/optimized/about/hero-about-640x512.avif    640w,
+                    assets/img/optimized/about/hero-about-960x768.avif    960w,
+                    assets/img/optimized/about/hero-about-1280x1024.avif 1280w
+                  "
+                  sizes="(min-width: 1280px) 504px, (min-width: 760px) 40vw, calc(100vw - 8rem)" />
+                <source
+                  type="image/webp"
+                  srcset="
+                    assets/img/optimized/about/hero-about-640x512.webp    640w,
+                    assets/img/optimized/about/hero-about-960x768.webp    960w,
+                    assets/img/optimized/about/hero-about-1280x1024.webp 1280w
+                  "
+                  sizes="(min-width: 1280px) 504px, (min-width: 760px) 40vw, calc(100vw - 8rem)" />
+                <img
+                  src="assets/img/optimized/about/hero-about-960x768.jpg"
+                  srcset="
+                    assets/img/optimized/about/hero-about-640x512.jpg    640w,
+                    assets/img/optimized/about/hero-about-960x768.jpg    960w,
+                    assets/img/optimized/about/hero-about-1280x1024.jpg 1280w
+                  "
+                  sizes="(min-width: 1280px) 504px, (min-width: 760px) 40vw, calc(100vw - 8rem)"
+                  alt="Słoneczne lobby hotelowe z beżowymi sofami, marmurowym stolikiem z hortensjami i przeszkloną ścianą z widokiem na ogród z drzewami oliwnymi"
+                  width="1280"
+                  height="1024"
+                  loading="lazy"
+                  decoding="async" />
               </picture>
             </figure>
           </div>
