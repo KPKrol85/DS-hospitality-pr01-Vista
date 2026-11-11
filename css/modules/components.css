@@ -422,7 +422,7 @@
   justify-items: start;
   gap: var(--space-2xs);
   margin-block-start: var(--space-sm);
-  font-size: var(--fs-200);
+  font-size: var(--fs-meta);
   line-height: var(--lh-relaxed);
   color: var(--muted);
 }
@@ -483,7 +483,7 @@
 }
 
 .lightbox__caption {
-  font-size: var(--fs-200);
+  font-size: var(--fs-meta);
   color: color-mix(in oklab, var(--text) 80%, var(--muted) 20%);
   text-align: center;
   margin-top: var(--space-2xs);
@@ -597,7 +597,7 @@
   border-radius: var(--radius-full);
   background: var(--bg-elev);
   color: var(--muted);
-  font-size: var(--fs-200);
+  font-size: var(--fs-meta);
   line-height: var(--lh-tight);
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
@@ -644,7 +644,7 @@
   padding: var(--space-2xs) 0 var(--space-sm);
   background: linear-gradient(to top, rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.4), transparent);
   color: #fff;
-  font-size: var(--fs-200);
+  font-size: var(--fs-meta);
 }
 
 .lightbox.lightbox--fullscreen .lightbox__close {
@@ -849,14 +849,15 @@
   color: var(--offer-badge-text);
   border-radius: var(--radius-full);
   font-weight: 500;
-  font-size: var(--fs-200);
+  font-size: var(--fs-meta);
   line-height: var(--lh-tight);
   font-variant-numeric: tabular-nums;
 }
 
 .offer-card__title {
   margin: var(--space-xs) 0;
-  font-size: var(--fs-500);
+  font-size: var(--fs-card-title);
+  line-height: var(--lh-snug);
   color: var(--text);
   font-weight: 600;
   text-align: center;
@@ -916,7 +917,6 @@
 
 .section--cta .section-title {
   margin: 0 0 var(--space-sm);
-  font-size: var(--fs-500);
 }
 
 .section--cta .cta-text {
@@ -1065,14 +1065,18 @@
 
 .room-card__title {
   margin: 0;
-  font-size: var(--fs-400);
+  font-size: var(--fs-card-title);
   font-weight: 600;
+  line-height: var(--lh-snug);
   color: var(--text);
 }
 
+/* Spec voice: area and occupancy figures. */
 .room-card__meta {
   color: var(--muted);
   font-size: var(--fs-meta);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
 }
 
 .room-card__text {

@@ -58,6 +58,7 @@ For each implementation task, determine `Changelog: yes` or `Changelog: no`. Add
 - Refined responsive grids, content alignment, heading scales, and button sizing.
 - Standardized theme-aware focus rings, form typography, and active navigation and filter states.
 - Consolidated phone and guest validation across contact-form input and submission handlers.
+- Established an editorial type hierarchy with display section titles, a body-size hero statement, unified card titles, tracked offer kickers, and tabular room specifications.
 
 ### Fixed
 

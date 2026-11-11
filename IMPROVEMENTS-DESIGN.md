@@ -138,34 +138,9 @@ Priorities express design value and dependency order, not defect severity. P1 it
 
 ### IMP-DESIGN-01 — Establish an editorial type system with display, kicker, caption and spec voices
 
-- **Status:** Proposed
-- **Priority:** P1
-- **Affected area:** homepage section openers, subpage page headers, the hero statement, card titles, photo captions, numeric specs (m², occupancy, discounts), and the shared type rules in `tokens.css`, `sections.css`, `components.css` and `subpages.css`.
-- **Evidence:**
-  - Source: `.section-title` (`--fs-500`); `.hero__subtitle` (`--fs-300`, `--muted`); `.room-card__title` and `.benefit__title` (`--fs-400`); tracked uppercase in `.hero__title-accent`, `.brand-lockup__tagline` and `.offer-card__meta`; `--fs-1000` is used only between 760 and 1023 px.
-  - Runtime (1280 px): 47.3 px hero, 19.6 px section titles, 17.4 px body and card titles, 15.0 px muted hero statement.
-  - Historical: archived IMP-UI-01 (heading order).
-- **Current state:** the homepage has two effective heading sizes. Card titles equal body text, and the positioning sentence is smaller than body text.
-- **Design judgment:** the hierarchy is correct but shallow. Chapters do not announce themselves, and the label voice that gives the header character is barely used in the content.
-- **Proposed improvement:** define four voices with the existing families and weights:
-  - display (Manrope 700, upper scale) for section openers and page titles;
-  - kicker (tracked uppercase Inter 500) to name chapters;
-  - reading (current body style);
-  - caption/spec (Inter 500, tabular figures, meta size) for photo captions and room and offer specs.
-
-  Promote the hero statement to at least body size.
-- **Expected value:** a recognisable typographic voice and clear chapter starts. Captions become available for photography, and specs read as data.
-- **Implementation scope:** role aliases on the existing scale, plus heading, label and caption rules. No font files, weights, heading levels, IDs or `aria-labelledby` changes. Preserve `scroll-margin-top`, the `text-wrap` rules and the IMP-UI-01 ordering. New visible kicker text is an owner content decision; existing labels can be reused first.
-- **Dependencies:** none beyond direction approval.
-- **Acceptance criteria:**
-  - These conditions hold at 390, 800, 1280 and 1440 px in light and dark:
-    - Homepage section openers compute to at least `--fs-700`, and card titles are larger than their supporting text.
-    - The hero statement is at least body size.
-    - Captions and specs use tabular figures.
-  - Only the four existing woff2 files load.
-  - Heading levels, IDs and `aria-labelledby` are unchanged, with one `h1` per page.
-  - Polish diacritics render in the display weight.
-  - No text overflows at 320 px or at 200% zoom.
+- **Status:** COMPLETED — implemented and verified.
+- **Result:** Homepage and CTA section titles use the Manrope 700 display voice at `--fs-700`, between subpage `h1` titles (`--fs-800`) and gallery and "O nas" section titles (`--fs-600`); card titles share the new `--fs-card-title` alias. The hero statement is body size, offer occasion labels share the hero tagline's tracked Inter 500 kicker voice, and room specs use Inter 500 tabular figures like the discount badge.
+- **Verification:** `npm run qa:fast`, `npm run build:css` and `npm run test:a11y` (27 scenarios) passed. Playwright checks of all 12 pages at 320–1440 px and 200% zoom, in light and dark, confirmed the size order, unchanged headings, IDs and `aria-labelledby`, no overflow, only the four project woff2 files and web-font diacritics; legal and utility pages were unchanged. Captions contain no figures, so tabular figures apply to specs only; the theme toggle and other browsers were not tested.
 - **Impact:** High
 - **Effort:** Medium
 

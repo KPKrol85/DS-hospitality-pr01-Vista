@@ -73,8 +73,9 @@
   --fs-1000: clamp(2.4rem, 2.6vw + 1.4rem, 3.8rem);
 
   /* Text roles */
+  --fs-card-title: var(--fs-500);
   --fs-supporting: var(--fs-300);
-  --fs-meta: var(--fs-200);
+  --fs-meta: var(--fs-200); /* kickers, captions and specs */
 
   /* Buttons */
   --fs-btn: 0.8rem;
