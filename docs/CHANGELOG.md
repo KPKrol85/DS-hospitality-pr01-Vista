@@ -62,6 +62,7 @@ For each implementation task, determine `Changelog: yes` or `Changelog: no`. Add
 - Established an editorial type hierarchy with display section titles, a body-size hero statement, unified card titles, tracked offer kickers, and tabular room specifications.
 - Replaced the universal card with Ground, Frame and Surface material roles, reserving elevation tokens and hover lift for actionable components.
 - Replaced the homepage hero, room, featured Luxury Room and About photographs with approved imagery, descriptive alt text and correctly sized responsive variants.
+- Replaced the homepage and gallery-page photographs with 26 approved images, descriptive alt text and captions, and correctly sized responsive variants.
 
 ### Fixed
 

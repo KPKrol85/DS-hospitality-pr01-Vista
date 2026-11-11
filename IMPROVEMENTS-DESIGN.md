@@ -154,9 +154,11 @@ Priorities express design value and dependency order, not defect severity. P1 it
 
 ### IMP-DESIGN-03 — Define a Vista photography system and asset brief
 
-- **Status:** In progress — Phase 1 (approved photography integration) implemented and verified; gallery categories and OG images remain.
+- **Status:** In progress — Phase 1 (approved photography integration) and Phase 2 (gallery photography) implemented and verified; OG images remain.
 - **Phase 1 result:** Six owner-approved masters replace the homepage hero, the Classic, Deluxe and Luxury Suite photographs on `index.html` and `rooms.html`, the featured Luxury Room and the about image. `npm run img:opt` now centre-crops each listed master to its display ratio (16:9, 3:2, 16:9, 5:4) and exports JPEG, WebP and AVIF widths without upscaling; markup, `alt`, dimensions, the hero preload and the about JSON-LD pair were updated, and the replaced and unused `hero-*` files were removed.
 - **Phase 1 verification:** `npm run img:opt` (idempotent rerun), `qa:fast` including `check:image-descriptors` and `check:links`, `npm run build` and `npm run test:a11y` passed. Playwright Chromium screenshots at 390, 800 and 1280 px in light and dark showed the correct image in each slot, subjects in frame, no overflow and a single hero download matching the preload; other browsers were not tested.
+- **Phase 2 result:** 26 owner-approved 3:2 PNG masters replace the six homepage gallery photographs and the four photographs in each `gallery.html` category, with unchanged category IDs and filters. `npm run img:opt` exports them at 640–1536 px in JPEG, WebP and AVIF; `srcset`, measured `sizes`, 1536 × 1024 dimensions, `alt`, captions and lightbox targets were updated, and the 104 legacy source JPEGs and 315 superseded variants were removed.
+- **Phase 2 verification:** `npm run img:opt` (rerun: 0 generated, 33 skipped), `qa:fast` (421 width descriptors), `npm run build` and `npm run test:a11y` (27 scenarios) passed; all 312 referenced variants exist with matching decoded dimensions and none is unreferenced. Browser-pane checks at 390 px (dark) and 800 and 1280 px (light) showed the correct image in each slot, no overflow, working filters and keyboard lightbox navigation; other browsers were not tested.
 - **Priority:** P1
 - **Affected area:** the hero, room and featured-room images, the homepage gallery, the `gallery.html` categories, the about image and the OG images; the `assets/img/src/` → `npm run img:opt` pipeline.
 - **Evidence:**

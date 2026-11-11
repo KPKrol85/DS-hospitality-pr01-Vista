@@ -17,6 +17,16 @@ const SUPPORTED_EXTS = new Set([".jpg", ".jpeg", ".png"]);
 // display ratio and exported as `<name>-<w>x<h>` JPEG/WebP/AVIF variants instead of being copied.
 // Widths must fit inside the cropped master; the build fails rather than upscale.
 const ROOM_CARD = { ratio: [3, 2], widths: [640, 960, 1280, 1536] };
+const GALLERY_TILE = { ratio: [3, 2], widths: [640, 960, 1280, 1536] };
+
+// Numbered gallery masters (`<prefix>-01.png` … `<prefix>-<count>.png`) keep their committed filenames.
+function galleryMasters(prefix, count) {
+  return Array.from({ length: count }, (_, index) => [
+    `${prefix}-${String(index + 1).padStart(2, "0")}.png`,
+    GALLERY_TILE,
+  ]);
+}
+
 const RESPONSIVE_MASTERS = new Map([
   ["hero/hero.png", { ratio: [16, 9], widths: [640, 960, 1200, 1600] }],
   ["rooms/classic.png", ROOM_CARD],
@@ -24,6 +34,12 @@ const RESPONSIVE_MASTERS = new Map([
   ["rooms/luxury.png", { ...ROOM_CARD, name: "luxury-suite" }],
   ["rooms/luxury-room.png", { ratio: [16, 9], widths: [640, 960, 1280, 1536] }],
   ["about/hero-about.png", { ratio: [5, 4], widths: [640, 960, 1280] }],
+  ...galleryMasters("gallery/gallery", 6),
+  ...galleryMasters("subpage-gallery/pokoje/room", 4),
+  ...galleryMasters("subpage-gallery/lobby/lobby", 4),
+  ...galleryMasters("subpage-gallery/restauracja/restaurant", 4),
+  ...galleryMasters("subpage-gallery/wellness/wellnes", 4),
+  ...galleryMasters("subpage-gallery/okolica/surroundings", 4),
 ]);
 
 function isSupportedImage(filePath) {
