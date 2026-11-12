@@ -13,9 +13,11 @@ const AVIF_EFFORT = 4;
 const JPEG_QUALITY = 80;
 const SUPPORTED_EXTS = new Set([".jpg", ".jpeg", ".png"]);
 
-// Single-master photographs, keyed by path under SRC_ROOT. Each master is centre-cropped to its
-// display ratio and exported as `<name>-<w>x<h>` JPEG/WebP/AVIF variants instead of being copied.
+// Single-master photographs, keyed by path under SRC_ROOT. Each master is cropped to its display
+// ratio and exported as `<name>-<w>x<h>` JPEG/WebP/AVIF variants instead of being copied.
 // Widths must fit inside the cropped master; the build fails rather than upscale.
+// A master may list several crops for art direction. A crop is centred unless `focus` places it
+// like CSS `object-position`: [x, y] fractions of the width and height left outside the crop.
 const ROOM_CARD = { ratio: [3, 2], widths: [640, 960, 1280, 1536] };
 const GALLERY_TILE = { ratio: [3, 2], widths: [640, 960, 1280, 1536] };
 
@@ -28,7 +30,14 @@ function galleryMasters(prefix, count) {
 }
 
 const RESPONSIVE_MASTERS = new Map([
-  ["hero/hero.png", { ratio: [16, 9], widths: [640, 960, 1200, 1600] }],
+  [
+    "hero/hero.png",
+    [
+      { ratio: [16, 9], widths: [640, 960, 1200, 1600] },
+      // Portrait crop for narrow viewports, keeping the reception, brand wall and chandeliers in frame.
+      { ratio: [4, 5], widths: [480, 640, 752], focus: [0.8, 0.5] },
+    ],
+  ],
   ["rooms/classic.png", ROOM_CARD],
   ["rooms/deluxe.png", ROOM_CARD],
   ["rooms/luxury.png", { ...ROOM_CARD, name: "luxury-suite" }],
@@ -73,9 +82,11 @@ function getOutputPaths(inputPath) {
   };
 }
 
-function getMasterConfig(inputPath) {
+// Returns the master's crops as an array, or undefined for images that are copied and converted.
+function getMasterCrops(inputPath) {
   const key = path.relative(SRC_ROOT, inputPath).split(path.sep).join("/");
-  return RESPONSIVE_MASTERS.get(key);
+  const config = RESPONSIVE_MASTERS.get(key);
+  return config === undefined ? undefined : [config].flat();
 }
 
 function getVariantPaths(inputPath, config) {
@@ -96,15 +107,10 @@ function getVariantPaths(inputPath, config) {
   });
 }
 
-async function processMaster(inputPath, config, stats) {
-  const variants = getVariantPaths(inputPath, config);
-  await fs.mkdir(variants[0].outputDir, { recursive: true });
-
+async function processMaster(inputPath, crops, stats) {
   const inputMtimeMs = await getMtimeMs(inputPath);
   const { width, height, orientation = 1 } = await sharp(inputPath).metadata();
   const [masterWidth, masterHeight] = orientation >= 5 ? [height, width] : [width, height];
-  const [ratioWidth, ratioHeight] = config.ratio;
-  const cropWidth = Math.min(masterWidth, Math.floor((masterHeight * ratioWidth) / ratioHeight));
 
   const encoders = [
     (image) => image.jpeg({ quality: JPEG_QUALITY, mozjpeg: true }),
@@ -113,23 +119,39 @@ async function processMaster(inputPath, config, stats) {
   ];
 
   const tasks = [];
-  for (const variant of variants) {
-    if (variant.width > cropWidth) {
-      throw new Error(
-        `${variant.width}px variant exceeds the ${cropWidth}px ${ratioWidth}:${ratioHeight} crop of the master`
-      );
-    }
+  for (const config of crops) {
+    const variants = getVariantPaths(inputPath, config);
+    await fs.mkdir(variants[0].outputDir, { recursive: true });
 
-    const resized = sharp(inputPath).rotate().resize({
-      width: variant.width,
-      height: variant.height,
-      fit: "cover",
-      position: "centre",
-    });
+    const [ratioWidth, ratioHeight] = config.ratio;
+    const cropWidth = Math.min(masterWidth, Math.floor((masterHeight * ratioWidth) / ratioHeight));
+    const cropHeight = Math.min(masterHeight, Math.floor((masterWidth * ratioHeight) / ratioWidth));
+    const region = config.focus && {
+      left: Math.round((masterWidth - cropWidth) * config.focus[0]),
+      top: Math.round((masterHeight - cropHeight) * config.focus[1]),
+      width: cropWidth,
+      height: cropHeight,
+    };
 
-    for (const [index, outputPath] of variant.files.entries()) {
-      if (await isOutputFresh(outputPath, inputMtimeMs)) continue;
-      tasks.push(encoders[index](resized.clone()).toFile(outputPath));
+    for (const variant of variants) {
+      if (variant.width > cropWidth) {
+        throw new Error(
+          `${variant.width}px variant exceeds the ${cropWidth}px ${ratioWidth}:${ratioHeight} crop of the master`
+        );
+      }
+
+      const oriented = sharp(inputPath).rotate();
+      const resized = (region ? oriented.extract(region) : oriented).resize({
+        width: variant.width,
+        height: variant.height,
+        fit: "cover",
+        position: "centre",
+      });
+
+      for (const [index, outputPath] of variant.files.entries()) {
+        if (await isOutputFresh(outputPath, inputMtimeMs)) continue;
+        tasks.push(encoders[index](resized.clone()).toFile(outputPath));
+      }
     }
   }
 
@@ -170,9 +192,9 @@ async function isOutputFresh(outputPath, inputMtimeMs) {
 }
 
 async function processImage(inputPath, stats) {
-  const masterConfig = getMasterConfig(inputPath);
-  if (masterConfig) {
-    await processMaster(inputPath, masterConfig, stats);
+  const masterCrops = getMasterCrops(inputPath);
+  if (masterCrops) {
+    await processMaster(inputPath, masterCrops, stats);
     return;
   }
 
@@ -292,10 +314,10 @@ async function runOptimization({ watch }) {
 
   watcher.on("unlink", async (filePath) => {
     if (!isSupportedImage(filePath)) return;
-    const masterConfig = getMasterConfig(filePath);
+    const masterCrops = getMasterCrops(filePath);
     let outputFiles;
-    if (masterConfig) {
-      outputFiles = getVariantPaths(filePath, masterConfig).flatMap((variant) => variant.files);
+    if (masterCrops) {
+      outputFiles = masterCrops.flatMap((config) => getVariantPaths(filePath, config)).flatMap((variant) => variant.files);
     } else {
       const { originalPath, webpPath, avifPath } = getOutputPaths(filePath);
       outputFiles = [originalPath, webpPath, avifPath];

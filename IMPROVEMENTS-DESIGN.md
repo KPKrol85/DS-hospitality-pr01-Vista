@@ -162,40 +162,9 @@ Priorities express design value and dependency order, not defect severity. P1 it
 
 ### IMP-DESIGN-04 — Re-compose the homepage hero around one dominant photograph
 
-- **Status:** Proposed
-- **Priority:** P1
-- **Affected area:** the `.hero` section of `index.html`, the hero rules in `sections.css`, and the hero `<link rel="preload">`.
-- **Evidence:**
-  - Runtime: at 1280 px the image is 541 × 304 px (about 45% of the container) and the hero is 516 px tall; at 1440 px the image is 538 × 302 px. At 390 px the image is 358 × 201 px, the title starts at about y = 414 and the CTAs at about y = 624. At 800 px the hero is 885 px tall.
-  - Source: `.hero__inner` uses `1fr 1.6fr` from 1024 px and `.hero__media` is limited to 80% from 480 px. The preload `imagesizes` is tied to `628px`.
-  - Visual: the badge in `hero-01` is visible at the current size.
-- **Current state:** a brand lockup sits beside a framed image of moderate size. The positioning statement is small and muted.
-- **Design judgment:** the image reads as a thumbnail, not a place, and the opening establishes no proposition.
-- **Proposed improvement:** an image-led opening:
-  - One wide photograph spans the full content width, or the full bleed, as the dominant element.
-  - The positioning statement is set in the display voice, and the brand `h1` semantics are retained.
-  - The existing CTA pair stays visible in the first viewport.
-  - Mobile gets a dedicated crop, with text on a solid or scrimmed area that guarantees contrast.
-  - No video, parallax or autoplay.
-- **Expected value:** a distinctive first view that states what Vista is and immediately shows the place.
-- **Implementation scope:** hero markup (an optional `<source media>` for art direction), hero CSS, and matching preload candidates and `sizes`.
-
-  Keep:
-  - one `h1` and the hero `aria-label`;
-  - CTA labels and destinations;
-  - the current DOM order;
-  - the reveal fallback.
-
-  Any change to the `h1` text is an owner content decision. Slices: desktop layout → mobile art direction → preload alignment.
-- **Dependencies:** IMP-DESIGN-01 and IMP-DESIGN-02. Final sign-off requires a clean wide asset and a mobile crop from IMP-DESIGN-03.
-- **Acceptance criteria:**
-  - At 1280 and 1440 px, the photograph spans the container width or more and is the largest element in the first viewport.
-  - At 390 × 844 px, the dedicated crop keeps its subject in frame, and the headline, statement and primary CTA are within the first viewport.
-  - Text over imagery measures at least 4.5:1 against the actual image region in light and dark.
-  - The network log shows a single hero download that matches the preload.
-  - The hero image causes no layout shift.
-  - Under reduced motion, the image has no transform.
-  - The hero stays readable at 200% zoom, and keyboard order is unchanged.
+- **Status:** COMPLETED — implemented and verified.
+- **Result:** The approved lobby photograph fills the content container: from 760 px the heading, a Manrope 600 statement and both CTAs sit on a theme-independent ink scrim, and below 760 px the photograph fades into a solid ink panel, with the DOM order unchanged. `img:opt` now exports several focus-positioned crops per master, adding a 4:5 portrait Hero crop served below 480 px through `<picture>` media sources. Each crop has one media-scoped AVIF preload matching the rendered `sizes`.
+- **Verification:** `npm run qa:fast`, `npm run build`, `npm run test:a11y` (27 scenarios) and an idempotent `img:opt` rerun passed. Playwright checks at 320–1440 px, 200% zoom and 844 × 390 px in light and dark measured a 1200 × 675 px photograph at 1280 and 1440 px, all Hero content within 390 × 844 px, a worst-case 5.75:1 for text over the photograph, one preload-initiated Hero download per viewport and DPR in source and `dist/`, no Hero layout shift, no reduced-motion image transform and an unchanged tab order. Safari, physical devices and assistive technologies were not tested; Playwright WebKit without AVIF loaded one WebP fallback.
 - **Impact:** High
 - **Effort:** Large
 

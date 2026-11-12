@@ -42,6 +42,7 @@ For each implementation task, determine `Changelog: yes` or `Changelog: no`. Add
 - Established modular CSS and JavaScript sources with PostCSS, esbuild, and reproducible clean `dist/` builds.
 - Added Sharp image optimization and responsive AVIF, WebP, and fallback assets.
 - Extended `img:opt` to crop configured single-image masters to their display ratios and generate responsive widths without upscaling.
+- Enabled `img:opt` to export several focus-positioned art-direction crops from one master.
 - Configured Netlify to publish `dist/` with rewritten asset references and a content-versioned service worker.
 - Restricted service worker registration to production builds and scoped development cache cleanup.
 - Added local development with live reload and production-package preview servers.
@@ -64,6 +65,7 @@ For each implementation task, determine `Changelog: yes` or `Changelog: no`. Add
 - Replaced the homepage hero, room, featured Luxury Room and About photographs with approved imagery, descriptive alt text and correctly sized responsive variants.
 - Replaced the homepage and gallery-page photographs with 26 approved images, descriptive alt text and captions, and correctly sized responsive variants.
 - Replaced the social-sharing graphics with approved branded images identifying the demonstration project, using the landscape version for X cards and accurate image alt text and JSON-LD captions.
+- Re-composed the homepage Hero around one full-width photograph with contrast-safe overlaid content, a dedicated mobile portrait crop and matching per-crop preloads.
 
 ### Fixed
 

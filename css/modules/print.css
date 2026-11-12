@@ -17,4 +17,13 @@
   .section {
     padding: 0;
   }
+  /* Without its photograph the Hero prints as plain text on the page. */
+  .hero {
+    --hero-ink: transparent;
+    --hero-on-ink: #000;
+  }
+  .hero__content {
+    min-block-size: 0;
+    margin: 0;
+  }
 }

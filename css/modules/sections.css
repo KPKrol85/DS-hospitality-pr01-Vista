@@ -1,20 +1,62 @@
-/* Hero */
+/* Hero
+   One photograph spans the container as the opening frame. Below 760px it fades into a solid ink panel
+   that carries the content; from 760px the content sits on the photograph over a left-weighted scrim.
+   Ink and text colours are the same in every theme because they sit on the same photograph, and the
+   ink background keeps the text readable when the image is unavailable. */
 
 .hero {
-  padding-block: var(--space-3xl);
+  --hero-ink: var(--bg-dark);
+  --hero-on-ink: var(--text-dark);
+  padding-block: var(--space-md) 0;
 }
 
 .hero__inner {
+  position: relative;
   display: grid;
-  margin: var(--space-md) auto;
-  grid-template-columns: 1fr;
-  gap: var(--space-2xl);
+  overflow: hidden;
+  isolation: isolate;
+  margin-block: 0;
+  border-radius: var(--frame-radius);
+  outline: 1px solid var(--frame-edge);
+  outline-offset: -1px;
+  background: var(--hero-ink);
+  color: var(--hero-on-ink);
+}
+
+.hero__media {
+  position: relative;
+}
+
+/* The frame clips the photograph, so the image drops the shared Frame radius and hairline. */
+.hero__media img {
+  inline-size: 100%;
+  block-size: auto;
+  aspect-ratio: 4 / 5;
+  max-block-size: 60svh;
+  object-fit: cover;
+  object-position: 80% 50%; /* matches the portrait crop when the 16:9 fallback is shown */
+  border-radius: 0;
+  outline: 0;
+}
+
+/* Scrim: the photograph fades into the ink panel below it. */
+.hero__media::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(to top, var(--hero-ink), transparent 40%);
+}
+
+.hero__content {
+  position: relative;
+  margin-block-start: calc(var(--space-xl) * -1);
+  padding: 0 var(--space-lg) var(--space-lg);
 }
 
 .hero__title {
-  margin: var(--space-sm) auto;
-  text-align: center;
-  font-size: var(--fs-900);
+  margin: 0 0 var(--space-md);
+  font-size: var(--fs-1000);
   line-height: var(--lh-snug);
   font-weight: 600;
   letter-spacing: var(--ls-tight);
@@ -32,16 +74,15 @@
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: var(--ls-wider);
-  color: color-mix(in oklab, var(--text) 80%, var(--muted) 20%);
 }
 
+/* The positioning statement in the display voice. */
 .hero__subtitle {
-  font-family: var(--font-sans);
-  font-size: var(--fs-400);
-  max-width: 42ch;
-  margin: 0 auto;
-  color: var(--muted);
-  text-align: center;
+  max-inline-size: 32ch;
+  font-family: var(--font-heading);
+  font-size: var(--fs-500);
+  font-weight: 600;
+  line-height: var(--lh-normal);
 }
 
 .hero__subtitle::after {
@@ -49,94 +90,74 @@
   display: block;
   width: 44px;
   height: 1px;
-  margin: var(--space-md) auto 0;
-  background: linear-gradient(to right, transparent, color-mix(in oklab, var(--primary) 35%, transparent), transparent);
+  margin-block-start: var(--space-md);
+  background: linear-gradient(to right, color-mix(in oklab, var(--hero-on-ink) 60%, transparent), transparent);
 }
 
+/* Over the photograph, focus rings and the ghost button use the panel text colour. */
 .hero__cta {
+  --focus-ring-color: var(--hero-on-ink);
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--space-md);
-  margin: var(--space-2xl) auto;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  margin-block-start: var(--space-lg);
 }
 
-.hero__media {
-  overflow: hidden;
-  border-radius: var(--frame-radius);
+.hero__cta .btn--ghost {
+  --ghost-accent: var(--hero-on-ink);
 }
 
-.hero__media img {
-  display: block;
-  width: 100%;
-  height: auto;
-  object-fit: unset;
+@media (max-width: 479px) {
+  .hero__cta .btn {
+    --btn-min-inline-size: 0;
+    flex: 1 1 auto;
+  }
 }
 
 @media (min-width: 480px) {
-  .hero__media {
-    max-width: 80%;
-    margin-inline: auto;
-  }
-  .hero__cta {
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center;
+  .hero__media img {
+    aspect-ratio: 16 / 9;
+    object-position: 50% 50%;
   }
 }
 
 @media (min-width: 760px) {
-  .hero__title {
-    font-size: var(--fs-1000);
+  .hero__media,
+  .hero__content {
+    grid-area: 1 / 1;
+  }
+  .hero__media img {
+    position: absolute;
+    inset: 0;
+    block-size: 100%;
+    max-block-size: none;
+  }
+  /* Scrim weighted to the left and the foot of the frame, where the content sits; the reception stays clear. */
+  .hero__media::after {
+    background:
+      linear-gradient(
+        to right,
+        color-mix(in oklab, var(--hero-ink) 80%, transparent),
+        color-mix(in oklab, var(--hero-ink) 64%, transparent) 34rem,
+        transparent 52rem
+      ),
+      linear-gradient(to top, color-mix(in oklab, var(--hero-ink) 55%, transparent), transparent 50%);
+  }
+  /* A 16:9 frame, shortened to stay within the first viewport; longer content still extends it. */
+  .hero__content {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-start;
+    min-block-size: min((100vw - 2rem) * 9 / 16, var(--container) * 9 / 16, 100svh - var(--header-h) - var(--space-md) * 2);
+    margin: 0;
+    padding: var(--space-2xl);
   }
   .hero__title-accent {
     font-size: var(--fs-300);
   }
-}
-
-@media (min-width: 1024px) {
-  .hero__inner {
-    grid-template-columns: 1fr 1.6fr;
-    padding-inline: var(--space-lg);
-    align-items: start;
-  }
-  .hero__content {
-    order: 1;
-    text-align: left;
-    margin: 0;
-    justify-self: start;
-  }
-  .hero__title,
   .hero__subtitle {
-    text-align: left;
-    margin-inline: 0;
-  }
-  .hero__title {
-    font-size: var(--fs-900);
-  }
-  .hero__subtitle::after {
-    margin: var(--space-lg) 0 0;
-  }
-  .hero__cta {
-    justify-content: flex-start;
-  }
-  .hero__media {
-    position: relative;
-    order: 2;
-    margin: 0;
-    justify-self: end;
-    align-self: start;
-  }
-  .hero__media::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    background: radial-gradient(120% 90% at 20% 10%, rgba(255, 255, 255, 0.1), transparent 55%);
-  }
-  .hero__media img {
-    height: auto;
-    display: block;
+    font-size: var(--fs-600);
   }
 }
 

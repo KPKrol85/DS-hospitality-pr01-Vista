@@ -84,19 +84,32 @@
         ]
       }
     </script>
-    <!-- Performance hints -->
+    <!-- Performance hints: one Hero preload per art-direction crop, matching the picture sources -->
     <link
       rel="preload"
       as="image"
       type="image/avif"
       fetchpriority="high"
+      media="(max-width: 479px)"
+      href="assets/img/optimized/hero/hero-640x800.avif"
+      imagesrcset="
+        assets/img/optimized/hero/hero-480x600.avif 480w,
+        assets/img/optimized/hero/hero-640x800.avif 640w,
+        assets/img/optimized/hero/hero-752x940.avif 752w"
+      imagesizes="calc(100vw - 2rem)" />
+    <link
+      rel="preload"
+      as="image"
+      type="image/avif"
+      fetchpriority="high"
+      media="(min-width: 480px)"
       href="assets/img/optimized/hero/hero-1200x675.avif"
       imagesrcset="
         assets/img/optimized/hero/hero-640x360.avif 640w,
         assets/img/optimized/hero/hero-960x540.avif 960w,
         assets/img/optimized/hero/hero-1200x675.avif 1200w,
         assets/img/optimized/hero/hero-1600x900.avif 1600w"
-      imagesizes="(max-width: 900px) calc(100vw - 2rem), 628px" />
+      imagesizes="(min-width: 1232px) 1200px, calc(100vw - 2rem)" />
   </head>
 
   <!-- Body -->
@@ -147,6 +160,40 @@
           <!-- hero media -->
           <div class="hero__media" data-reveal>
             <picture>
+              <!-- Portrait 4:5 crop below 480px; the 16:9 crop from 480px. -->
+              <source
+                media="(max-width: 479px)"
+                type="image/avif"
+                srcset="
+                  assets/img/optimized/hero/hero-480x600.avif 480w,
+                  assets/img/optimized/hero/hero-640x800.avif 640w,
+                  assets/img/optimized/hero/hero-752x940.avif 752w
+                "
+                sizes="calc(100vw - 2rem)"
+                width="752"
+                height="940" />
+              <source
+                media="(max-width: 479px)"
+                type="image/webp"
+                srcset="
+                  assets/img/optimized/hero/hero-480x600.webp 480w,
+                  assets/img/optimized/hero/hero-640x800.webp 640w,
+                  assets/img/optimized/hero/hero-752x940.webp 752w
+                "
+                sizes="calc(100vw - 2rem)"
+                width="752"
+                height="940" />
+              <source
+                media="(max-width: 479px)"
+                type="image/jpeg"
+                srcset="
+                  assets/img/optimized/hero/hero-480x600.jpg 480w,
+                  assets/img/optimized/hero/hero-640x800.jpg 640w,
+                  assets/img/optimized/hero/hero-752x940.jpg 752w
+                "
+                sizes="calc(100vw - 2rem)"
+                width="752"
+                height="940" />
               <source
                 type="image/avif"
                 srcset="
@@ -155,7 +202,7 @@
                   assets/img/optimized/hero/hero-1200x675.avif 1200w,
                   assets/img/optimized/hero/hero-1600x900.avif 1600w
                 "
-                sizes="(max-width: 900px) calc(100vw - 2rem), 628px" />
+                sizes="(min-width: 1232px) 1200px, calc(100vw - 2rem)" />
               <source
                 type="image/webp"
                 srcset="
@@ -164,7 +211,7 @@
                   assets/img/optimized/hero/hero-1200x675.webp 1200w,
                   assets/img/optimized/hero/hero-1600x900.webp 1600w
                 "
-                sizes="(max-width: 900px) calc(100vw - 2rem), 628px" />
+                sizes="(min-width: 1232px) 1200px, calc(100vw - 2rem)" />
               <img
                 src="assets/img/optimized/hero/hero-1200x675.jpg"
                 srcset="
@@ -173,7 +220,7 @@
                   ./assets/img/optimized/hero/hero-1200x675.jpg 1200w,
                   ./assets/img/optimized/hero/hero-1600x900.jpg 1600w
                 "
-                sizes="(max-width: 900px) calc(100vw - 2rem), 628px"
+                sizes="(min-width: 1232px) 1200px, calc(100vw - 2rem)"
                 alt="Wieczorne lobby hotelu Vista z marmurową recepcją i logo marki, okrągłymi złotymi żyrandolami, beżowymi sofami oraz zielonymi fotelami przy przeszklonej ścianie"
                 width="1600"
                 height="900"
