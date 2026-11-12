@@ -67,6 +67,7 @@ For each implementation task, determine `Changelog: yes` or `Changelog: no`. Add
 - Replaced the social-sharing graphics with approved branded images identifying the demonstration project, using the landscape version for X cards and accurate image alt text and JSON-LD captions.
 - Re-composed the homepage Hero around one full-width photograph with contrast-safe overlaid content, a dedicated mobile portrait crop and matching per-crop preloads.
 - Re-composed the rooms page as alternating full-width, image-led entries with display titles and tabular spec lines, and the homepage Luxury Room highlight as an asymmetric photographic chapter.
+- Re-composed offer cards to lead with the occasion and title, presenting inclusions as spec rows and discounts as secondary unfilled tags, and added occasion labels to the homepage offer teasers.
 
 ### Fixed
 

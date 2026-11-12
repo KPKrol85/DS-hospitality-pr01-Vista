@@ -843,61 +843,60 @@
 
 /* Offers card (Surface role, see Material roles) */
 
+/* Occasion-led order: kicker → title → description → [inclusions] → discount tag → CTA.
+   The discount tag takes the free space above it, so tags and CTAs align across a grid row. */
 .offer-card {
-  display: grid;
-  padding: var(--space-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  padding: var(--space-lg);
   position: relative;
 }
 
-.offer-card__badge {
-  display: inline-grid;
-  place-items: center;
-  min-width: 4.5rem;
-  height: 2rem;
-  padding: 0 var(--space-sm);
-  margin-left: auto;
-  background: var(--primary);
-  color: var(--offer-badge-text);
-  border-radius: var(--radius-full);
-  font-weight: 500;
+/* Kicker voice, aligned with the hero tagline; the occasion opens every offer. */
+.offer-card__meta {
   font-size: var(--fs-meta);
-  line-height: var(--lh-tight);
-  font-variant-numeric: tabular-nums;
+  font-weight: 500;
+  line-height: var(--lh-snug);
+  color: var(--primary);
+  letter-spacing: var(--ls-wider);
+  text-transform: uppercase;
 }
 
 .offer-card__title {
-  margin: var(--space-xs) 0;
   font-size: var(--fs-card-title);
   line-height: var(--lh-snug);
   color: var(--text);
-  font-weight: 600;
-  text-align: center;
+  font-weight: 700;
 }
 
 .offer-card__text {
-  margin: var(--space-xs) 0;
+  margin-block-end: var(--space-xs);
   color: var(--muted);
   font-size: var(--fs-supporting);
-  text-align: center;
+  line-height: var(--lh-relaxed);
   letter-spacing: var(--ls-subtle);
 }
 
-.offer-card .btn {
-  margin-top: var(--space-md);
-  justify-self: center;
+/* Discount: a secondary, unfilled typographic tag in the spec voice. */
+.offer-card__badge {
+  align-self: flex-start;
+  margin-block-start: auto;
+  padding: var(--space-2xs) var(--space-xs);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-xs);
+  color: var(--text);
+  font-size: var(--fs-meta);
   font-weight: 500;
+  line-height: var(--lh-tight);
+  letter-spacing: var(--ls-wide);
+  font-variant-numeric: tabular-nums;
 }
 
-@media (min-width: 760px) {
-  .offer-card__title {
-    text-align: left;
-  }
-  .offer-card__text {
-    text-align: left;
-  }
-  .offer-card .btn {
-    justify-self: start;
-  }
+.offer-card .btn {
+  align-self: flex-start;
+  margin-block-start: var(--space-xs);
+  font-weight: 500;
 }
 
 /* CTA */

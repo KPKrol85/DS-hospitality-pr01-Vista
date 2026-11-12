@@ -33,28 +33,23 @@
 
 /* Subpage Offers */
 
-/* Kicker voice, aligned with the hero tagline. */
-.offer-card__meta {
-  display: inline-block;
-  margin-bottom: var(--space-md);
-  font-size: var(--fs-meta);
-  font-weight: 500;
-  line-height: var(--lh-snug);
-  color: var(--muted);
-  letter-spacing: var(--ls-wider);
-  text-transform: uppercase;
+/* Inclusions as hairline-divided spec rows, matching the homepage highlight specs. */
+.offer-card__list {
+  margin: 0 0 var(--space-sm);
+  padding: 0;
+  list-style-position: inside;
+  color: var(--text);
+  font-size: var(--fs-supporting);
+  line-height: var(--lh-normal);
+  border-block: 1px solid var(--rule);
 }
 
-.offer-card__list {
-  margin: var(--space-sm) 0 var(--space-md);
-  padding-left: var(--space-lg);
-  color: var(--muted);
-  font-size: var(--fs-supporting);
-  line-height: var(--lh-relaxed);
+.offer-card__list li {
+  padding-block: var(--space-xs);
 }
 
 .offer-card__list li + li {
-  margin-top: var(--space-2xs);
+  border-block-start: 1px solid var(--rule);
 }
 
 .offer-card__list li::marker {

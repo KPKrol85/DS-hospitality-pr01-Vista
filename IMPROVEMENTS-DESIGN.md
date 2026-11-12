@@ -178,29 +178,9 @@ Priorities express design value and dependency order, not defect severity. P1 it
 
 ### IMP-DESIGN-06 — Lead offers with the occasion, not the discount
 
-- **Status:** Proposed
-- **Priority:** P2
-- **Affected area:** the `index.html` offers teaser and the six offer cards on `offers.html`.
-- **Evidence:**
-  - Source: `.offer-card__badge` is a solid `--primary` pill, the only filled accent element in each card. The occasion label `.offer-card__meta` ("Dla par", "Dla biznesu"…) appears only on `offers.html`. The homepage teasers mix "Skorzystaj" (three cards) and "Zapytaj o projekt" (one card).
-  - Visual: the badge is the strongest element in each card in both themes.
-  - Source: the section disclosure marks the offers as illustrative.
-- **Current state:** each offer is a text card anchored by a percentage pill.
-- **Design judgment:** a discount-led layout reads like a deals site. The occasion and the inclusions are the real content.
-- **Proposed improvement:**
-  - Compose each offer as kicker (occasion) → title → description → inclusions set as a spec list.
-  - Restyle the discount as a secondary typographic tag.
-  - Reuse the existing occasion text in the homepage teasers.
-  - Add a per-offer image only if IMP-DESIGN-03 supplies one; never use a placeholder.
-  - Harmonising the action labels is a content/UX decision for the owner.
-- **Expected value:** offers read as curated stays, consistent with the recommended direction.
-- **Implementation scope:** offer rules in `components.css` and `subpages.css`; homepage teaser markup reuses the existing meta text. Keep the card IDs, the `?oferta=` links (IMP-UX-03 contract), the `aria-label` values, the disclosure and grid balancing.
-- **Dependencies:** IMP-DESIGN-01 and IMP-DESIGN-02.
-- **Acceptance criteria:**
-  - In every offer card at 390 and 1280 px in light and dark, the occasion and the title precede the discount and outweigh it visually, and the discount is not the only filled-colour element.
-  - Discount text measures at least 4.5:1.
-  - The offer links still pre-fill the contact form.
-  - The disclosure remains visible below the grid.
+- **Status:** COMPLETED — implemented and verified.
+- **Result:** The six `offers.html` cards follow occasion kicker → title → description → inclusions → discount → CTA in source order, and the four homepage teasers reuse the existing occasion labels without inclusions. The kicker uses the tracked Inter 500 voice in `--primary`, titles are Manrope 700, inclusions are hairline-divided spec rows, and the discount is an unfilled, hairline-framed tabular tag aligned with the CTA across each grid row. All offer content, discount values, IDs, CTA labels, `href` and `aria-label` values, the disclosure and grid balancing are unchanged; the unused `--offer-badge-text` token was removed.
+- **Verification:** `npm run qa:fast`, `npm run build` and `npm run test:a11y` (27 scenarios; the offer scenario now asserts an unfilled tag) passed. Playwright checks at 390, 800 and 1280 px in light and dark measured discounts at 15.52:1 (light) and 14.49:1 (dark) and kickers at 5.19:1 and 9.07:1, with no page overflow or in-card clipping; all six offer links pre-filled the form, the homepage teasers kept their destinations, and focus rings, heading order and reduced-motion hover were unchanged. 200% zoom was approximated by halved viewports (no overflow at 400 and 640 px); the 12–17 px page overflow below 240 px exists in `HEAD`, and the theme toggle, other browsers and assistive technologies were not tested.
 - **Impact:** Medium
 - **Effort:** Medium
 

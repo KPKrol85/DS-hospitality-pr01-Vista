@@ -858,10 +858,10 @@ function skipLinkScenario() {
 function offerBadgeScenario(preference, colorScheme) {
   const effective = preference === 'auto' ? colorScheme : preference;
   const label = `index.html + offers.html (offer badges) [${preference}, OS ${colorScheme}]`;
-  // Light keeps the shared white --primary-contrast; dark pairs the mint primary with the existing dark text color.
+  // The discount is an unfilled tag: theme --text measured on the offer card's --bg-elev Surface.
   const expected = effective === 'dark'
-    ? { foreground: [31, 36, 48, 255], background: [52, 209, 178, 255] }
-    : { foreground: [255, 255, 255, 255], background: [15, 111, 191, 255] };
+    ? { foreground: [231, 234, 241, 255], background: [20, 26, 36, 255] }
+    : { foreground: [31, 36, 48, 255], background: [255, 255, 255, 255] };
 
   async function assertBadges(page, file, count) {
     const state = await page.evaluate(() => {
@@ -880,6 +880,7 @@ function offerBadgeScenario(preference, colorScheme) {
         primaryButtons: [...document.querySelectorAll('.btn--primary')].map((button) => toRgba(getComputedStyle(button).color)),
         badges: [...document.querySelectorAll('.offer-card__badge')].map((badge) => {
           const style = getComputedStyle(badge);
+          const surface = getComputedStyle(badge.closest('.offer-card'));
           const rect = badge.getBoundingClientRect();
           const opaqueAncestors = [];
           for (let node = badge; node; node = node.parentElement) {
@@ -889,8 +890,10 @@ function offerBadgeScenario(preference, colorScheme) {
             text: badge.innerText.trim(),
             visible: rect.width > 0 && rect.height > 0 && badge.checkVisibility({ visibilityProperty: true }),
             foreground: toRgba(style.color),
-            background: toRgba(style.backgroundColor),
-            backgroundImage: style.backgroundImage,
+            fill: toRgba(style.backgroundColor),
+            fillImage: style.backgroundImage,
+            background: toRgba(surface.backgroundColor),
+            backgroundImage: surface.backgroundImage,
             opaque: opaqueAncestors.every(Boolean)
           };
         })
@@ -899,7 +902,7 @@ function offerBadgeScenario(preference, colorScheme) {
     assert.equal(state.stored, preference === 'auto' ? null : preference);
     assert.equal(state.effective, effective, `${file}: effective theme`);
     assert.equal(state.osDark, colorScheme === 'dark');
-    // The badge correction must stay local: primary buttons keep the shared white foreground.
+    // The offer tag must not alter the shared button tokens: primary buttons keep the white foreground.
     assert.equal(state.primaryContrast, '#ffffff', `${file}: shared --primary-contrast must remain unchanged`);
     assert.ok(state.primaryButtons.length > 0 &&
       state.primaryButtons.every((color) => color.join() === '255,255,255,255'),
@@ -910,8 +913,10 @@ function offerBadgeScenario(preference, colorScheme) {
     for (const [index, badge] of state.badges.entries()) {
       const name = `${file} badge ${index + 1} (${badge.text || 'empty'})`;
       assert.ok(badge.visible && badge.text, `${name}: badge must be visible with text`);
+      assert.ok(badge.fill[3] === 0 && badge.fillImage === 'none',
+        `${name}: the discount tag must stay unfilled, without a solid accent background`);
       assert.ok(badge.opaque && badge.foreground[3] === 255 && badge.background[3] === 255 && badge.backgroundImage === 'none',
-        `${name}: contrast measurement requires opaque text on a solid surface`);
+        `${name}: contrast measurement requires opaque text on a solid card surface`);
       assert.deepEqual({ foreground: badge.foreground, background: badge.background }, expected,
         `${name}: ${effective} theme color pair`);
       const text = luminance(badge.foreground.slice(0, 3));
