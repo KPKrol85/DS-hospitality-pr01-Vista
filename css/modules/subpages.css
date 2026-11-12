@@ -68,13 +68,71 @@
 }
 
 .page--rooms .room-card {
-  display: flex;
-  flex-direction: column;
   scroll-margin-top: 8rem;
 }
 
 .page--rooms .room-card[hidden] {
   display: none;
+}
+
+/* Stays: each room is a full-width Ground entry opened by a rule and led by its framed photograph.
+   From 760px entries alternate sides through grid areas; the DOM order stays image → title → spec → text,
+   and every entry carries its own rule, so any filtered subset remains a complete composition. */
+.room-stays {
+  display: grid;
+}
+
+.room-card--stay {
+  gap: var(--space-lg);
+  padding-block: var(--space-xl);
+  border-block-start: 1px solid var(--rule);
+}
+
+/* One full-width track keeps the spec hairline the same length in every entry. */
+.room-card--stay .room-card__body {
+  grid-template-columns: minmax(0, 1fr);
+  max-inline-size: 28rem;
+  padding: 0;
+  gap: var(--space-sm);
+  justify-items: start;
+  text-align: start;
+}
+
+.room-card--stay .room-card__title {
+  font-size: var(--fs-700);
+  font-weight: 700;
+}
+
+/* Spec line: area and occupancy as one tracked line of tabular figures under a hairline. */
+.room-card--stay .room-card__meta {
+  inline-size: 100%;
+  padding-block-start: var(--space-xs);
+  border-block-start: 1px solid var(--rule);
+  letter-spacing: var(--ls-wide);
+}
+
+.room-card--stay .room-card__text {
+  font-size: var(--fs-400);
+}
+
+@media (min-width: 760px) {
+  .room-card--stay {
+    grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+    grid-template-areas: "media body";
+    align-items: center;
+    column-gap: var(--space-2xl);
+    padding-block: var(--space-2xl);
+  }
+  .room-card--stay:nth-child(even) {
+    grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+    grid-template-areas: "body media";
+  }
+  .room-card--stay .room-card__media {
+    grid-area: media;
+  }
+  .room-card--stay .room-card__body {
+    grid-area: body;
+  }
 }
 
 @media (min-width: 760px) {

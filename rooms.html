@@ -162,10 +162,10 @@
             </ul>
           </nav>
 
-          <div class="card-grid card-grid--balanced-three card-grid--min-280" data-room-grid aria-live="polite" data-reveal>
+          <div class="room-stays" data-room-grid aria-live="polite" data-reveal>
             <!-- item 1 -->
-            <article class="room-card" id="classic" data-room-type="classic">
-              <picture>
+            <article class="room-card room-card--stay" id="classic" data-room-type="classic">
+              <picture class="room-card__media">
                 <source
                   type="image/avif"
                   srcset="
@@ -174,7 +174,7 @@
                     assets/img/optimized/rooms/classic-1280x853.avif  1280w,
                     assets/img/optimized/rooms/classic-1536x1024.avif 1536w
                   "
-                  sizes="(max-width: 900px) calc(100vw - 2rem), 400px" />
+                  sizes="(min-width: 1232px) 690px, (min-width: 760px) calc(60vw - 3rem), calc(100vw - 2rem)" />
                 <source
                   type="image/webp"
                   srcset="
@@ -183,7 +183,7 @@
                     assets/img/optimized/rooms/classic-1280x853.webp  1280w,
                     assets/img/optimized/rooms/classic-1536x1024.webp 1536w
                   "
-                  sizes="(max-width: 900px) calc(100vw - 2rem), 400px" />
+                  sizes="(min-width: 1232px) 690px, (min-width: 760px) calc(60vw - 3rem), calc(100vw - 2rem)" />
                 <img
                   class="room-card__img"
                   src="assets/img/optimized/rooms/classic-1280x853.jpg"
@@ -193,11 +193,11 @@
                     assets/img/optimized/rooms/classic-1280x853.jpg  1280w,
                     assets/img/optimized/rooms/classic-1536x1024.jpg 1536w
                   "
-                  sizes="(max-width: 900px) calc(100vw - 2rem), 400px"
+                  sizes="(min-width: 1232px) 690px, (min-width: 760px) calc(60vw - 3rem), calc(100vw - 2rem)"
                   alt="Pokój Classic — podwójne łóżko z beżową narzutą, fotel i stolik przy przeszklonych drzwiach na balkon z widokiem na zatokę"
                   width="1536"
                   height="1024"
-                  loading="lazy"
+                  loading="eager"
                   decoding="async" />
               </picture>
               <div class="room-card__body">
@@ -207,8 +207,8 @@
               </div>
             </article>
             <!-- item 2 -->
-            <article class="room-card" id="deluxe" data-room-type="deluxe">
-              <picture>
+            <article class="room-card room-card--stay" id="deluxe" data-room-type="deluxe">
+              <picture class="room-card__media">
                 <source
                   type="image/avif"
                   srcset="
@@ -217,7 +217,7 @@
                     assets/img/optimized/rooms/deluxe-1280x853.avif  1280w,
                     assets/img/optimized/rooms/deluxe-1536x1024.avif 1536w
                   "
-                  sizes="(max-width: 900px) calc(100vw - 2rem), 400px" />
+                  sizes="(min-width: 1232px) 690px, (min-width: 760px) calc(60vw - 3rem), calc(100vw - 2rem)" />
                 <source
                   type="image/webp"
                   srcset="
@@ -226,7 +226,7 @@
                     assets/img/optimized/rooms/deluxe-1280x853.webp  1280w,
                     assets/img/optimized/rooms/deluxe-1536x1024.webp 1536w
                   "
-                  sizes="(max-width: 900px) calc(100vw - 2rem), 400px" />
+                  sizes="(min-width: 1232px) 690px, (min-width: 760px) calc(60vw - 3rem), calc(100vw - 2rem)" />
                 <img
                   class="room-card__img"
                   src="assets/img/optimized/rooms/deluxe-1280x853.jpg"
@@ -236,7 +236,7 @@
                     assets/img/optimized/rooms/deluxe-1280x853.jpg  1280w,
                     assets/img/optimized/rooms/deluxe-1536x1024.jpg 1536w
                   "
-                  sizes="(max-width: 900px) calc(100vw - 2rem), 400px"
+                  sizes="(min-width: 1232px) 690px, (min-width: 760px) calc(60vw - 3rem), calc(100vw - 2rem)"
                   alt="Pokój Deluxe wieczorem — podwójne łóżko z granatową narzutą, zdjęcia wybrzeża na ścianie i balkon z widokiem na morze o zachodzie słońca"
                   width="1536"
                   height="1024"
@@ -250,8 +250,8 @@
               </div>
             </article>
             <!-- item 3 -->
-            <article class="room-card" id="luxury" data-room-type="luxury">
-              <picture>
+            <article class="room-card room-card--stay" id="luxury" data-room-type="luxury">
+              <picture class="room-card__media">
                 <source
                   type="image/avif"
                   srcset="
@@ -260,7 +260,7 @@
                     assets/img/optimized/rooms/luxury-suite-1280x853.avif  1280w,
                     assets/img/optimized/rooms/luxury-suite-1536x1024.avif 1536w
                   "
-                  sizes="(max-width: 900px) calc(100vw - 2rem), 400px" />
+                  sizes="(min-width: 1232px) 690px, (min-width: 760px) calc(60vw - 3rem), calc(100vw - 2rem)" />
                 <source
                   type="image/webp"
                   srcset="
@@ -269,7 +269,7 @@
                     assets/img/optimized/rooms/luxury-suite-1280x853.webp  1280w,
                     assets/img/optimized/rooms/luxury-suite-1536x1024.webp 1536w
                   "
-                  sizes="(max-width: 900px) calc(100vw - 2rem), 400px" />
+                  sizes="(min-width: 1232px) 690px, (min-width: 760px) calc(60vw - 3rem), calc(100vw - 2rem)" />
                 <img
                   class="room-card__img"
                   src="assets/img/optimized/rooms/luxury-suite-1280x853.jpg"
@@ -279,7 +279,7 @@
                     assets/img/optimized/rooms/luxury-suite-1280x853.jpg  1280w,
                     assets/img/optimized/rooms/luxury-suite-1536x1024.jpg 1536w
                   "
-                  sizes="(max-width: 900px) calc(100vw - 2rem), 400px"
+                  sizes="(min-width: 1232px) 690px, (min-width: 760px) calc(60vw - 3rem), calc(100vw - 2rem)"
                   alt="Luxury Suite o zachodzie słońca — duże łóżko z granatową narzutą, szampan na pikowanej ławie, sofa i panoramiczne okna z widokiem na zatokę"
                   width="1536"
                   height="1024"

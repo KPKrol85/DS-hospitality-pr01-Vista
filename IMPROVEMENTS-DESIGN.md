@@ -170,35 +170,9 @@ Priorities express design value and dependency order, not defect severity. P1 it
 
 ### IMP-DESIGN-05 — Present rooms as image-led stays with a typographic spec line
 
-- **Status:** Proposed
-- **Priority:** P2
-- **Affected area:** the `index.html` rooms teaser and "Luxury Room" highlight; the `rooms.html` room grid.
-- **Evidence:**
-  - Source: on `rooms.html`, each of the three `.room-card` items has one `.room-card__text` sentence and a "18 m² • 1–2 os." style meta line, and the page ends after the grid. On the homepage, `.section--highlight` reuses `.section-title` and a framed 16:9 image. Both the "Luxury Room" highlight and the "Luxury Suite" card link to `rooms.html#luxury`.
-  - Runtime: `rooms.html` is 1523 px tall at 1280 px.
-- **Current state:** the rooms, the core product, are presented as a short catalogue, and the featured room is composed like the teaser grid.
-- **Design judgment:** the rooms page is the thinnest primary page. It has photographs and specs but no presentation that gives them weight.
-- **Proposed improvement:**
-  - On `rooms.html`, present each room as an alternating wide image-and-text entry with only the existing content. The title uses the display voice, and area and occupancy form a spec line with tabular figures.
-  - On the homepage, make the featured room a full-width, asymmetric chapter with larger media and its list set as specs, distinct from the three-up teaser.
-  - A closing band on `rooms.html` is an owner decision.
-- **Expected value:** rooms read as places to stay, not as listings. The featured chapter adds the emphasis the homepage lacks.
-- **Implementation scope:** room markup classes and CSS.
-
-  Keep:
-  - the filters (`aria-pressed`, `data-room-filter`, hash restore);
-  - the card IDs `#classic`, `#deluxe` and `#luxury`, and `scroll-margin-top`;
-  - the image → title → meta → text DOM order.
-
-  Do not invent room content.
-- **Dependencies:** IMP-DESIGN-01 and IMP-DESIGN-02. IMP-DESIGN-03 for final image balance. Owner decisions on the "Luxury Room"/"Luxury Suite" naming and on any richer room descriptions.
-- **Acceptance criteria:**
-  - At 390, 800 and 1280 px in both themes, imagery is the dominant element of each room entry.
-  - The spec line uses tabular figures.
-  - Each filtered state remains a composed layout with no empty tracks.
-  - `#classic`, `#deluxe` and `#luxury` still filter and scroll.
-  - The homepage featured room is visibly distinct from the teaser grid.
-  - No room content is added without approval.
+- **Status:** COMPLETED — implemented and verified.
+- **Result:** `rooms.html` presents the three rooms as full-width Ground entries divided by rules: from 760 px the framed 3:2 photograph takes three fifths of the row and Deluxe is mirrored through grid areas, with `--fs-700` titles and a tabular spec line under a hairline. The homepage "Luxury Room" highlight is an asymmetric chapter from 1024 px, its photograph beside the title, statement, hairline-divided feature list and unchanged `rooms.html#luxury` CTA; the Surface teaser cards are unchanged. Room content, DOM order, IDs and filter hooks are preserved, and both images use `sizes` matching the new geometry.
+- **Verification:** `npm run qa:fast` (433 width descriptors), `npm run build` and `npm run test:a11y` (27 scenarios) passed. Playwright checks at 390–1440 px in light, dark and auto confirmed dominant, undistorted photographs, alternating and image-first order, tabular figures, all four filter states without empty tracks, fragment, `hashchange`, Back/Forward and homepage-link filtering, expected `srcset` candidates at DPR 1 and 2, no overflow at 200% zoom, static reduced motion, unchanged focus order and no image layout shift. The theme toggle, other browsers, physical devices and assistive technologies were not tested.
 - **Impact:** Medium
 - **Effort:** Medium
 

@@ -223,30 +223,25 @@
   }
 }
 
-/* Highlight */
+/* Highlight
+   The featured room as an asymmetric chapter on the Ground: from 1024px the framed 16:9 photograph takes
+   three fifths of the container and the title, statement and spec group sit beside it, centred on the
+   photograph. Narrower layouts stack in DOM order: title → photograph → text. */
 
 .highlight {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--space-lg);
-  align-items: center;
 }
 
-.highlight__body {
-  display: grid;
-  gap: var(--space-sm);
+/* The parent selector keeps these alignments above the later shared `.section-title` rule. */
+.highlight > .highlight__title {
+  margin: 0;
+  text-align: start;
 }
 
-.highlight p {
-  max-width: 34ch;
-  margin-inline: var(--space-lg);
-  font-size: var(--fs-supporting);
-}
-
-.list {
-  font-size: var(--fs-supporting);
-  padding-inline: var(--space-md);
-  margin-inline: var(--space-lg);
+.highlight > .highlight__title::after {
+  margin-inline: 0;
 }
 
 .highlight__media img {
@@ -256,31 +251,61 @@
   aspect-ratio: 16 / 9;
 }
 
-.highlight__body .btn {
-  justify-self: start;
-  margin-left: var(--space-lg);
+.highlight__body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-lg);
+  justify-items: start;
+  max-inline-size: 30rem;
 }
 
-@media (min-width: 760px) {
-  .highlight {
-    grid-template-columns: 1.1fr 1fr;
-    gap: var(--space-md);
-  }
-  .highlight p {
-    margin-inline: 0;
-  }
-  .highlight__body .btn {
-    margin-left: 0;
-  }
-  .list {
-    margin-inline: 0;
-  }
+.highlight__text {
+  font-size: var(--fs-400);
+}
+
+/* Spec group: the features as hairline-divided rows marked with the primary accent. */
+.highlight__specs {
+  justify-self: stretch;
+  margin: 0;
+  padding: 0;
+  list-style-position: inside;
+  font-size: var(--fs-supporting);
+  border-block: 1px solid var(--rule);
+}
+
+.highlight__specs li {
+  padding-block: var(--space-xs);
+}
+
+.highlight__specs li + li {
+  border-block-start: 1px solid var(--rule);
+}
+
+.highlight__specs li::marker {
+  color: var(--primary);
 }
 
 @media (min-width: 1024px) {
   .highlight {
-    grid-template-columns: 1.1fr 1fr;
-    gap: var(--space-xl);
+    grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+    grid-template-rows: 1fr auto auto 1fr;
+    grid-template-areas:
+      "media ."
+      "media title"
+      "media body"
+      "media .";
+    gap: 0 var(--space-2xl);
+  }
+  .highlight > .highlight__title {
+    grid-area: title;
+    margin-block-end: var(--space-lg);
+  }
+  .highlight__media {
+    grid-area: media;
+    align-self: center;
+  }
+  .highlight__body {
+    grid-area: body;
   }
 }
 
