@@ -68,6 +68,7 @@ For each implementation task, determine `Changelog: yes` or `Changelog: no`. Add
 - Re-composed the homepage Hero around one full-width photograph with contrast-safe overlaid content, a dedicated mobile portrait crop and matching per-crop preloads.
 - Re-composed the rooms page as alternating full-width, image-led entries with display titles and tabular spec lines, and the homepage Luxury Room highlight as an asymmetric photographic chapter.
 - Re-composed offer cards to lead with the occasion and title, presenting inclusions as spec rows and discounts as secondary unfilled tags, and added occasion labels to the homepage offer teasers.
+- Expanded the rooms-page descriptions and added three hairline-divided highlights to each room within the existing image-led composition.
 
 ### Fixed
 

@@ -71,7 +71,7 @@
 }
 
 /* Stays: each room is a full-width Ground entry opened by a rule and led by its framed photograph.
-   From 760px entries alternate sides through grid areas; the DOM order stays image → title → spec → text,
+   From 760px entries alternate sides through grid areas; the DOM order stays image → title → spec → text → highlights,
    and every entry carries its own rule, so any filtered subset remains a complete composition. */
 .room-stays {
   display: grid;
@@ -108,6 +108,30 @@
 
 .room-card--stay .room-card__text {
   font-size: var(--fs-400);
+}
+
+/* Highlights: hairline-divided spec rows, matching the homepage highlight specs and offer inclusions. */
+.room-card--stay .room-card__highlights {
+  justify-self: stretch;
+  margin: 0;
+  padding: 0;
+  list-style-position: inside;
+  font-size: var(--fs-supporting);
+  line-height: var(--lh-normal);
+  border-block: 1px solid var(--rule);
+}
+
+.room-card--stay .room-card__highlights li {
+  padding-block: var(--space-xs);
+  text-wrap: balance;
+}
+
+.room-card--stay .room-card__highlights li + li {
+  border-block-start: 1px solid var(--rule);
+}
+
+.room-card--stay .room-card__highlights li::marker {
+  color: var(--primary);
 }
 
 @media (min-width: 760px) {
