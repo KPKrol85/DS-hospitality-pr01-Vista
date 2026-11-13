@@ -186,39 +186,9 @@ Priorities express design value and dependency order, not defect severity. P1 it
 
 ### IMP-DESIGN-07 — Curate the galleries as sequenced, mixed-format mosaics
 
-- **Status:** Proposed
-- **Priority:** P2
-- **Affected area:** the homepage gallery (six items) and the five four-item categories on `gallery.html`. The lightbox behaviour is unchanged.
-- **Evidence:**
-  - Source: `.gallery-grid` uses equal columns (2/3/4) with `--balanced-four`, and every tile is 3:2. Captions exist only in the lightbox (`data-caption`/`alt`).
-  - Runtime: the homepage gallery is 861 px tall at 1280 px and 2,456 px at 390 px. `gallery.html` is 2,641 px tall at 1280 px.
-  - Visual: equal tiles with no lead image; captions are not visible.
-- **Current state:** both galleries are uniform indexes of thumbnails.
-- **Design judgment:** the grid catalogues the photographs instead of telling a story. On mobile it becomes a long, undifferentiated scroll.
-- **Proposed improvement:**
-  - Give each collection one lead image (wide or tall) and supporting tiles in mixed formats on a consistent CSS grid.
-  - Show short captions in the caption voice on `gallery.html`.
-  - Turn the homepage gallery into a curated sequence; the selection is owner-approved.
-  - On mobile, use a full-width lead with a two-column mosaic.
-  - No masonry library and no horizontal scrolling.
-- **Expected value:** the galleries become the visual proof of the "Atlas" story, at a much lower mobile scroll cost.
-- **Implementation scope:** gallery CSS and item modifier classes, and visible caption markup that keeps link accessible names.
-
-  Keep:
-  - DOM order, which is the lightbox order;
-  - `data-lightbox-item`, `data-cat-item` and `data-caption`;
-  - the filter anchors and hash restore;
-  - the position counter;
-  - focus behaviour.
-
-  Intrinsic `width`/`height` attributes must match the files.
-- **Dependencies:** the alt and caption prerequisite (section 4), IMP-DESIGN-03 (formats and crops), IMP-DESIGN-02 (Frame role) and IMP-DESIGN-01 (caption voice).
-- **Acceptance criteria:**
-  - From 760 px, each collection's lead image is visibly larger than its siblings.
-  - At 390 px, the homepage gallery is substantially shorter than 2,456 px, with every image fully visible and tappable.
-  - Visible captions match the lightbox captions and the image content.
-  - Lightbox order, the counter and filter hash behaviour are unchanged, and the existing `test:a11y` gallery scenarios pass.
-  - The pages have no horizontal overflow, and loading images cause no layout shift.
+- **Status:** COMPLETED — implemented and verified.
+- **Result:** The homepage gallery is a six-photograph mosaic led by the lobby: from 760 px the lead spans two columns and rows beside a stacked pair above a row of three, and on phones a full-width lead and closing photograph frame a 2 × 2 block. Each `gallery.html` category is a four-photograph mosaic with a full-width lead above a pair (phones) or three thirds (480–1023 px), and from 1024 px a two-row lead beside a wide photograph above a pair. The 20 existing `data-caption` texts appear beneath their photographs in the caption voice and name their links through `aria-labelledby`, while each image's unchanged `alt` describes its link through `aria-describedby`; DOM, lightbox and filter contracts are unchanged, and `sizes` match the new geometry.
+- **Verification:** `npm run qa:fast` (433 width descriptors), `npm run build` and `npm run test:a11y` (27 scenarios) passed after each stage. Playwright checks at 320–1920 px (200% zoom approximated at 640 px) in light, dark and auto measured the 390 px homepage gallery at 754 px instead of 1,513 px and confirmed DOM-order focus and lightbox sequences (6, 20 and 4 per filter), all six filter states, fragments, `hashchange` and Back/Forward, ideal `srcset` candidates at DPR 1 and 2, no gallery overflow or image layout shift, and captions equal to `data-caption` at 6.27:1 or more, with all 20 link names computed exactly from them and descriptions exactly from the image `alt` in the accessibility tree. Other browsers, physical devices and assistive technologies were not tested; whether screen readers announce the description depends on their settings, axe's experimental `label-content-name-mismatch` rule counts that `alt` as label text, and the 17 px Hero overflow at a 195 px viewport exists in `HEAD`.
 - **Impact:** High
 - **Effort:** Large
 
