@@ -70,6 +70,7 @@ For each implementation task, determine `Changelog: yes` or `Changelog: no`. Add
 - Re-composed offer cards to lead with the occasion and title, presenting inclusions as spec rows and discounts as secondary unfilled tags, and added occasion labels to the homepage offer teasers.
 - Expanded the rooms-page descriptions and added three hairline-divided highlights to each room within the existing image-led composition.
 - Re-composed the homepage and gallery-page galleries as responsive mosaics led by one photograph, with visible captions on the gallery page and unchanged lightbox and filter order.
+- Unified the light and dark themes on one Sea Blue accent family, including primary-button gradients, focus rings and the skip-link highlight, and replaced the yellow and saturated blue page washes with restrained brass and sea tones.
 
 ### Fixed
 
@@ -81,6 +82,7 @@ For each implementation task, determine `Changelog: yes` or `Changelog: no`. Add
 - Corrected responsive-image width and `sizes` descriptors to match generated assets and rendered layouts.
 - Improved offer-badge, skip-link, and form-error contrast across supported themes.
 - Raised primary-button and contact-form placeholder contrast to WCAG AA across light, dark, and auto themes, including hover and active states.
+- Raised the selected room and gallery filter border above 3:1 non-text contrast in the light theme.
 - Made gallery category scrolling jump immediately when reduced motion is requested.
 - Enforced integer guest counts from 1 to 6 and restored native form validation without JavaScript.
 - Corrected past-arrival date rejection and valid Netlify Forms inquiry submission.

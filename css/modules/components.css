@@ -1096,7 +1096,8 @@
 
 .gallery-cats__link[aria-pressed="true"],
 .gallery-cats__link[aria-current="true"] {
-  border-color: color-mix(in oklab, var(--primary) 55%, var(--border));
+  /* The full accent keeps the selected-state border at 3:1 or more against the page and the tinted fill. */
+  border-color: var(--primary);
   background: color-mix(in oklab, var(--primary) 12%, var(--bg-elev));
   color: var(--text);
   font-weight: 500;

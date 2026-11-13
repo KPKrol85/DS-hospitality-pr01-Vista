@@ -194,24 +194,9 @@ Priorities express design value and dependency order, not defect severity. P1 it
 
 ### IMP-DESIGN-08 — Give Vista a theme-stable accent and material palette
 
-- **Status:** Proposed
-- **Priority:** P2
-- **Affected area:** the palette and gradient tokens in `tokens.css`; accent consumers (primary button, badges, links, kickers); the theme-colour metadata as a separate configuration slice.
-- **Evidence:**
-  - Source: `--primary` is `#0f6fbf` in light and `#34d1b2` in dark. `--primary-alt` stays `#0a5ca0` in both themes, so the dark gradient runs from `#0b7564` to `#0a5ca0`. `--focus` is `#2dc7a6`. The washes are `#ffd37a` (light) and `#2d9bf0` (dark). The logo uses `#f69d1f` and `#4181c3`. `msapplication-TileColor` is `#2dc7a6`. The `theme-color` values `#f7f6f3`/`#0d0f14` differ from `--bg` (`#faf8f3`/`#0a0d11`).
-  - Runtime: the computed `--primary` changes per theme.
-- **Current state:** blue identifies the light theme, mint and teal the dark theme, and orange appears only in the logo.
-- **Design judgment:** the two editions read as two brands, and the palette is unrelated to both the mark and the photography.
-- **Proposed improvement:** define one accent family once and tune it per theme. The hue stays the same; only lightness and chroma adjust. Derive it from the approved direction: for *Atlas*, a warm sand and brass neutral system with one deep ink or sea accent, or a reconciliation with the mark if the owner keeps it. Develop the dark edition as an intentional "evening" variant, not an inversion. The change is limited to tokens.
-- **Expected value:** a stable colour signature that links the UI, the mark and the photography in both themes.
-- **Implementation scope:** the `tokens.css` palettes and gradients. Align the `theme-color` and manifest values later in a separate slice. Keep the theme switch, the `theme-pref` storage, auto mode and the focus-ring tokens. Re-verify the contrast fixes recorded in `docs/CHANGELOG.md`.
-- **Dependencies:** owner decisions on the direction and the brand mark. Sequence after IMP-DESIGN-02, because both edit `tokens.css`.
-- **Acceptance criteria:**
-  - Light and dark accents share one hue family.
-  - Contrast is measured in light, dark and auto, and nothing is assumed: normal text pairs reach at least 4.5:1 and UI component boundaries at least 3:1.
-  - These states pass again: primary buttons with hover and active, offer badges, the skip link, form errors and placeholders.
-  - `npm run test:a11y` reports no new violations.
-  - The owner approves the relationship between the mark and the palette.
+- **Status:** COMPLETED — implemented and verified.
+- **Result:** Both themes share one Sea Blue accent family at OKLCH hue 236, `#155e82` (light) and `#7dbde4` (dark), with blue primary-button gradients, an Evening Blue skip-link highlight and brass and sea page washes replacing the mint, yellow and saturated blue tones. The logo, neutral surfaces and the error and success colours are unchanged, and the selected room and gallery filter border now uses the full accent.
+- **Verification:** `npm run qa:fast`, `npm run build` and `npm run test:a11y` (27 scenarios) passed. Rendered-pixel checks in light, dark and auto measured primary buttons at 6.91:1 (light) and 5.45:1 (dark) or more at rest, hover and active, accent text at 4.65:1 (the light breadcrumb, previously 3.82:1) and 7.58:1, focus rings at 4.60:1 and 8.41:1, the skip link at 7.59:1 and selected filter borders at 5.74:1 and 8.67:1, with unchanged placeholders and errors and no overflow at 390, 800 and 1280 px. Metadata and manifest colours remain for a separate task, input borders (1.86:1 and 1.78:1) are unchanged neutral-token findings, and other browsers and assistive technologies were not tested.
 - **Impact:** Medium
 - **Effort:** Medium
 

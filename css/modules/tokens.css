@@ -5,7 +5,8 @@
   --text-light: #1f2430;
   --muted-light: #55585e;
   --border-light: #e0e3e8;
-  --primary-light: #0f6fbf;
+  /* Sea Blue accent family (OKLCH hue 236): only lightness and chroma change per theme. */
+  --primary-light: #155e82; /* Sea Blue */
 
   /* Default light semantics */
   --bg: var(--bg-light);
@@ -14,9 +15,9 @@
   --muted: var(--muted-light);
   --border: var(--border-light);
   --primary: var(--primary-light);
-  --primary-alt: #0a5ca0;
+  --primary-alt: #0d4e6d; /* Deep Sea: primary-button gradient end */
   --primary-contrast: #ffffff;
-  /* Primary button gradient start; dark themes use a deeper mint so white text keeps 4.5:1. */
+  /* Primary button gradient start; dark themes use a deeper fill than the text accent so white text keeps 4.5:1. */
   --btn-primary-start: var(--primary);
 
   /* Colors alert */
@@ -24,7 +25,8 @@
   --form-error-text: #b91c1c;
   --form-error-text-elevated: #b91c1c;
   --success: #0f766e;
-  --focus: #2dc7a6;
+  /* Theme-independent highlight; the skip link keeps --text-light on it. */
+  --focus: var(--primary-dark);
 
   /* Colors dark */
   --bg-dark: #0a0d11;
@@ -32,17 +34,21 @@
   --text-dark: #e7eaf1;
   --muted-dark: #a6b3c6;
   --border-dark: #1b2433;
-  --primary-dark: #34d1b2;
+  --primary-dark: #7dbde4; /* Evening Blue */
+  --btn-primary-start-dark: #266e94; /* Harbour Blue: the dark primary-button fill */
   --form-error-text-dark: #f87171;
   --form-error-text-elevated-dark: #f87171;
 
+  /* Soft Brass: decorative warmth in the page washes only, never text or controls. */
+  --brass: #c7a16b;
+
   /* Theme gradients */
   --bg-gradients-light:
-    radial-gradient(60vw 60vw at 10% 6%, color-mix(in oklab, #ffd37a 35%, transparent) 0%, transparent 60%),
+    radial-gradient(60vw 60vw at 10% 6%, color-mix(in oklab, var(--brass) 24%, transparent) 0%, transparent 60%),
     radial-gradient(40vw 40vw at 88% 90%, color-mix(in oklab, var(--focus)  10%, transparent) 0%, transparent 70%);
   --bg-gradients-dark:
-    radial-gradient(60vw 60vw at 92% 8%, color-mix(in oklab, #2d9bf0 18%, transparent) 0%, transparent 60%),
-    radial-gradient(35vw 35vw at 6% 94%, color-mix(in oklab, var(--primary-dark) 10%, transparent) 0%, transparent 70%);
+    radial-gradient(60vw 60vw at 92% 8%, color-mix(in oklab, var(--primary-light) 28%, transparent) 0%, transparent 60%),
+    radial-gradient(35vw 35vw at 6% 94%, color-mix(in oklab, var(--brass) 10%, transparent) 0%, transparent 70%);
 
   /* Focus ring */
   --focus-ring-color: var(--primary);
@@ -147,7 +153,8 @@ html[data-theme="dark"] {
   --text: var(--text-dark);
   --muted: var(--muted-dark);
   --primary: var(--primary-dark);
-  --btn-primary-start: #0b7564;
+  --btn-primary-start: var(--btn-primary-start-dark);
+  --primary-alt: var(--primary-light);
   --border: var(--border-dark);
   --bg-gradients: var(--bg-gradients-dark);
 }
@@ -162,7 +169,8 @@ html[data-theme="dark"] {
     --text: var(--text-dark);
     --muted: var(--muted-dark);
     --primary: var(--primary-dark);
-    --btn-primary-start: #0b7564;
+    --btn-primary-start: var(--btn-primary-start-dark);
+    --primary-alt: var(--primary-light);
     --border: var(--border-dark);
     --bg-gradients: var(--bg-gradients-dark);
   }
