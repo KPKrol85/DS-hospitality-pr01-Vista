@@ -95,6 +95,23 @@
   gap: var(--space-md);
 }
 
+/* Four offer previews: one column, two from 600px and a single row of four from 1200px. */
+.card-grid.card-grid--balanced-four {
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 600px) {
+  .card-grid.card-grid--balanced-four {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1200px) {
+  .card-grid.card-grid--balanced-four {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
 @media (min-width: 480px) {
   .card-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -125,9 +142,6 @@
 @media (min-width: 1024px) {
   .card-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-  .card-grid--balanced-four {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
   .card-grid--balanced-three > :last-child:nth-child(odd) {
     grid-column: auto;

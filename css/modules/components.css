@@ -984,6 +984,29 @@
   letter-spacing: var(--ls-subtle);
 }
 
+/* Inclusions as hairline-divided spec rows, matching the homepage highlight specs. */
+.offer-card__list {
+  margin: 0 0 var(--space-sm);
+  padding: 0;
+  list-style-position: inside;
+  color: var(--text);
+  font-size: var(--fs-supporting);
+  line-height: var(--lh-normal);
+  border-block: 1px solid var(--rule);
+}
+
+.offer-card__list li {
+  padding-block: var(--space-xs);
+}
+
+.offer-card__list li + li {
+  border-block-start: 1px solid var(--rule);
+}
+
+.offer-card__list li::marker {
+  color: var(--primary);
+}
+
 /* Discount: a secondary, unfilled typographic tag in the spec voice. */
 .offer-card__badge {
   align-self: flex-start;
@@ -1003,6 +1026,85 @@
   align-self: flex-start;
   margin-block-start: var(--space-xs);
   font-weight: 500;
+}
+
+/* Homepage preview: the catalogue entry condensed for a row of four.
+   The discount figure leads the header opposite the kicker (still the unfilled --text tag);
+   on a subgrid, titles, descriptions, inclusions and CTAs share rows across each grid row. */
+.offer-card--preview {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-rows: auto auto auto 1fr auto;
+  gap: var(--space-xs) var(--space-sm);
+}
+
+@supports (grid-template-rows: subgrid) {
+  .offer-card--preview {
+    grid-row: span 5;
+    grid-template-rows: subgrid;
+  }
+}
+
+.offer-card--preview > * {
+  grid-column: 1 / -1;
+}
+
+.offer-card--preview .offer-card__meta {
+  grid-area: 1 / 1;
+  align-self: baseline;
+}
+
+.offer-card--preview .offer-card__badge {
+  grid-area: 1 / 2;
+  align-self: baseline;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-family: var(--font-heading);
+  font-size: var(--fs-card-title);
+  font-weight: 700;
+  line-height: var(--lh-tight);
+  letter-spacing: var(--ls-tight);
+}
+
+.offer-card--preview .offer-card__title {
+  margin: var(--space-2xs) 0;
+}
+
+.offer-card--preview .offer-card__text {
+  margin: 0;
+}
+
+/* Outside markers hang wrapped inclusions under their text; the dividers span the marker gutter.
+   Lists of unequal length stay open at the bottom, so no closing rule breaks the shared row line. */
+.offer-card--preview .offer-card__list {
+  --list-gutter: 1.25em;
+  align-self: start;
+  margin: var(--space-2xs) 0 0;
+  padding-inline-start: var(--list-gutter);
+  list-style-position: outside;
+  border-block-end: 0;
+}
+
+.offer-card--preview .offer-card__list li {
+  position: relative;
+}
+
+.offer-card--preview .offer-card__list li + li {
+  border-block-start: 0;
+}
+
+.offer-card--preview .offer-card__list li + li::before {
+  content: "";
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline: calc(var(--list-gutter) * -1) 0;
+  border-block-start: 1px solid var(--rule);
+}
+
+.offer-card--preview .btn {
+  justify-self: start;
+  margin-block-start: var(--space-sm);
 }
 
 /* CTA */

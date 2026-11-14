@@ -31,31 +31,6 @@
   }
 }
 
-/* Subpage Offers */
-
-/* Inclusions as hairline-divided spec rows, matching the homepage highlight specs. */
-.offer-card__list {
-  margin: 0 0 var(--space-sm);
-  padding: 0;
-  list-style-position: inside;
-  color: var(--text);
-  font-size: var(--fs-supporting);
-  line-height: var(--lh-normal);
-  border-block: 1px solid var(--rule);
-}
-
-.offer-card__list li {
-  padding-block: var(--space-xs);
-}
-
-.offer-card__list li + li {
-  border-block-start: 1px solid var(--rule);
-}
-
-.offer-card__list li::marker {
-  color: var(--primary);
-}
-
 /* Subpage Rooms */
 
 .rooms-filters {
