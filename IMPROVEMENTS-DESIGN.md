@@ -202,30 +202,9 @@ Priorities express design value and dependency order, not defect severity. P1 it
 
 ### IMP-DESIGN-09 — Recompose "O nas" as an editorial brand story
 
-- **Status:** Proposed
-- **Priority:** P2
-- **Affected area:** `onas.html` and the `.brand__*` rules in `subpages.css`.
-- **Evidence:**
-  - Source: a `grid-2` intro with text and a 5:4 image, then three `.grid-3` groups with nine boxed items in total. The stat values are "24/7", "Premium" and "100%". A section disclosure follows.
-  - Runtime: the page is 2,698 px tall at 1280 px.
-  - Visual: three consecutive rows of equal boxes. The unbadged interior image is the strongest asset on the page.
-- **Current state:** the brand page repeats the catalogue idiom used everywhere else.
-- **Design judgment:** the page meant to carry the brand voice has the least voice.
-- **Proposed improvement:**
-  - Enlarge the intro image, with the lead in the display and reading voices.
-  - Set philosophy and values as numbered typographic principles on the Ground role.
-  - Add one pull statement taken from existing copy.
-  - Show the stats only if the owner keeps them, as a quiet line rather than as feature cards.
-  - Keep the disclosure adjacent to the story.
-- **Expected value:** the clearest single expression of the *Atlas* voice, using content already on the page.
-- **Implementation scope:** `onas.html` classes and brand rules. Keep the heading outline (including the `sr-only` `h2`), `aria-labelledby`, the disclosure text and the CTA destination. Add no new claims.
-- **Dependencies:** IMP-DESIGN-01 and IMP-DESIGN-02; an owner decision on the stats content.
-- **Acceptance criteria:**
-  - At 390 and 1280 px in both themes, philosophy and values render without card surfaces.
-  - Reading lines stay within 72ch.
-  - The heading outline is unchanged.
-  - The disclosure is visible in the same section.
-  - No content is added without approval.
+- **Status:** COMPLETED — implemented and verified.
+- **Result:** From 1024 px the framed 5:4 photograph takes three fifths of the introduction beside a Manrope display lead, an Inter reading narrative and the unchanged disclosure, with `sizes` matching the new geometry. Philosophy and values are explicitly numbered, rule-divided `ol` entries on a shared 2 : 3 axis, separated by one `aria-hidden` pull statement that repeats an existing sentence, and the three unchanged figures form one ruled line. All copy, headings, IDs, `aria-labelledby` references, `data-reveal` hooks, both disclosures and the CTA are preserved.
+- **Verification:** `npm run qa:fast` and `npm run build:css` passed. Browser checks at 320–1440 px in light and dark found no overflow or surfaces, reading measures of 60ch or less, the unchanged heading outline and focus order, and the 960w image candidate at 1024 and 1280 px; a scratch axe run reported no light-theme violations, and its dark-theme `h1` and breadcrumb flags also occur on the unchanged `rooms.html` because axe reads the `body::before` ground as white. Token contrast of the new text is 5.6:1 or more on the page washes; `test:a11y`, the theme toggle, other browsers and assistive technologies were not tested.
 - **Impact:** Medium
 - **Effort:** Medium
 

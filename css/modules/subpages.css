@@ -366,81 +366,140 @@
   overflow-wrap: anywhere;
 }
 
-/* O nas */
+/* O nas
+   An editorial brand story on the Ground. The framed photograph leads the introduction beside its display lead and
+   reading narrative; philosophy and values read as numbered principles divided by rules, one pull statement separates
+   them, and the figures close as a single ruled line. From 1024px the photograph, the philosophy list and the value
+   descriptions share one 2 : 3 axis; every layout keeps the DOM order. */
 
-.brand__content {
-  display: grid;
-  gap: var(--space-md);
+.brand__intro {
+  align-items: center;
 }
 
 .brand__intro-content {
   display: grid;
-  gap: var(--space-lg);
+  justify-items: start;
+  gap: var(--space-md);
 }
 
 .brand__subtitle {
-  margin: 0 0 var(--space-xs);
+  margin: 0;
   font-size: var(--fs-600);
   line-height: var(--lh-snug);
-  text-align: center;
 }
 
+.brand__section .brand__subtitle {
+  margin-block-end: var(--space-md);
+}
+
+/* Display voice: the opening statement of the story. */
 .brand__lead {
-  margin: var(--space-sm) auto 0;
-  max-width: 48ch;
-  font-size: var(--fs-300);
+  max-inline-size: 36ch;
+  font-family: var(--font-heading);
+  font-size: var(--fs-500);
+  font-weight: 600;
+  line-height: var(--lh-normal);
+}
+
+/* Reading voice: the supporting narrative; the disclosure keeps the same bounded measure when the intro stacks. */
+.brand__narrative,
+.brand__intro .section-disclosure {
+  max-inline-size: 60ch;
+}
+
+.brand__narrative {
   color: var(--muted);
 }
 
+.brand__media {
+  margin: 0;
+}
+
 .brand__media img {
-  display: block;
-  width: 100%;
-  height: 100%;
+  inline-size: 100%;
   aspect-ratio: 5 / 4;
   object-fit: cover;
 }
 
-.section--about .brand__subtitle {
-  margin: var(--space-2xl) 0 var(--space-md);
+/* Principles: explicitly numbered entries opened by rules; the list closes with a rule of its own. */
+.brand__principles {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-block-end: 1px solid var(--rule);
 }
 
-/* Ground: principles read as ruled columns on the page. */
-.brand__card {
+.brand__principle {
   display: grid;
-  align-content: start;
   gap: var(--space-xs);
-  padding-block-start: var(--space-md);
-  padding-inline-end: var(--space-md);
+  padding-block: var(--space-lg);
   border-block-start: 1px solid var(--rule);
 }
 
-.brand__card-title {
+/* Kicker voice with tabular figures, matching the offer occasions. */
+.brand__principle-index {
+  color: var(--primary);
+  font-size: var(--fs-meta);
+  font-weight: 500;
+  line-height: var(--lh-snug);
+  letter-spacing: var(--ls-wider);
+  font-variant-numeric: tabular-nums;
+}
+
+.brand__principle-title {
   margin: 0;
   font-size: var(--fs-card-title);
-  font-weight: 600;
+  font-weight: 700;
   line-height: var(--lh-snug);
 }
 
-.brand__text {
-  margin: 0;
-  max-width: 56ch;
-  font-size: var(--fs-supporting);
-  line-height: var(--lh-relaxed);
+.brand__principle-text {
+  max-inline-size: 60ch;
   color: var(--muted);
 }
 
-/* Ground: figures form one quiet line divided by rules instead of three boxes. */
-.brand__section--stats .grid-3 {
-  gap: 0;
+/* Pull statement: one sentence of the story in the display voice, opened by a short accent rule. */
+.brand__statement {
+  max-inline-size: 22ch;
+  margin-block: var(--space-3xl);
+  font-family: var(--font-heading);
+  font-size: var(--fs-700);
+  font-weight: 600;
+  line-height: var(--lh-snug);
+  letter-spacing: var(--ls-tight);
+  text-wrap: balance;
+}
+
+.brand__statement::before {
+  content: "";
+  display: block;
+  inline-size: 2.5rem;
+  block-size: 1px;
+  margin-block-end: var(--space-md);
+  background: var(--primary);
+}
+
+.brand__section + .brand__section {
+  margin-block-start: var(--space-3xl);
+}
+
+/* Figures: value and label rows that share one value column through subgrid. */
+.brand__stats {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  column-gap: var(--space-md);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-block: 1px solid var(--rule);
 }
 
 .brand__stat {
   display: grid;
-  align-content: center;
-  gap: var(--space-xs);
-  min-height: 100%;
-  padding: var(--space-md);
-  text-align: center;
+  grid-column: 1 / -1;
+  grid-template-columns: subgrid;
+  align-items: baseline;
+  padding-block: var(--space-sm);
 }
 
 .brand__stat + .brand__stat {
@@ -448,53 +507,63 @@
 }
 
 .brand__stat-value {
-  display: block;
+  font-family: var(--font-heading);
   font-size: var(--fs-500);
-  font-weight: 600;
-  line-height: var(--lh-tight);
-  letter-spacing: 0.02em;
+  font-weight: 700;
+  line-height: var(--lh-snug);
+  font-variant-numeric: tabular-nums;
 }
 
 .brand__stat-label {
-  margin-top: var(--space-xs);
-  font-size: var(--fs-meta);
   color: var(--muted);
+  font-size: var(--fs-supporting);
+  line-height: var(--lh-normal);
 }
 
 @media (min-width: 760px) {
-  .brand__intro {
-    align-items: center;
-    align-content: center;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  /* Values: the index and title sit beside the description, sharing its first baseline. */
+  .brand__section--values .brand__principle {
+    grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+    column-gap: var(--space-2xl);
+    align-items: baseline;
   }
-  .brand__subtitle {
-    text-align: left;
+  .brand__section--values .brand__principle-title {
+    grid-area: 2 / 1;
   }
-  .brand__lead {
-    margin: 0;
-    text-align: left;
+  .brand__section--values .brand__principle-text {
+    grid-area: 2 / 2;
   }
-  .brand__text {
-    margin: 0;
-    max-width: none;
-    text-align: left;
+  /* Figures: one line of three, divided by rules. */
+  .brand__stats {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    column-gap: var(--space-lg);
   }
-  .brand__media {
-    height: auto;
+  .brand__stat {
+    grid-column: auto;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-2xs);
+    padding-block: var(--space-md);
   }
-}
-
-/* Matches the three-column `.grid-3` breakpoint. */
-@media (min-width: 970px) {
   .brand__stat + .brand__stat {
+    padding-inline-start: var(--space-lg);
     border-block-start: 0;
     border-inline-start: 1px solid var(--rule);
   }
 }
 
 @media (min-width: 1024px) {
-  .brand__lead {
-    max-width: 52ch;
+  .brand__intro,
+  .brand__section--philosophy {
+    grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+    column-gap: var(--space-2xl);
+  }
+  .brand__section--philosophy {
+    display: grid;
+    align-items: start;
+  }
+  /* The statement starts on the shared axis: the 2fr column plus the gap. */
+  .brand__statement {
+    margin-inline-start: calc(40% + 0.6 * var(--space-2xl));
   }
 }
 

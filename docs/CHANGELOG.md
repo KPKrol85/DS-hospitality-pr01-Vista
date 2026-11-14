@@ -71,6 +71,7 @@ For each implementation task, determine `Changelog: yes` or `Changelog: no`. Add
 - Expanded the rooms-page descriptions and added three hairline-divided highlights to each room within the existing image-led composition.
 - Re-composed the homepage and gallery-page galleries as responsive mosaics led by one photograph, with visible captions on the gallery page and unchanged lightbox and filter order.
 - Unified the light and dark themes on one Sea Blue accent family, including primary-button gradients, focus rings and the skip-link highlight, and replaced the yellow and saturated blue page washes with restrained brass and sea tones.
+- Re-composed the "O nas" page as an editorial brand story led by a larger framed photograph, with numbered philosophy and value principles, one pull statement and the figures as a single ruled line.
 
 ### Fixed
 
