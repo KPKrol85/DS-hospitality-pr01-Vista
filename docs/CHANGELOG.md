@@ -57,6 +57,7 @@ For each implementation task, determine `Changelog: yes` or `Changelog: no`. Add
 - Clarified contact CTAs and the PWA shortcut to distinguish project inquiries from hotel reservations.
 - Aligned homepage offer cards with the offers catalogue and routed their CTAs to prefilled project inquiries.
 - Reworded the offer-prefilled inquiry message and the About page 24/7 figure to keep fictional hotel services separate from the author's real contact channels.
+- Unified the featured Luxury Suite name across the homepage and room catalogue and aligned offers page metadata with the current catalogue.
 - Consolidated theme colours and gradients into shared palette tokens.
 - Replaced repeated inline SVG icons with a cached, reusable 15-symbol sprite.
 - Redesigned the contact page with a responsive two-column layout, integrated map, and clearer form hierarchy.

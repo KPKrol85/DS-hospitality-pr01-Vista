@@ -14,7 +14,7 @@
       "@id": "https://ds-hospitality-pr01-vista.netlify.app/offers.html#webpage",
       "url": "https://ds-hospitality-pr01-vista.netlify.app/offers.html",
       "name": "Vista | Oferty — Hotels & Travel",
-      "description": "Przykładowe oferty fikcyjnej marki Vista — Hotels & Travel: weekendy dla dwojga, pakiety biznesowe i sezonowe promocje.",
+      "description": "Przykładowe oferty fikcyjnej marki Vista — Hotels & Travel: propozycje dla par, rodzin i gości biznesowych, dłuższe pobyty oraz pakiety wellness i premium.",
       "isPartOf": {
         "@id": "https://ds-hospitality-pr01-vista.netlify.app/#website"
       },
