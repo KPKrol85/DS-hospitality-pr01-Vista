@@ -36,6 +36,7 @@ For each implementation task, determine `Changelog: yes` or `Changelog: no`. Add
 
 - Adopted bilingual KP_Code proprietary licensing and aligned package license metadata.
 - Updated legal disclosures for the demonstration, inquiry form, browser storage, offline caching, and embedded map.
+- Aligned displayed contact formatting, form placeholders, and the cookies-policy operator identity with the owner-approved author details.
 
 ### Build and Tooling
 
