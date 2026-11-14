@@ -392,7 +392,7 @@ function contactGuestScenario() {
     '1.5': { stepMismatch: true },
     '6.5': { rangeOverflow: true, stepMismatch: true }
   };
-  const offerMessage = 'Zapytanie dotyczy oferty: Rodzinny city break.';
+  const offerMessage = 'Pytanie o projekt Vista — przykładowa oferta „Rodzinny city break”.';
   const otherIds = ['name', 'email', 'phone', 'checkin', 'checkout', 'consent'];
   const submitName = { name: 'Wyślij zapytanie', exact: true };
 

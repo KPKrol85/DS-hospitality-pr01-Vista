@@ -239,7 +239,7 @@ export function initForm() {
     if (!message || message.value !== "") return;
     const offerIds = new URLSearchParams(window.location.search).getAll("oferta");
     const offerName = offerIds.length === 1 ? OFFER_NAMES.get(offerIds[0]) : undefined;
-    if (offerName) message.value = `Zapytanie dotyczy oferty: ${offerName}.`;
+    if (offerName) message.value = `Pytanie o projekt Vista — przykładowa oferta „${offerName}”.`;
   }
 
   form.noValidate = true;
