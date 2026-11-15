@@ -37,6 +37,7 @@ For each implementation task, determine `Changelog: yes` or `Changelog: no`. Add
 - Adopted bilingual KP_Code proprietary licensing and aligned package license metadata.
 - Updated legal disclosures for the demonstration, inquiry form, browser storage, offline caching, and embedded map.
 - Aligned displayed contact formatting, form placeholders, and the cookies-policy operator identity with the owner-approved author details.
+- Documented inquiry legal bases, form-submission and correspondence retention periods, and Netlify's Akismet spam-filtering subprocessor in the privacy policy.
 
 ### Build and Tooling
 
@@ -77,6 +78,7 @@ For each implementation task, determine `Changelog: yes` or `Changelog: no`. Add
 - Unified the light and dark themes on one Sea Blue accent family, including primary-button gradients, focus rings and the skip-link highlight, and replaced the yellow and saturated blue page washes with restrained brass and sea tones.
 - Re-composed the "O nas" page as an editorial brand story led by a larger framed photograph, with numbered philosophy and value principles, one pull statement and the figures as a single ruled line.
 - Redesigned the homepage offer previews as a responsive four-up row with header-aligned discounts, the catalogue inclusion lists and subgrid-aligned content and CTAs.
+- Replaced the mandatory inquiry-form privacy checkbox with an informational data-controller notice linking to the privacy policy.
 
 ### Fixed
 

@@ -358,7 +358,7 @@ function contactValidationScenario(preference, colorScheme) {
       await page.locator('#guests').fill('0');
       await form.getByRole('button', { name: 'Wyślij zapytanie', exact: true }).click();
 
-      const ids = ['name', 'email', 'phone', 'checkin', 'checkout', 'guests', 'consent'];
+      const ids = ['name', 'email', 'phone', 'checkin', 'checkout', 'guests'];
       for (const id of ids) {
         const control = page.locator(`#${id}`);
         const error = page.locator(`#err-${id}`);
@@ -374,9 +374,21 @@ function contactValidationScenario(preference, colorScheme) {
       assert.equal(page.url(), contactUrl, 'Invalid submission must remain on contact.html');
       assert.equal(await form.locator('.form__success').isVisible(), false, 'Invalid submission must not show success');
       assert.deepEqual(formPosts, [], 'Invalid submission must not POST to the Vista form action');
+
+      // Model A1: an informational privacy notice replaces any required privacy checkbox.
+      assert.equal(await form.locator('input[type="checkbox"]').count(), 0, 'Inquiry form must not require a privacy checkbox');
+      const privacy = form.locator('#form-privacy');
+      assert.equal(await privacy.isVisible(), true, 'Privacy notice must be visible in the form');
+      assert.match(await privacy.innerText(), /Administratorem danych jest Kamil Król \(KP_Code Digital Studio\)\./);
+      const privacyLink = privacy.getByRole('link', { name: 'Polityka prywatności', exact: true });
+      assert.equal(new URL(await privacyLink.evaluate((link) => link.href)).pathname, '/polityka-prywatnosci.html',
+        'Privacy notice must link to the privacy policy');
+      assert.equal(await privacy.evaluate((element) =>
+        Boolean(element.compareDocumentPosition(element.closest('form').querySelector('.form__actions'))
+          & Node.DOCUMENT_POSITION_FOLLOWING)), true, 'Privacy notice must precede the submit button');
       // The runner shares a context; do not leave this preference for unrelated scenarios.
       await page.evaluate(() => localStorage.removeItem('theme-pref'));
-      console.log(`${label}: all seven errors, optional phone, focus, ARIA/live feedback and blocked submission passed.`);
+      console.log(`${label}: all six errors, optional phone, focus, ARIA/live feedback, blocked submission and privacy notice passed.`);
     }
   };
 }
@@ -393,7 +405,7 @@ function contactGuestScenario() {
     '6.5': { rangeOverflow: true, stepMismatch: true }
   };
   const offerMessage = 'Pytanie o projekt Vista — przykładowa oferta „Rodzinny city break”.';
-  const otherIds = ['name', 'email', 'phone', 'checkin', 'checkout', 'consent'];
+  const otherIds = ['name', 'email', 'phone', 'checkin', 'checkout'];
   const submitName = { name: 'Wyślij zapytanie', exact: true };
 
   function localISO(offsetDays) {
@@ -429,7 +441,6 @@ function contactGuestScenario() {
     await page.locator('#phone').fill('');
     await page.locator('#checkin').fill(dates.checkin);
     await page.locator('#checkout').fill(dates.checkout);
-    await page.locator('#consent').check();
     return dates;
   }
 
@@ -567,6 +578,8 @@ function contactGuestScenario() {
         const body = posts.at(-1);
         assert.deepEqual(body.getAll('guests'), [value], `"${value}": submitted guest value must be exact`);
         assert.deepEqual(body.getAll('form-name'), ['booking'], `"${value}": form-name must remain booking`);
+        assert.deepEqual(body.getAll('website'), [''], `"${value}": empty honeypot must be submitted unchanged`);
+        assert.equal(body.has('consent'), false, `"${value}": no consent field may be submitted`);
         assert.equal(body.get('checkin'), dates.checkin);
         assert.equal(body.get('checkout'), dates.checkout);
         assert.equal(body.get('message'), offerMessage);

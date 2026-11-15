@@ -287,18 +287,11 @@
                   <label for="message">Wiadomość</label>
                   <textarea id="message" name="message" rows="4" placeholder="Pytania o projekt (opcjonalnie)"></textarea>
                 </div>
-                <!-- zgoda -->
-                <div class="form__field form__field--checkbox">
-                  <label class="checkbox">
-                    <input id="consent" name="consent" type="checkbox" required aria-describedby="err-consent" />
-                    <span>
-                      Wyrażam zgodę na kontakt w sprawie zapytania o projekt oraz akceptuję
-                      <a href="polityka-prywatnosci.html">Politykę prywatności</a>
-                      *
-                    </span>
-                  </label>
-                  <p class="form__error" id="err-consent" aria-live="polite" hidden>Wymagana zgoda na kontakt.</p>
-                </div>
+                <!-- informacja o przetwarzaniu danych -->
+                <p class="form__privacy" id="form-privacy">
+                  Administratorem danych jest Kamil Król (KP_Code Digital Studio). Dane z formularza są przetwarzane w celu udzielenia odpowiedzi na zapytanie. Szczegółowe informacje oraz prawa użytkownika opisuje
+                  <a href="polityka-prywatnosci.html">Polityka prywatności</a>.
+                </p>
                 <div class="form__actions"><button class="btn btn--primary" type="submit">Wyślij zapytanie</button></div>
                 <p class="form__success" role="status" aria-live="polite" hidden>Dziękujemy! Skontaktujemy się wkrótce.</p>
               </form>

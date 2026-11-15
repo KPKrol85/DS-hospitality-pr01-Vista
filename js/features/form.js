@@ -19,7 +19,6 @@ export function initForm() {
   const checkin = form.querySelector("#checkin");
   const checkout = form.querySelector("#checkout");
   const guests = form.querySelector("#guests");
-  const consent = form.querySelector("#consent");
 
   const $ = (id) => document.getElementById(id);
 
@@ -129,12 +128,6 @@ export function initForm() {
     return valid;
   }
 
-  function validateConsent() {
-    const valid = consent?.checked === true;
-    setError(consent, "err-consent", !valid);
-    return valid;
-  }
-
   name?.addEventListener("input", () => {
     if (name.getAttribute("aria-invalid") === "true") validateName();
   });
@@ -158,10 +151,6 @@ export function initForm() {
   });
   checkout?.addEventListener("input", () => {
     if (checkout.getAttribute("aria-invalid") === "true") validateCheckout();
-  });
-
-  consent?.addEventListener("change", () => {
-    if (consent.getAttribute("aria-invalid") === "true") validateConsent();
   });
 
   guests?.addEventListener("input", () => {
@@ -202,11 +191,6 @@ export function initForm() {
 
     if (guests) {
       const v = validateGuests();
-      ok = ok && v;
-    }
-
-    if (consent) {
-      const v = validateConsent();
       ok = ok && v;
     }
 
