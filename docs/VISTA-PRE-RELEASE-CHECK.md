@@ -50,7 +50,7 @@
 
 ## 5. Forms & Integrations
 
-- [ ] Implemented forms contain the required fields, labels, and validation rules.
+- [x] Implemented forms contain the required fields, labels, and validation rules.
 - [ ] Form submission, error handling, and success feedback behave correctly.
 - [ ] Required privacy acknowledgements, spam protection, and anti-bot mechanisms are configured correctly.
 - [ ] Forms direct submissions to the intended recipient or service.
