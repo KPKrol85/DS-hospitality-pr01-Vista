@@ -54,7 +54,7 @@
 - [x] Form submission, error handling, and success feedback behave correctly.
 - [x] Required privacy acknowledgements, spam protection, and anti-bot mechanisms are configured correctly.
 - [x] Forms direct submissions to the intended recipient or service.
-- [ ] Required external integrations, APIs, and third-party services are configured and functional.
+- [x] Required external integrations, APIs, and third-party services are configured and functional.
 - [x] No unintended data collection, inactive integration references, or misleading submission behavior remains.
 
 ## 6. SEO & Discoverability
