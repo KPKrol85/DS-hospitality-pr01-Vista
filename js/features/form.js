@@ -12,7 +12,6 @@ export function initForm() {
   const form = document.querySelector("[data-form]");
   if (!form) return;
 
-  const success = form.querySelector(".form__success");
   const name = form.querySelector("#name");
   const email = form.querySelector("#email");
   const phone = form.querySelector("#phone");
@@ -94,36 +93,50 @@ export function initForm() {
     return valid;
   }
 
+  // Optional fields: an empty value is omitted, but unparseable browser input (badInput) is malformed.
+  function isOmitted(input) {
+    return !input || (input.value.trim() === "" && !input.validity?.badInput);
+  }
+
+  function showError(input, msgId, message) {
+    const el = $(msgId);
+    if (el && message) el.textContent = message;
+    setError(input, msgId, !!message);
+    return !message;
+  }
+
+  // Stay dates are optional as a pair: both omitted, or a valid arrival (today or later) and a later departure.
   function validateCheckin() {
     const todayISO = refreshCheckinMin();
-    const value = checkin?.value || "";
-    const date = parseLocalISO(value);
-    const valid = !!date && formatLocalISO(date) >= todayISO;
-    const message = $("err-checkin");
-    if (message) {
-      message.textContent = !value
-        ? "Wybierz datę przyjazdu."
-        : !date
-          ? "Podaj poprawną datę przyjazdu."
-          : "Wybierz datę przyjazdu: dziś lub później.";
+    let message = "";
+    if (isOmitted(checkin)) {
+      if (!isOmitted(checkout)) message = "Podaj także datę przyjazdu albo usuń datę wyjazdu.";
+    } else {
+      const date = parseLocalISO(checkin.value);
+      if (!date) message = "Podaj poprawną datę przyjazdu.";
+      else if (formatLocalISO(date) < todayISO) message = "Wybierz datę przyjazdu: dziś lub później.";
     }
-    setError(checkin, "err-checkin", !valid);
-    return valid;
+    return showError(checkin, "err-checkin", message);
   }
 
   function validateCheckout() {
-    const date = parseLocalISO(checkout?.value);
-    const minOut = nextDay(checkin?.value);
-    const valid = !!date && (!checkin?.value || (!!minOut && formatLocalISO(date) >= minOut));
-    setError(checkout, "err-checkout", !valid);
-    return valid;
+    let message = "";
+    if (isOmitted(checkout)) {
+      if (!isOmitted(checkin)) message = "Podaj także datę wyjazdu albo usuń datę przyjazdu.";
+    } else {
+      const date = parseLocalISO(checkout.value);
+      const minOut = nextDay(checkin?.value);
+      if (!date) message = "Podaj poprawną datę wyjazdu.";
+      else if (minOut && formatLocalISO(date) < minOut) message = "Wybierz datę wyjazdu co najmniej dzień po przyjeździe.";
+    }
+    return showError(checkout, "err-checkout", message);
   }
 
   function validateGuests() {
-    // Check the complete value against required/min/max/step; never truncate 1.5 or 6.5 into range.
+    // Empty is allowed; otherwise check the complete value and never truncate 1.5 or 6.5 into range.
     const value = guests.value.trim();
     const n = Number(value);
-    const valid = value !== "" && Number.isInteger(n) && n >= 1 && n <= 6;
+    const valid = isOmitted(guests) || (value !== "" && Number.isInteger(n) && n >= 1 && n <= 6);
     setError(guests, "err-guests", !valid);
     return valid;
   }
@@ -148,9 +161,12 @@ export function initForm() {
 
   checkout?.addEventListener("change", () => {
     if (checkout.getAttribute("aria-invalid") === "true") validateCheckout();
+    // A missing-arrival error depends on whether departure is still supplied.
+    if (checkin?.getAttribute("aria-invalid") === "true") validateCheckin();
   });
   checkout?.addEventListener("input", () => {
     if (checkout.getAttribute("aria-invalid") === "true") validateCheckout();
+    if (checkin?.getAttribute("aria-invalid") === "true") validateCheckin();
   });
 
   guests?.addEventListener("input", () => {
@@ -199,22 +215,16 @@ export function initForm() {
     if ((pot || "").toString().trim() !== "") return;
 
     if (!ok) {
-      if (success) success.hidden = true;
       form.querySelector('[aria-invalid="true"]')?.focus();
       return;
     }
 
-    if (form.getAttribute("name") === "booking" && formData.get("form-name") === "booking") {
-      form.querySelectorAll('[aria-invalid="true"]').forEach((el) => el.setAttribute("aria-invalid", "false"));
-      form.submit();
-      return;
-    }
+    // Native submission to Netlify Forms is the only success path; its action page confirms delivery.
+    // A mismatched identity would not reach the registered "booking" form, so nothing is sent or reset.
+    if (form.getAttribute("name") !== "booking" || formData.get("form-name") !== "booking") return;
 
-    if (success) success.hidden = false;
-    form.reset();
-    syncCheckoutMin();
-    const btn = form.querySelector('button[type="submit"]');
-    btn?.focus();
+    form.querySelectorAll('[aria-invalid="true"]').forEach((el) => el.setAttribute("aria-invalid", "false"));
+    form.submit();
   });
 
   // Fills only an empty message, once at load; the visitor owns the text afterwards.

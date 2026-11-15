@@ -36,9 +36,20 @@ export default async function validateBookingDate(request) {
   const formNames = fields.getAll("form-name");
   if (!formNames.includes("booking")) return;
 
+  // Stay dates are optional as a pair: both omitted (absent or empty), or a valid arrival
+  // today or later in Warsaw with a later departure. A single date or a repeated field is rejected.
   const arrivals = fields.getAll("checkin");
-  if (formNames.length !== 1 || arrivals.length !== 1 || !validCalendarDate(arrivals[0]) || arrivals[0] < currentWarsawDate()) {
-    return new Response("Wybierz poprawną datę przyjazdu: dziś lub później.", {
+  const departures = fields.getAll("checkout");
+  const arrival = arrivals.length === 1 ? arrivals[0] : "";
+  const departure = departures.length === 1 ? departures[0] : "";
+  const omitted = arrival === "" && departure === "";
+  const validPair =
+    validCalendarDate(arrival) &&
+    validCalendarDate(departure) &&
+    arrival >= currentWarsawDate() &&
+    departure > arrival;
+  if (formNames.length !== 1 || arrivals.length > 1 || departures.length > 1 || !(omitted || validPair)) {
+    return new Response("Pozostaw obie daty pobytu puste albo podaj przyjazd od dziś i późniejszy wyjazd.", {
       status: 422,
       headers: { "content-type": "text/plain; charset=utf-8" },
     });

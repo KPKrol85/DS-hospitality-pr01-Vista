@@ -263,11 +263,6 @@
   color: var(--form-error-text-elevated, #b91c1c);
 }
 
-.form__success {
-  color: var(--success);
-  margin: 0;
-}
-
 .form__note {
   max-inline-size: 48ch;
   color: var(--muted);

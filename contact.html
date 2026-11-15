@@ -229,7 +229,7 @@
               <form class="form" name="booking" method="POST" action="/dziekujemy.html" data-netlify="true" netlify-honeypot="website" data-form aria-describedby="form-note">
                 <input type="hidden" name="form-name" value="booking" />
                 <input type="text" name="website" class="visually-hidden" aria-hidden="true" tabindex="-1" autocomplete="off" />
-                <p id="form-note" class="form__note">Wypełnij pola oznaczone * i wyślij zapytanie do operatora projektu KP_Code Digital Studio. Pola dotyczące pobytu służą demonstracji; wysłanie formularza nie rezerwuje noclegu.</p>
+                <p id="form-note" class="form__note">Wypełnij pola oznaczone * i wyślij zapytanie do operatora projektu KP_Code Digital Studio. Pola dotyczące pobytu są opcjonalne i służą demonstracji: podaj obie daty albo pozostaw je puste. Wysłanie formularza nie rezerwuje noclegu.</p>
                 <!-- imię i nazwisko -->
                 <div class="form__field">
                   <label for="name">Imię i nazwisko *</label>
@@ -260,27 +260,27 @@
                 </div>
                 <!-- termin pobytu -->
                 <fieldset class="form__group">
-                  <legend>Termin pobytu *</legend>
+                  <legend>Termin pobytu (opcjonalnie)</legend>
                   <!-- data przyjazdu i wyjazdu -->
                   <div class="form__group-fields">
                     <div class="form__field">
                       <label for="checkin">Przyjazd</label>
-                      <input id="checkin" name="checkin" type="date" required aria-describedby="err-checkin" />
-                      <p class="form__error" id="err-checkin" aria-live="polite" hidden>Wybierz datę przyjazdu.</p>
+                      <input id="checkin" name="checkin" type="date" aria-describedby="err-checkin" />
+                      <p class="form__error" id="err-checkin" aria-live="polite" hidden>Podaj poprawną datę przyjazdu: dziś lub później.</p>
                     </div>
                     <div class="form__field">
                       <label for="checkout">Wyjazd</label>
-                      <input id="checkout" name="checkout" type="date" required aria-describedby="err-checkout" />
-                      <p class="form__error" id="err-checkout" aria-live="polite" hidden>Wybierz datę wyjazdu (co najmniej dzień po przyjeździe).</p>
+                      <input id="checkout" name="checkout" type="date" aria-describedby="err-checkout" />
+                      <p class="form__error" id="err-checkout" aria-live="polite" hidden>Podaj poprawną datę wyjazdu, co najmniej dzień po przyjeździe.</p>
                     </div>
                   </div>
                 </fieldset>
                 <!-- liczba osob -->
                 <div class="form__field form__field--short">
-                  <label for="guests">Liczba osób *</label>
-                  <input id="guests" name="guests" type="number" min="1" max="6" step="1" required value="2" aria-describedby="hint-guests err-guests" />
+                  <label for="guests">Liczba osób (opcjonalnie)</label>
+                  <input id="guests" name="guests" type="number" min="1" max="6" step="1" aria-describedby="hint-guests err-guests" />
                   <p class="form__hint" id="hint-guests">Zakres 1–6.</p>
-                  <p class="form__error" id="err-guests" aria-live="polite" hidden>Podaj liczbę osób (1–6).</p>
+                  <p class="form__error" id="err-guests" aria-live="polite" hidden>Podaj liczbę osób od 1 do 6 lub pozostaw to pole puste.</p>
                 </div>
                 <!-- wiadomość -->
                 <div class="form__field">
@@ -293,7 +293,6 @@
                   <a href="polityka-prywatnosci.html">Polityka prywatności</a>.
                 </p>
                 <div class="form__actions"><button class="btn btn--primary" type="submit">Wyślij zapytanie</button></div>
-                <p class="form__success" role="status" aria-live="polite" hidden>Dziękujemy! Skontaktujemy się wkrótce.</p>
               </form>
             </article>
           </div>

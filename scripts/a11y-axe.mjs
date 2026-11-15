@@ -297,6 +297,25 @@ async function assertErrorContrast(page, ids, label) {
   console.log(`${label}: minimum across all errors ${Math.min(...ratios).toFixed(3)}:1 (required 4.5:1).`);
 }
 
+// Browser-local calendar date; the test browser runs on the same machine as this script.
+function localISO(offsetDays) {
+  const date = new Date();
+  date.setDate(date.getDate() + offsetDays);
+  return [date.getFullYear(), date.getMonth() + 1, date.getDate()].map((part) => String(part).padStart(2, '0')).join('-');
+}
+
+// Fulfils only the Vista form action locally; embedded Google Maps POSTs are not inquiries.
+async function interceptFormPosts(page, formAction) {
+  const posts = [];
+  await page.route((url) => url.origin === formAction.origin && url.pathname === formAction.pathname, (route) => {
+    const request = route.request();
+    if (request.method() !== 'POST') return route.fallback();
+    posts.push(new URLSearchParams(request.postData() ?? ''));
+    return route.fulfill({ status: 200, contentType: 'text/html; charset=utf-8', body: '<!doctype html><title>Intercepted</title>' });
+  });
+  return posts;
+}
+
 function contactValidationScenario(preference, colorScheme) {
   const effective = preference === 'auto' ? colorScheme : preference;
   const label = `contact.html (validation errors visible) [${preference}, OS ${colorScheme}]`;
@@ -355,6 +374,8 @@ function contactValidationScenario(preference, colorScheme) {
       await phone.fill('123');
       assert.equal(await phone.evaluate((element) => element.validity.patternMismatch), true,
         'Non-empty optional phone must actually violate its pattern');
+      // Optional stay fields still fail when supplied: a past arrival without its departure flags both dates.
+      await page.locator('#checkin').fill(localISO(-1));
       await page.locator('#guests').fill('0');
       await form.getByRole('button', { name: 'Wyślij zapytanie', exact: true }).click();
 
@@ -372,7 +393,8 @@ function contactValidationScenario(preference, colorScheme) {
       await page.waitForFunction(() => document.activeElement === document.querySelector('#name'));
       await assertErrorContrast(page, ids, label);
       assert.equal(page.url(), contactUrl, 'Invalid submission must remain on contact.html');
-      assert.equal(await form.locator('.form__success').isVisible(), false, 'Invalid submission must not show success');
+      assert.equal(await form.locator('[role="status"]').count(), 0,
+        'The form must not contain inline success feedback; only /dziekujemy.html confirms submission');
       assert.deepEqual(formPosts, [], 'Invalid submission must not POST to the Vista form action');
 
       // Model A1: an informational privacy notice replaces any required privacy checkbox.
@@ -395,10 +417,10 @@ function contactValidationScenario(preference, colorScheme) {
 
 function contactGuestScenario() {
   const label = 'contact.html (guest count validation)';
-  const invalidValues = ['', '0', '7', '1.5', '6.5'];
-  const validValues = ['1', '2', '3', '4', '5', '6'];
+  // The guest count is optional: an empty value is valid and submitted empty, never defaulted.
+  const invalidValues = ['0', '7', '1.5', '6.5'];
+  const validValues = ['', '1', '2', '3', '4', '5', '6'];
   const nativeFlags = {
-    '': { valueMissing: true },
     '0': { rangeUnderflow: true },
     '7': { rangeOverflow: true },
     '1.5': { stepMismatch: true },
@@ -407,12 +429,6 @@ function contactGuestScenario() {
   const offerMessage = 'Pytanie o projekt Vista — przykładowa oferta „Rodzinny city break”.';
   const otherIds = ['name', 'email', 'phone', 'checkin', 'checkout'];
   const submitName = { name: 'Wyślij zapytanie', exact: true };
-
-  function localISO(offsetDays) {
-    const date = new Date();
-    date.setDate(date.getDate() + offsetDays);
-    return [date.getFullYear(), date.getMonth() + 1, date.getDate()].map((part) => String(part).padStart(2, '0')).join('-');
-  }
 
   function expectedValidity(value) {
     const flags = nativeFlags[value] ?? {};
@@ -442,18 +458,6 @@ function contactGuestScenario() {
     await page.locator('#checkin').fill(dates.checkin);
     await page.locator('#checkout').fill(dates.checkout);
     return dates;
-  }
-
-  // Fulfils only the Vista form action locally; embedded Google Maps POSTs are not inquiries.
-  async function interceptFormPosts(page, formAction) {
-    const posts = [];
-    await page.route((url) => url.origin === formAction.origin && url.pathname === formAction.pathname, (route) => {
-      const request = route.request();
-      if (request.method() !== 'POST') return route.fallback();
-      posts.push(new URLSearchParams(request.postData() ?? ''));
-      return route.fulfill({ status: 200, contentType: 'text/html; charset=utf-8', body: '<!doctype html><title>Intercepted</title>' });
-    });
-    return posts;
   }
 
   // The submit handler validates synchronously: a rejected value has moved focus when click()
@@ -526,8 +530,8 @@ function contactGuestScenario() {
       assert.equal(formAction.origin, new URL(contactUrl).origin, 'Vista form action must remain same-origin');
       assert.deepEqual(await guests.evaluate((element) => ({
         type: element.type, min: element.min, max: element.max, step: element.step, required: element.required,
-        describedBy: element.getAttribute('aria-describedby')
-      })), { type: 'number', min: '1', max: '6', step: '1', required: true, describedBy: 'hint-guests err-guests' });
+        defaultValue: element.defaultValue, describedBy: element.getAttribute('aria-describedby')
+      })), { type: 'number', min: '1', max: '6', step: '1', required: false, defaultValue: '', describedBy: 'hint-guests err-guests' });
 
       await assertNativeContract(page, contactUrl, formAction);
 
@@ -546,13 +550,23 @@ function contactGuestScenario() {
           assert.equal(await page.locator(`#${id}`).getAttribute('aria-invalid'), 'false', `"${value}": ${id} must stay valid`);
         }
         assert.equal(page.url(), contactUrl, `"${value}": invalid submission must remain on contact.html`);
-        assert.equal(await form.locator('.form__success').isVisible(), false, `"${value}": invalid submission must not show success`);
+        assert.equal(await form.locator('[role="status"]').count(), 0, `"${value}": the form must not contain inline success feedback`);
         assert.equal(posts.length, 0, `"${value}": invalid submission must not POST to the Vista form action`);
 
         await guests.fill('2');
         await guests.fill(value);
         await assertGuestRejected(page, value, 'Input');
       }
+
+      // Unparseable input leaves an empty value with badInput; it is malformed, not omitted.
+      await guests.fill('');
+      await guests.focus();
+      await page.keyboard.type('1e');
+      assert.equal(await guests.evaluate((element) => element.validity.badInput), true, '"1e" must be unparseable input');
+      await submitRejected(page, '1e');
+      assert.equal(await guests.getAttribute('aria-invalid'), 'true', '"1e": guests must be invalid');
+      assert.equal(await page.locator('#err-guests').isVisible(), true, '"1e": err-guests must be visible');
+      assert.equal(posts.length, 0, '"1e": invalid submission must not POST to the Vista form action');
 
       // Recover from a rejected fractional value and submit through the real path.
       await guests.fill('1.5');
@@ -568,6 +582,8 @@ function contactGuestScenario() {
         await openEnhancedForm(page, contactUrl);
         assert.equal(await page.locator('#message').inputValue(), offerMessage, 'Offer prefill must remain unchanged');
         const dates = await fillValidFields(page);
+        // Start from a rejected value so every valid value, including empty, must clear the error.
+        await guests.fill('0');
         await guests.fill(value);
         await assertGuestAccepted(page, value);
         assert.deepEqual(await nativeValidity(guests), expectedValidity(value), `Enhanced page native validity for "${value}"`);
@@ -590,7 +606,153 @@ function contactGuestScenario() {
       await guests.fill('6.5');
       await assertGuestRejected(page, '6.5', 'Final');
       console.log(`${label}: enhanced and no-JS rejection of ${invalidValues.map((v) => `"${v}"`).join(', ')}, ` +
-        `recovery and exact intercepted POSTs for ${validValues.join(', ')} passed.`);
+        `recovery and exact intercepted POSTs for ${validValues.map((v) => `"${v}"`).join(', ')} passed.`);
+    }
+  };
+}
+
+function contactOptionalStayScenario() {
+  const label = 'contact.html (optional stay details)';
+  const submitName = { name: 'Wyślij zapytanie', exact: true };
+  const contact = { name: 'Jan Kowalski', email: 'jan.kowalski@example.com' };
+
+  async function fillContact(page) {
+    await page.locator('#name').fill(contact.name);
+    await page.locator('#email').fill(contact.email);
+  }
+
+  async function openEnhancedForm(page, url) {
+    await page.goto(url, { waitUntil: 'networkidle' });
+    await page.waitForFunction(() => document.querySelector('form[data-form]')?.noValidate === true);
+  }
+
+  // A contact-only inquiry sends the optional fields empty, without defaults, consent or other fields.
+  function assertContactOnlyBody(body, mode) {
+    assert.deepEqual([...body.keys()], ['form-name', 'website', 'name', 'email', 'phone', 'checkin', 'checkout', 'guests', 'message'],
+      `${mode}: submitted field set must be unchanged`);
+    assert.deepEqual(Object.fromEntries(body), {
+      'form-name': 'booking', website: '', name: contact.name, email: contact.email,
+      phone: '', checkin: '', checkout: '', guests: '', message: ''
+    }, `${mode}: contact-only submission must send empty optional fields`);
+  }
+
+  async function assertDateRejected(page, posts, contactUrl, id, pattern, step) {
+    const control = page.locator(`#${id}`);
+    const error = page.locator(`#err-${id}`);
+    const postsBefore = posts.length;
+    await page.locator('form[data-form]').getByRole('button', submitName).click();
+    assert.equal(await control.getAttribute('aria-invalid'), 'true', `${step}: ${id} must be invalid`);
+    assert.equal(await error.isVisible(), true, `${step}: err-${id} must be visible`);
+    assert.match(await error.innerText(), pattern, `${step}: err-${id} must explain the problem`);
+    assert.equal(await page.evaluate(() => document.activeElement?.id ?? ''), id, `${step}: focus must move to ${id}`);
+    assert.equal(page.url(), contactUrl, `${step}: invalid submission must remain on contact.html`);
+    assert.equal(posts.length, postsBefore, `${step}: invalid submission must not POST to the Vista form action`);
+  }
+
+  async function assertNoJsContactOnly(page, contactUrl, formAction) {
+    const context = await page.context().browser().newContext({ javaScriptEnabled: false, viewport: { width: 1280, height: 720 } });
+    try {
+      const noJsPage = await context.newPage();
+      const posts = await interceptFormPosts(noJsPage, formAction);
+      await noJsPage.goto(contactUrl, { waitUntil: 'domcontentloaded' });
+      const form = noJsPage.locator('form[name="booking"]');
+      assert.equal(await form.evaluate((element) => element.noValidate), false, 'Native validation must stay active without JavaScript');
+      assert.deepEqual(await form.evaluate((element) => [...element.querySelectorAll('[required]')].map((control) => control.id)),
+        ['name', 'email'], 'Only name and email may be natively required');
+      await noJsPage.locator('#name').fill(contact.name);
+      await noJsPage.locator('#email').fill(contact.email);
+      await Promise.all([noJsPage.waitForURL(formAction.href), form.getByRole('button', submitName).click()]);
+      assert.equal(posts.length, 1, 'No-JS contact-only submission must POST exactly once');
+      assertContactOnlyBody(posts[0], 'No-JS');
+    } finally {
+      await context.close();
+    }
+  }
+
+  return {
+    label,
+    path: 'contact.html',
+    setup: async (page) => {
+      await page.waitForFunction(() => document.querySelector('form[data-form]')?.noValidate === true);
+      const contactUrl = page.url();
+      const form = page.locator('form[data-form]');
+      const formAction = new URL(await form.evaluate((element) => element.action));
+      assert.equal(formAction.origin, new URL(contactUrl).origin, 'Vista form action must remain same-origin');
+      assert.equal(formAction.pathname, '/dziekujemy.html', 'Submission must keep the confirmation page as its action');
+      assert.equal(await form.locator('[role="status"]').count(), 0, 'The form must not contain inline success feedback');
+
+      await assertNoJsContactOnly(page, contactUrl, formAction);
+
+      const posts = await interceptFormPosts(page, formAction);
+      const arrival = localISO(7);
+      const departure = localISO(9);
+
+      // Enhanced contact-only inquiry.
+      await fillContact(page);
+      await Promise.all([page.waitForURL(formAction.href), form.getByRole('button', submitName).click()]);
+      assert.equal(posts.length, 1, 'Contact-only submission must POST exactly once');
+      assertContactOnlyBody(posts[0], 'Enhanced');
+
+      // A single date requests its companion; the supplied date stays valid.
+      await openEnhancedForm(page, contactUrl);
+      await fillContact(page);
+      await page.locator('#checkin').fill(arrival);
+      await assertDateRejected(page, posts, contactUrl, 'checkout', /datę wyjazdu/, 'Arrival only');
+      assert.equal(await page.locator('#checkin').getAttribute('aria-invalid'), 'false', 'Arrival only: checkin must stay valid');
+      await page.locator('#checkin').fill('');
+      assert.equal(await page.locator('#checkout').getAttribute('aria-invalid'), 'false',
+        'Clearing the lone arrival must clear the companion error');
+
+      await page.locator('#checkout').fill(departure);
+      await assertDateRejected(page, posts, contactUrl, 'checkin', /datę przyjazdu/, 'Departure only');
+      await page.locator('#checkin').fill(arrival);
+      assert.equal(await page.locator('#checkin').getAttribute('aria-invalid'), 'false', 'Supplying arrival must recover checkin');
+
+      // A past arrival and a departure not after arrival are rejected.
+      await page.locator('#checkin').fill(localISO(-1));
+      await assertDateRejected(page, posts, contactUrl, 'checkin', /dziś lub później/, 'Past arrival');
+      await page.locator('#checkin').fill(arrival);
+      await page.locator('#checkout').evaluate((element, value) => { element.value = value; }, arrival);
+      await assertDateRejected(page, posts, contactUrl, 'checkout', /dzień po przyjeździe/, 'Same-day departure');
+      assert.equal(posts.length, 1, 'Rejected stay details must not POST');
+
+      // Valid optional details are submitted exactly as entered.
+      await page.locator('#checkout').fill(departure);
+      await page.locator('#guests').fill('3');
+      await Promise.all([page.waitForURL(formAction.href), form.getByRole('button', submitName).click()]);
+      assert.equal(posts.length, 2, 'Valid stay details must POST exactly once');
+      assert.deepEqual([posts[1].get('checkin'), posts[1].get('checkout'), posts[1].get('guests')], [arrival, departure, '3']);
+
+      // A mismatched form identity is never submitted, reset or reported as successful.
+      for (const [step, mismatch] of [
+        ['Mismatched form-name', (element) => { element.querySelector('input[name="form-name"]').value = 'contact'; }],
+        ['Mismatched form name', (element) => { element.setAttribute('name', 'contact'); }]
+      ]) {
+        await openEnhancedForm(page, contactUrl);
+        await fillContact(page);
+        await form.evaluate(mismatch);
+        await form.getByRole('button', submitName).click();
+        assert.equal(page.url(), contactUrl, `${step}: submission must remain on contact.html`);
+        assert.equal(posts.length, 2, `${step}: submission must not POST`);
+        assert.equal(await page.locator('#name').inputValue(), contact.name, `${step}: the form must not be reset`);
+        assert.equal(await page.locator('[role="status"]').count(), 0, `${step}: no success feedback may appear`);
+      }
+
+      // Honeypot submissions are dropped without success feedback.
+      await openEnhancedForm(page, contactUrl);
+      await fillContact(page);
+      await page.locator('input[name="website"]').evaluate((element) => { element.value = 'bot'; });
+      await form.getByRole('button', submitName).click();
+      assert.equal(page.url(), contactUrl, 'Honeypot submission must remain on contact.html');
+      assert.equal(posts.length, 2, 'Honeypot submission must not POST');
+
+      // Leave the companion-date error visible for the scenario's axe pass.
+      await openEnhancedForm(page, contactUrl);
+      await fillContact(page);
+      await page.locator('#checkin').fill(arrival);
+      await assertDateRejected(page, posts, contactUrl, 'checkout', /datę wyjazdu/, 'Final');
+      console.log(`${label}: no-JS and enhanced contact-only POSTs, companion-date, past-arrival, same-day departure, ` +
+        'valid optional details, mismatched form identity and honeypot checks passed.');
     }
   };
 }
@@ -1164,6 +1326,7 @@ const scenarios = [
   contactValidationScenario('auto', 'light'),
   contactValidationScenario('auto', 'dark'),
   contactGuestScenario(),
+  contactOptionalStayScenario(),
   { label: 'regulamin.html (baseline)', path: 'regulamin.html' }
 ];
 

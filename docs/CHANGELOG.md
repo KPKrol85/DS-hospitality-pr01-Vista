@@ -79,6 +79,7 @@ For each implementation task, determine `Changelog: yes` or `Changelog: no`. Add
 - Re-composed the "O nas" page as an editorial brand story led by a larger framed photograph, with numbered philosophy and value principles, one pull statement and the figures as a single ruled line.
 - Redesigned the homepage offer previews as a responsive four-up row with header-aligned discounts, the catalogue inclusion lists and subgrid-aligned content and CTAs.
 - Replaced the mandatory inquiry-form privacy checkbox with an informational data-controller notice linking to the privacy policy.
+- Made inquiry stay dates and guest count optional, accepting supplied dates only as a valid future pair, and removed the unreachable inline success message.
 
 ### Fixed
 
@@ -114,5 +115,6 @@ For each implementation task, determine `Changelog: yes` or `Changelog: no`. Add
 - Added responsive-image descriptor validation and browser candidate-selection coverage.
 - Added focused regression coverage for form validation, theme contrast, navigation, dialogs, and 404 behavior.
 - Added reduced-motion regression coverage for gallery category scrolling.
+- Added optional stay-detail coverage for contact-only, partial-date and invalid-pair inquiries with and without JavaScript.
 - Fixed the navigation breakpoint accessibility scenario to verify the current cross-page contact CTA instead of a removed in-page anchor.
 - Verified clean production builds and eight Playwright/axe accessibility scenarios without reported violations.

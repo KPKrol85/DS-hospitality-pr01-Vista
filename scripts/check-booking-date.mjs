@@ -22,10 +22,12 @@ function shiftCalendarDay(today, days) {
   return date.toISOString().slice(0, 10);
 }
 
-function bookingBody(checkin, multipart = false) {
+// undefined omits a field entirely; '' submits it empty, as a native form does for an empty date input.
+function bookingBody(checkin, checkout, multipart = false) {
   const fields = multipart ? new FormData() : new URLSearchParams();
   fields.set('form-name', 'booking');
   if (checkin !== undefined) fields.set('checkin', checkin);
+  if (checkout !== undefined) fields.set('checkout', checkout);
   return fields;
 }
 
@@ -33,23 +35,36 @@ async function runCases(today) {
   const yesterday = shiftCalendarDay(today, -1);
   const tomorrow = shiftCalendarDay(today, 1);
   const future = shiftCalendarDay(today, 30);
+  const afterFuture = shiftCalendarDay(today, 32);
   const impossible = `${Number(today.slice(0, 4)) + 1}-02-30`;
+  const repeated = bookingBody(future, afterFuture);
+  repeated.append('checkin', tomorrow);
   const cases = [
-    { name: 'future booking arrival', body: bookingBody(future) },
-    { name: 'today in Warsaw', body: bookingBody(today) },
-    { name: 'tomorrow in Warsaw', body: bookingBody(tomorrow) },
-    { name: 'yesterday in Warsaw', body: bookingBody(yesterday), rejected: true },
-    { name: 'malformed date format', body: bookingBody(`${future}T00:00:00Z`), rejected: true },
-    { name: 'impossible date in a future year', body: bookingBody(impossible), rejected: true },
-    { name: 'missing checkin', body: bookingBody(), rejected: true },
+    { name: 'future stay', body: bookingBody(future, afterFuture) },
+    { name: 'arrival today in Warsaw', body: bookingBody(today, tomorrow) },
+    { name: 'arrival tomorrow in Warsaw', body: bookingBody(tomorrow, future) },
+    { name: 'both dates absent', body: bookingBody() },
+    { name: 'both dates empty', body: bookingBody('', '') },
+    { name: 'arrival yesterday in Warsaw', body: bookingBody(yesterday, tomorrow), rejected: true },
+    { name: 'malformed arrival format', body: bookingBody(`${future}T00:00:00Z`, afterFuture), rejected: true },
+    { name: 'impossible arrival in a future year', body: bookingBody(impossible, afterFuture), rejected: true },
+    { name: 'impossible departure in a future year', body: bookingBody(future, impossible), rejected: true },
+    { name: 'arrival only', body: bookingBody(future, ''), rejected: true },
+    { name: 'arrival without departure field', body: bookingBody(future), rejected: true },
+    { name: 'departure only', body: bookingBody('', afterFuture), rejected: true },
+    { name: 'departure equal to arrival', body: bookingBody(future, future), rejected: true },
+    { name: 'departure before arrival', body: bookingBody(afterFuture, future), rejected: true },
+    { name: 'repeated arrival field', body: repeated, rejected: true },
     { name: 'unrelated form with past arrival', body: new URLSearchParams({ 'form-name': 'contact', checkin: yesterday }) },
     {
       name: 'JSON booking request with past arrival',
       body: JSON.stringify({ 'form-name': 'booking', checkin: yesterday }),
       headers: { 'content-type': 'application/json' },
     },
-    { name: 'multipart future arrival', body: bookingBody(future, true) },
-    { name: 'multipart past arrival', body: bookingBody(yesterday, true), rejected: true },
+    { name: 'multipart future stay', body: bookingBody(future, afterFuture, true) },
+    { name: 'multipart empty dates', body: bookingBody('', '', true) },
+    { name: 'multipart past arrival', body: bookingBody(yesterday, tomorrow, true), rejected: true },
+    { name: 'multipart arrival only', body: bookingBody(future, '', true), rejected: true },
   ];
 
   for (const { name, body, headers, rejected } of cases) {
