@@ -80,6 +80,7 @@ For each implementation task, determine `Changelog: yes` or `Changelog: no`. Add
 - Redesigned the homepage offer previews as a responsive four-up row with header-aligned discounts, the catalogue inclusion lists and subgrid-aligned content and CTAs.
 - Replaced the mandatory inquiry-form privacy checkbox with an informational data-controller notice linking to the privacy policy.
 - Made inquiry stay dates and guest count optional, accepting supplied dates only as a valid future pair, and removed the unreachable inline success message.
+- Excluded the offline fallback page from search indexing.
 
 ### Fixed
 
