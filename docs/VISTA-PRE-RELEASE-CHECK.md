@@ -62,7 +62,7 @@
 - [x] Page titles, meta descriptions, canonical URLs, and social-sharing metadata are accurate.
 - [ ] Indexing directives, `robots.txt`, and `sitemap.xml` reflect the intended published pages.
 - [ ] Structured data is valid and consistent with visible content, where implemented.
-- [ ] Public URLs, internal references, and social-preview assets are valid and current.
+- [x] Public URLs, internal references, and social-preview assets are valid and current.
 - [ ] Utility and demonstration-only pages use appropriate indexing policies.
 
 ## 7. PWA & Offline Support
