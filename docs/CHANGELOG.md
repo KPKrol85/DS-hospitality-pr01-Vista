@@ -110,6 +110,7 @@ For each implementation task, determine `Changelog: yes` or `Changelog: no`. Add
 - Removed the initial mobile header layout shift by applying the JavaScript-enhanced layout before first paint.
 - Aligned the homepage Hero image preload with its AVIF source to prevent a redundant WebP download.
 - Corrected the homepage Luxury Room image aspect ratio to match its 16:9 sources and prevent distorted rendering.
+- Replaced combined `any maskable` manifest icons with standard icons and dedicated opaque, safe-area-padded maskable icons, and declared the manifest `id`, `lang`, and Polish `description`.
 
 ### Testing
 

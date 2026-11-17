@@ -1,6 +1,9 @@
 {
+  "id": "/",
   "name": "Vista — Hotels & Travel",
   "short_name": "Vista",
+  "description": "Demonstracyjny projekt portfolio KP_Code Digital Studio dla fikcyjnej marki hotelarskiej. Nie realizuje rzeczywistych rezerwacji.",
+  "lang": "pl",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
@@ -13,23 +16,25 @@
       "src": "assets/img/ui/android-chrome-192x192.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
     },
     {
       "src": "assets/img/ui/android-chrome-512x512.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
     },
     {
       "src": "assets/img/ui/web-app-manifest-192x192.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "maskable"
     },
     {
       "src": "assets/img/ui/web-app-manifest-512x512.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "maskable"
     },
     {
       "src": "assets/img/ui/favicon-96x96.png",
