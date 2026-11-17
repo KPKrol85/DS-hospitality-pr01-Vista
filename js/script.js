@@ -12,6 +12,7 @@ import { initGalleryFilters } from "./features/gallery-filters.js";
 import { setAriaCurrent } from "./features/aria-current.js";
 import { initJsonLd } from "./features/seo-jsonld.js";
 import { initMapEmbed } from "./features/map-embed.js";
+import { initInstallBanner } from "./features/install-banner.js";
 import * as logger from "./features/logger.js";
 
 function setYear() {
@@ -80,5 +81,8 @@ function boot() {
 
   void configureSW();
 }
+
+// Listen before DOMContentLoaded so an early `beforeinstallprompt` is not missed; the banner renders later.
+initInstallBanner();
 
 window.addEventListener("DOMContentLoaded", boot);

@@ -192,7 +192,7 @@
               </ul>
               <p>W związku z połączeniem z Serwisem lub osadzoną mapą mogą być przetwarzane dane techniczne, w tym adres IP oraz informacje o przeglądarce i żądaniu. Dokładny zakres danych rejestrowanych przez dostawców wymaga potwierdzenia.</p>
               <h3>Dane przechowywane lokalnie w przeglądarce</h3>
-              <p>Serwis wykorzystuje <code>localStorage</code> do zapamiętania wyboru motywu. W pakiecie produkcyjnym Service Worker i Cache Storage przechowują zasoby strony oraz odwiedzone strony HTML do ponownego użycia, także w trybie offline.</p>
+              <p>Serwis wykorzystuje <code>localStorage</code> do zapamiętania wyboru motywu oraz odrzucenia propozycji instalacji aplikacji, a <code>sessionStorage</code> – automatycznie, bez działania Użytkownika – do odmierzania czasu przeglądania i ograniczenia wyświetlania tej propozycji w ramach sesji przeglądarki. W pakiecie produkcyjnym Service Worker i Cache Storage przechowują zasoby strony oraz odwiedzone strony HTML do ponownego użycia, także w trybie offline.</p>
               <p>Dane zapisane wyłącznie lokalnie na urządzeniu Użytkownika nie są automatycznie przekazywane Administratorowi.</p>
               <p>Szczegółowe informacje dotyczące plików cookies i podobnych technologii znajdują się w dokumencie <a href="cookies.html">Polityka cookies</a>.</p>
             </section>
@@ -345,7 +345,7 @@
             <section class="legal-section" id="pliki-cookies" aria-labelledby="pliki-cookies-heading">
               <h2 id="pliki-cookies-heading">11. Pliki cookies i podobne technologie <a class="legal-anchor" href="#legal-heading" aria-label="Wróć na górę strony">↑</a></h2>
               <p>Serwis korzysta z technologii przechowywania danych w zakresie odpowiadającym jego rzeczywistemu działaniu.</p>
-              <ul><li><code>localStorage</code> zapisuje wybrany motyw,</li><li>Cache Storage i Service Worker umożliwiają ponowne użycie zasobów i dostęp do wybranych stron w trybie offline.</li></ul>
+              <ul><li><code>localStorage</code> zapisuje wybrany motyw oraz odrzucenie propozycji instalacji aplikacji,</li><li><code>sessionStorage</code> automatycznie zapisuje czas przeglądania i informację o wyświetleniu propozycji instalacji aplikacji w ramach sesji przeglądarki,</li><li>Cache Storage i Service Worker umożliwiają ponowne użycie zasobów i dostęp do wybranych stron w trybie offline.</li></ul>
               <p>W kodzie aktualnej wersji Serwisu nie stwierdzono ustawiania klasycznych plików cookies przez sam Serwis. Nie wdrożono mechanizmu zarządzania zgodą na technologie przechowywania danych. Osadzona mapa Google Maps może korzystać z własnych technologii, których dokładny zakres nie wynika z kodu Serwisu.</p>
               <p>Szczegółowy wykaz technologii, ich cele, dostawcy i okresy przechowywania znajdują się w dokumencie <a href="cookies.html">Polityka cookies</a>.</p>
             </section>
@@ -374,7 +374,7 @@
               <p>Administrator udziela odpowiedzi bez zbędnej zwłoki, z uwzględnieniem charakteru żądania oraz terminów wynikających z obowiązujących przepisów.</p>
             </section>
 
-            <p class="legal-updated"><strong>Data ostatniej aktualizacji:</strong> <time datetime="2026-11-15">15.11.2026</time></p>
+            <p class="legal-updated"><strong>Data ostatniej aktualizacji:</strong> <time datetime="2026-11-17">17.11.2026</time></p>
           </article>
         </div>
       </section>

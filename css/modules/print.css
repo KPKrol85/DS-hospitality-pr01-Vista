@@ -7,7 +7,8 @@
   .map,
   .btn,
   nav,
-  .lightbox {
+  .lightbox,
+  .install-banner {
     display: none !important;
   }
   body {

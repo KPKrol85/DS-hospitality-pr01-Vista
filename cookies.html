@@ -171,6 +171,7 @@
               <p>Oprócz plików cookies Serwis wykorzystuje inne technologie umożliwiające zapis lub odczyt informacji na urządzeniu końcowym:</p>
               <ul>
                 <li><code>localStorage</code>,</li>
+                <li><code>sessionStorage</code>,</li>
                 <li>Cache Storage,</li>
                 <li>Service Worker.</li>
               </ul>
@@ -185,11 +186,11 @@
               <p>Umożliwiają prawidłowe i bezpieczne funkcjonowanie Serwisu albo dostarczenie funkcjonalności wyraźnie żądanej przez Użytkownika.</p>
               <p>W aktualnej wersji obejmują zapewnienie działania wybranych zasobów w trybie offline.</p>
               <h3>Technologie funkcjonalne</h3>
-              <p>Pozwalają zapamiętać ustawienia wybrane przez Użytkownika. W Serwisie dotyczy to wyboru jasnego lub ciemnego motywu.</p>
-              <p>Technologie funkcjonalne, które nie są konieczne do dostarczenia funkcji wyraźnie żądanej przez Użytkownika, są uruchamiane dopiero po uzyskaniu wymaganej zgody.</p>
-              <p>Ze względu na czas przechowywania pliki cookies i podobne technologie mogą mieć charakter sesyjny – do zakończenia sesji przeglądarki – albo trwały – przez określony czas lub do usunięcia przez Użytkownika. Własne mechanizmy wykazane poniżej mają charakter trwały; ich okresy przechowywania opisano w tabeli.</p>
+              <p>Pozwalają zapamiętać ustawienia wybrane przez Użytkownika lub dostosować działanie wybranych funkcji. W Serwisie dotyczy to wyboru jasnego lub ciemnego motywu oraz propozycji instalacji aplikacji.</p>
+              <p>Serwis nie pobiera zgody na technologie funkcjonalne. Klucze <code>theme-pref</code> i <code>install-banner-dismissed-at</code> są zapisywane po działaniu Użytkownika – wyborze motywu albo odrzuceniu propozycji instalacji aplikacji. Klucze <code>install-banner-visible-ms</code> i <code>install-banner-shown</code> są zapisywane w <code>sessionStorage</code> automatycznie, bez działania Użytkownika, w pakiecie produkcyjnym i w przeglądarkach, które udostępniają instalację strony.</p>
+              <p>Ze względu na czas przechowywania pliki cookies i podobne technologie mogą mieć charakter sesyjny – do zakończenia sesji przeglądarki – albo trwały – przez określony czas lub do usunięcia przez Użytkownika. Własne mechanizmy wykazane poniżej mają charakter trwały, z wyjątkiem danych <code>sessionStorage</code> usuwanych po zamknięciu karty przeglądarki; okresy przechowywania opisano w tabeli.</p>
               <h3 id="technology-inventory-heading">Wykaz technologii stosowanych w Serwisie</h3>
-              <p>Service Worker jest rejestrowany tylko przez strony z pakietu produkcyjnego, również w jego lokalnym podglądzie. W nazwach pamięci Cache Storage {hash} oznacza wspólny, generowany podczas budowania pakietu 12-znakowy szesnastkowy skrót jego treści.</p>
+              <p>Service Worker jest rejestrowany tylko przez strony z pakietu produkcyjnego, również w jego lokalnym podglądzie. W nazwach pamięci Cache Storage {hash} oznacza wspólny, generowany podczas budowania pakietu 12-znakowy szesnastkowy skrót jego treści. Klucze propozycji instalacji aplikacji są zapisywane również wyłącznie w pakiecie produkcyjnym i tylko w przeglądarkach, które udostępniają instalację strony.</p>
               <p class="legal-table-hint">Na węższych ekranach tabelę można przewijać poziomo.</p>
               <div class="legal-table-scroll" role="region" aria-labelledby="technology-inventory-heading" tabindex="0">
                 <table class="legal-table">
@@ -211,6 +212,30 @@
                       <td>funkcjonalna</td>
                       <td>Zapamiętanie wybranego motywu jasnego lub ciemnego.</td>
                       <td>Do usunięcia danych witryny albo przywrócenia ustawienia automatycznego.</td>
+                    </tr>
+                    <tr>
+                      <th scope="row"><code>install-banner-dismissed-at</code></th>
+                      <td><code>localStorage</code></td>
+                      <td>Operator</td>
+                      <td>funkcjonalna</td>
+                      <td>Zapamiętanie odrzucenia propozycji instalacji aplikacji, aby nie wyświetlać jej ponownie przez 14 dni.</td>
+                      <td>Do usunięcia danych witryny; zapis przestaje być uwzględniany po 14 dniach.</td>
+                    </tr>
+                    <tr>
+                      <th scope="row"><code>install-banner-visible-ms</code></th>
+                      <td><code>sessionStorage</code></td>
+                      <td>Operator</td>
+                      <td>funkcjonalna</td>
+                      <td>Zliczanie czasu przeglądania widocznej strony przed wyświetleniem propozycji instalacji aplikacji.</td>
+                      <td>Do zamknięcia karty przeglądarki.</td>
+                    </tr>
+                    <tr>
+                      <th scope="row"><code>install-banner-shown</code></th>
+                      <td><code>sessionStorage</code></td>
+                      <td>Operator</td>
+                      <td>funkcjonalna</td>
+                      <td>Ograniczenie wyświetlania propozycji instalacji aplikacji do jednego razu w sesji.</td>
+                      <td>Do zamknięcia karty przeglądarki.</td>
                     </tr>
                     <tr>
                       <th scope="row"><code>vista-static-{hash}</code></th>
@@ -248,9 +273,10 @@
                 <li>zapewnienia prawidłowego funkcjonowania Serwisu,</li>
                 <li>dostarczenia funkcjonalności wyraźnie żądanych przez Użytkownika,</li>
                 <li>zapamiętania wybranego motywu,</li>
+                <li>ograniczenia wyświetlania propozycji instalacji aplikacji i zapamiętania jej odrzucenia,</li>
                 <li>zapewnienia działania wybranych zasobów w trybie offline.</li>
               </ul>
-              <p>Technologie nie są wykorzystywane do celów, które nie zostały opisane w niniejszym dokumencie lub w przekazanym Użytkownikowi mechanizmie zarządzania zgodą.</p>
+              <p>Technologie nie są wykorzystywane do celów, które nie zostały opisane w niniejszym dokumencie.</p>
             </section>
 
             <section class="legal-section" id="podstawy-prawne-stosowania-technologii" aria-labelledby="podstawy-prawne-stosowania-technologii-heading">
@@ -273,7 +299,7 @@
               </ol>
               <p>Jeżeli technologie wymagające zgody wiążą się z przetwarzaniem danych osobowych, podstawą ich przetwarzania jest zgoda Użytkownika, o której mowa w art. 6 ust. 1 lit. a RODO.</p>
               <p>Podstawy przetwarzania danych osobowych związanych z technologiami niezbędnymi są określane odpowiednio do ich celu i zostały opisane w <a href="polityka-prywatnosci.html">Polityce prywatności</a>.</p>
-              <p>Użytkownik może w dowolnym momencie wycofać udzieloną zgodę. Cofnięcie zgody nie wpływa na zgodność z prawem działań wykonanych przed jej wycofaniem.</p>
+              <p>W aktualnej wersji Serwis nie pobiera zgody na technologie wykazane w punkcie 3. Jeżeli zgoda zostanie udzielona, Użytkownik może ją w dowolnym momencie wycofać. Cofnięcie zgody nie wpływa na zgodność z prawem działań wykonanych przed jej wycofaniem.</p>
             </section>
 
             <section class="legal-section" id="zarzadzanie-ustawieniami" aria-labelledby="zarzadzanie-ustawieniami-heading">
@@ -283,7 +309,7 @@
               <p>W zależności od przeglądarki Użytkownik może w szczególności:</p>
               <ul>
                 <li>ograniczyć zapisywanie lub usunąć wcześniej zapisane pliki cookies,</li>
-                <li>usunąć dane zapisane w <code>localStorage</code>,</li>
+                <li>usunąć dane zapisane w <code>localStorage</code> i <code>sessionStorage</code>,</li>
                 <li>usunąć dane Cache Storage oraz rejestrację Service Workera,</li>
                 <li>zablokować wybrane mechanizmy pamięci witryny.</li>
               </ul>
@@ -322,7 +348,7 @@
               <p>Operator udziela odpowiedzi w możliwie najkrótszym terminie, z uwzględnieniem charakteru zgłoszenia oraz obowiązujących przepisów prawa.</p>
             </section>
 
-            <p class="legal-updated"><strong>Data ostatniej aktualizacji:</strong> <time datetime="2026-11-07">07.11.2026</time></p>
+            <p class="legal-updated"><strong>Data ostatniej aktualizacji:</strong> <time datetime="2026-11-17">17.11.2026</time></p>
           </article>
         </div>
       </section>

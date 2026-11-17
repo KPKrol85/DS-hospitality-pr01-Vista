@@ -30,6 +30,7 @@ For each implementation task, determine `Changelog: yes` or `Changelog: no`. Add
 - Added responsive navigation, persisted light/dark/auto theme preferences, and a dismissible project notice.
 - Implemented a validated Netlify Forms inquiry flow with offer prefill and a confirmation page, without reservation processing.
 - Introduced a web app manifest, versioned service worker, cached assets and pages, and an offline fallback.
+- Added a production-only PWA install banner shown after 10 seconds of visible browsing when the browser offers installation, with a 14-day dismissal period.
 - Added page metadata, JSON-LD, sitemap and robots rules, Netlify headers and redirects, and a custom 404 route.
 
 ### Documentation

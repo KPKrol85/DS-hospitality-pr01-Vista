@@ -1251,3 +1251,99 @@
     text-align: left;
   }
 }
+
+/* Install banner */
+
+/* Non-modal Surface rendered by js/features/install-banner.js; it sits below dialogs and yields to the open mobile menu. */
+.install-banner {
+  position: fixed;
+  z-index: var(--z-header);
+  inset-inline: var(--space-sm);
+  inset-block-end: max(var(--space-sm), env(safe-area-inset-bottom));
+  max-inline-size: 26rem;
+  margin-inline: auto;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm);
+  color: var(--text);
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--elev-high);
+  transition:
+    opacity 0.25s ease,
+    transform 0.25s ease,
+    display 0.25s allow-discrete;
+}
+
+.install-banner[hidden] {
+  display: none;
+  opacity: 0;
+  transform: translateY(12px);
+}
+
+@starting-style {
+  .install-banner {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+}
+
+.is-nav-open .install-banner {
+  visibility: hidden;
+}
+
+.install-banner__icon {
+  inline-size: 48px;
+  block-size: 48px;
+  border-radius: var(--radius-sm);
+}
+
+.install-banner__body {
+  display: grid;
+  gap: var(--space-2xs);
+}
+
+.install-banner__title,
+.install-banner__text {
+  margin: 0;
+}
+
+.install-banner__title {
+  font-family: var(--font-heading);
+  font-size: var(--fs-400);
+  font-weight: 600;
+  line-height: var(--lh-snug);
+}
+
+.install-banner__text {
+  color: var(--muted);
+  font-size: var(--fs-supporting);
+  line-height: var(--lh-normal);
+}
+
+.install-banner__actions {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-xs);
+}
+
+.install-banner__btn {
+  --btn-min-inline-size: 0;
+  flex: 1 1 0;
+}
+
+@media (min-width: 760px) {
+  .install-banner {
+    inset-inline: auto var(--space-lg);
+    inset-block-end: max(var(--space-lg), env(safe-area-inset-bottom));
+    max-inline-size: 24rem;
+  }
+
+  .install-banner__btn {
+    flex: 0 0 auto;
+  }
+}
