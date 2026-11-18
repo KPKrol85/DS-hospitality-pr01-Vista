@@ -70,7 +70,7 @@
 - [x] The PWA manifest, application icons, shortcuts, and screenshots are valid and current, where applicable.
 - [x] PWA installation and launch behavior work correctly on supported devices.
 - [x] Service Worker registration, caching, and application updates work as intended.
-- [ ] Offline fallback and connection recovery function within the supported scope.
+- [x] Offline fallback and connection recovery function within the supported scope.
 - [ ] No unresolved Service Worker or cache-related errors remain.
 
 ## 8. Security, Privacy & Legal
