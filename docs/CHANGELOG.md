@@ -100,6 +100,7 @@ For each implementation task, determine `Changelog: yes` or `Changelog: no`. Add
 - Corrected past-arrival date rejection and valid Netlify Forms inquiry submission.
 - Improved first-invalid-field focus, live validation feedback, and error recovery.
 - Resolved custom 404 assets, structured data, and recovery links from the domain root.
+- Fixed the permanent redirect from `/index.html` to `/` on Netlify.
 - Removed hidden mobile navigation links from keyboard traversal and reset menu state at desktop widths.
 - Preserved reveal content without JavaScript and contained dialog focus with restoration on dismissal.
 - Hardened room and gallery URL-filter handling against malformed fragments.
