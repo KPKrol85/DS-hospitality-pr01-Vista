@@ -39,6 +39,7 @@ For each implementation task, determine `Changelog: yes` or `Changelog: no`. Add
 - Updated legal disclosures for the demonstration, inquiry form, browser storage, offline caching, and embedded map.
 - Aligned displayed contact formatting, form placeholders, and the cookies-policy operator identity with the owner-approved author details.
 - Documented inquiry legal bases, form-submission and correspondence retention periods, and Netlify's Akismet spam-filtering subprocessor in the privacy policy.
+- Corrected public disclosures about embedded map loading, offline caching, and optional inquiry fields.
 
 ### Build and Tooling
 

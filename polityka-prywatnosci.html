@@ -182,7 +182,7 @@
 
             <section class="legal-section" id="zakres-i-charakter-przetwarzania-danych" aria-labelledby="zakres-i-charakter-przetwarzania-danych-heading">
               <h2 id="zakres-i-charakter-przetwarzania-danych-heading">3. Źródła i zakres przetwarzanych danych <a class="legal-anchor" href="#legal-heading" aria-label="Wróć na górę strony">↑</a></h2>
-              <p>Administrator może przetwarzać dane otrzymane bezpośrednio od Użytkownika za pośrednictwem formularza zapytania lub wiadomości e-mail. Dostawca hostingu może również przetwarzać dane techniczne związane z połączeniem i działaniem Serwisu. Strona kontaktowa zawiera ramkę Google Maps z opóźnionym ładowaniem. Początkowo wyświetlany jest obraz zastępczy, który pozostaje widoczny po upływie limitu czasu oczekiwania, jeśli mapa nie została załadowana. Późniejsze pomyślne załadowanie ramki może nadal zastąpić obraz mapą. Wczytanie mapy wiąże się z połączeniem przeglądarki z usługą Google Maps.</p>
+              <p>Administrator może przetwarzać dane otrzymane bezpośrednio od Użytkownika za pośrednictwem formularza zapytania lub wiadomości e-mail. Dostawca hostingu może również przetwarzać dane techniczne związane z połączeniem i działaniem Serwisu. Strona kontaktowa zawiera ramkę Google Maps skonfigurowaną do opóźnionego ładowania. Początkowo wyświetlany jest lokalny obraz zastępczy. Zdarzenie <code>load</code> powoduje wyświetlenie ramki zamiast obrazu i może wystąpić także wtedy, gdy mapa nie wyświetli się poprawnie. Po upływie limitu oczekiwania lub w razie błędu ładowania obraz może pozostać widoczny aż do późniejszego zdarzenia <code>load</code>. Wczytanie mapy wiąże się z połączeniem przeglądarki z usługą Google Maps.</p>
               <p>Dane przekazane przez formularz mogą obejmować:</p>
               <ul>
                 <li>imię i nazwisko oraz adres e-mail,</li>
@@ -192,7 +192,7 @@
               </ul>
               <p>W związku z połączeniem z Serwisem lub osadzoną mapą mogą być przetwarzane dane techniczne, w tym adres IP oraz informacje o przeglądarce i żądaniu. Dokładny zakres danych rejestrowanych przez dostawców wymaga potwierdzenia.</p>
               <h3>Dane przechowywane lokalnie w przeglądarce</h3>
-              <p>Serwis wykorzystuje <code>localStorage</code> do zapamiętania wyboru motywu oraz odrzucenia propozycji instalacji aplikacji, a <code>sessionStorage</code> – automatycznie, bez działania Użytkownika – do odmierzania czasu przeglądania i ograniczenia wyświetlania tej propozycji w ramach sesji przeglądarki. W pakiecie produkcyjnym Service Worker i Cache Storage przechowują zasoby strony oraz odwiedzone strony HTML do ponownego użycia, także w trybie offline.</p>
+              <p>Serwis wykorzystuje <code>localStorage</code> do zapamiętania wyboru motywu oraz odrzucenia propozycji instalacji aplikacji, a <code>sessionStorage</code> – automatycznie, bez działania Użytkownika – do odmierzania czasu przeglądania i ograniczenia wyświetlania tej propozycji w ramach sesji przeglądarki. W pakiecie produkcyjnym Service Worker podczas instalacji automatycznie zapisuje w Cache Storage wszystkie strony HTML pakietu, także te wcześniej nieodwiedzone, oraz wymagane zasoby statyczne. Odpowiedzi HTML na kolejne żądania nawigacji zapisuje w osobnej pamięci podręcznej. Zapisane strony i zasoby mogą być używane także w trybie offline.</p>
               <p>Dane zapisane wyłącznie lokalnie na urządzeniu Użytkownika nie są automatycznie przekazywane Administratorowi.</p>
               <p>Szczegółowe informacje dotyczące plików cookies i podobnych technologii znajdują się w dokumencie <a href="cookies.html">Polityka cookies</a>.</p>
             </section>
@@ -374,7 +374,7 @@
               <p>Administrator udziela odpowiedzi bez zbędnej zwłoki, z uwzględnieniem charakteru żądania oraz terminów wynikających z obowiązujących przepisów.</p>
             </section>
 
-            <p class="legal-updated"><strong>Data ostatniej aktualizacji:</strong> <time datetime="2026-11-17">17.11.2026</time></p>
+            <p class="legal-updated"><strong>Data ostatniej aktualizacji:</strong> <time datetime="2026-11-22">22.11.2026</time></p>
           </article>
         </div>
       </section>
