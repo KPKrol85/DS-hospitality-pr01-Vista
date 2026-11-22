@@ -6,6 +6,7 @@ if (CACHE_VERSION !== "SOURCE_ONLY") {
   const STATIC_CACHE = `vista-static-${CACHE_VERSION}`;
   const HTML_CACHE = `vista-html-${CACHE_VERSION}`;
   const OFFLINE_URL = new URL("offline.html", self.registration.scope).href;
+  const INDEX_PATH = new URL("index.html", self.registration.scope).pathname;
   const isVistaCache = (name) =>
     /^vista-(?:static|html)-[a-f0-9]{12}$/.test(name) ||
     /^th-(?:static|html)-(?:v1\.2\.1|[a-f0-9]{12})$/.test(name);
@@ -33,7 +34,8 @@ if (CACHE_VERSION !== "SOURCE_ONLY") {
 
   self.addEventListener("fetch", (event) => {
     const request = event.request;
-    if (request.method !== "GET" || new URL(request.url).origin !== self.location.origin) {
+    const requestUrl = new URL(request.url);
+    if (request.method !== "GET" || requestUrl.origin !== self.location.origin) {
       return;
     }
 
@@ -57,17 +59,11 @@ if (CACHE_VERSION !== "SOURCE_ONLY") {
           try {
             const htmlCache = await caches.open(HTML_CACHE);
             const staticCache = await caches.open(STATIC_CACHE);
-            const cached = (await htmlCache.match(request, { ignoreSearch: true })) ||
-              (await staticCache.match(request, { ignoreSearch: true }));
-            if (cached) return cached;
-
-            // The manifest opens "/", while the precached document is "/index.html".
-            if (new URL(request.url).pathname === new URL(self.registration.scope).pathname) {
-              const home = await staticCache.match(new URL("index.html", self.registration.scope).href);
-              if (home) return home;
-            }
-
-            return (await staticCache.match(OFFLINE_URL)) ||
+            // Homepage links use /index.html, which shares the canonical precache entry.
+            const staticKey = requestUrl.pathname === INDEX_PATH ? self.registration.scope : request;
+            return (await htmlCache.match(request, { ignoreSearch: true })) ||
+              (await staticCache.match(staticKey, { ignoreSearch: true })) ||
+              (await staticCache.match(OFFLINE_URL)) ||
               new Response("Offline", { status: 503, headers: { "Content-Type": "text/plain; charset=utf-8" } });
           } catch {
             return new Response("Offline", { status: 503, headers: { "Content-Type": "text/plain; charset=utf-8" } });

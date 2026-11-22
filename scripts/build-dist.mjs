@@ -6,6 +6,7 @@ import { fileURLToPath } from "node:url";
 
 const ROOT_DIR = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const DIST_DIR = path.join(ROOT_DIR, "dist");
+const HOME_PAGE = "index.html";
 
 const COPIED_FILES = [
   ["js/theme-init.js", "js/theme-init.js"],
@@ -224,6 +225,11 @@ function replaceExactlyOnce(source, literal, replacement) {
   return source.replace(literal, replacement);
 }
 
+function precacheUrl(file) {
+  // Netlify redirects /index.html to /, so fetch the homepage directly.
+  return file === HOME_PAGE ? "/" : `/${file}`;
+}
+
 async function buildServiceWorker(distFiles, htmlPages) {
   const sourceServiceWorkerPath = path.join(ROOT_DIR, "pwa", "service-worker.js");
   const sourceServiceWorker = await readFile(sourceServiceWorkerPath, "utf8");
@@ -234,7 +240,7 @@ async function buildServiceWorker(distFiles, htmlPages) {
     }
   }
   const precacheSet = new Set(requiredPrecache);
-  const precachePaths = distFiles.filter((file) => precacheSet.has(file)).map((file) => `/${file}`);
+  const precachePaths = distFiles.filter((file) => precacheSet.has(file)).map(precacheUrl).sort();
   const staticAssets = JSON.stringify(precachePaths, null, 2);
   const cacheVersion = await buildCacheVersion(distFiles, sourceServiceWorker);
 
@@ -286,7 +292,8 @@ async function verifyDistribution(htmlPages) {
   const precache = JSON.parse(precacheMatch[1]);
   const expected = distFiles
     .filter((file) => htmlPages.includes(file) || DIST_STATIC_ASSETS.includes(file))
-    .map((file) => `/${file}`);
+    .map(precacheUrl)
+    .sort();
   if (JSON.stringify(precache) !== JSON.stringify(expected)) {
     throw new Error("Production Service Worker precache does not match dist assets.");
   }
@@ -314,8 +321,8 @@ async function main() {
   }
 
   const htmlPages = await listHtmlPages();
-  if (htmlPages.length === 0) {
-    throw new Error("No public HTML pages found in project root.");
+  if (!htmlPages.includes(HOME_PAGE)) {
+    throw new Error(`Missing homepage in project root: ${HOME_PAGE}`);
   }
 
   for (const directory of REQUIRED_DIRS) {
