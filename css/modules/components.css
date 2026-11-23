@@ -379,7 +379,6 @@
 }
 
 .map__frame {
-  position: relative;
   inline-size: 100%;
   aspect-ratio: 4 / 3;
   overflow: hidden;
@@ -389,40 +388,11 @@
   box-shadow: var(--elev-rest);
 }
 
-.map__fallback {
-  block-size: 100%;
-}
-
-.map__frame :is(img, iframe) {
+.map__frame img {
   display: block;
   inline-size: 100%;
   block-size: 100%;
-}
-
-.map__fallback img {
   object-fit: cover;
-}
-
-.map iframe {
-  border: 0;
-}
-
-.map__fallback[hidden] {
-  display: none;
-}
-
-.map--embed iframe[hidden] {
-  display: none;
-}
-
-.map--embed iframe {
-  position: absolute;
-  inset: 0;
-}
-
-.map--embed iframe[aria-hidden="true"] {
-  opacity: 0;
-  pointer-events: none;
 }
 
 .map__caption {

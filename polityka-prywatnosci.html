@@ -182,7 +182,8 @@
 
             <section class="legal-section" id="zakres-i-charakter-przetwarzania-danych" aria-labelledby="zakres-i-charakter-przetwarzania-danych-heading">
               <h2 id="zakres-i-charakter-przetwarzania-danych-heading">3. Źródła i zakres przetwarzanych danych <a class="legal-anchor" href="#legal-heading" aria-label="Wróć na górę strony">↑</a></h2>
-              <p>Administrator może przetwarzać dane otrzymane bezpośrednio od Użytkownika za pośrednictwem formularza zapytania lub wiadomości e-mail. Dostawca hostingu może również przetwarzać dane techniczne związane z połączeniem i działaniem Serwisu. Strona kontaktowa zawiera ramkę Google Maps skonfigurowaną do opóźnionego ładowania. Początkowo wyświetlany jest lokalny obraz zastępczy. Zdarzenie <code>load</code> powoduje wyświetlenie ramki zamiast obrazu i może wystąpić także wtedy, gdy mapa nie wyświetli się poprawnie. Po upływie limitu oczekiwania lub w razie błędu ładowania obraz może pozostać widoczny aż do późniejszego zdarzenia <code>load</code>. Wczytanie mapy wiąże się z połączeniem przeglądarki z usługą Google Maps.</p>
+              <p>Administrator może przetwarzać dane otrzymane bezpośrednio od Użytkownika za pośrednictwem formularza zapytania lub wiadomości e-mail. Dostawca hostingu może również przetwarzać dane techniczne związane z połączeniem i działaniem Serwisu.</p>
+              <p>Strona kontaktowa wyświetla statyczny obraz mapy z zasobów Serwisu i zawiera odnośnik do Google Maps. Po wybraniu odnośnika Użytkownik otwiera zewnętrzną usługę, w której Google może przetwarzać dane techniczne połączenia zgodnie z własną polityką prywatności.</p>
               <p>Dane przekazane przez formularz mogą obejmować:</p>
               <ul>
                 <li>imię i nazwisko oraz adres e-mail,</li>
@@ -190,7 +191,7 @@
                 <li>daty pobytu i liczbę osób, jeżeli Użytkownik poda te demonstracyjne dane,</li>
                 <li>treść wiadomości i inne informacje dobrowolnie przekazane przez Użytkownika.</li>
               </ul>
-              <p>W związku z połączeniem z Serwisem lub osadzoną mapą mogą być przetwarzane dane techniczne, w tym adres IP oraz informacje o przeglądarce i żądaniu. Dokładny zakres danych rejestrowanych przez dostawców wymaga potwierdzenia.</p>
+              <p>W związku z połączeniem z Serwisem mogą być przetwarzane dane techniczne, w tym adres IP oraz informacje o przeglądarce i żądaniu. Dokładny zakres danych rejestrowanych przez dostawców wymaga potwierdzenia.</p>
               <h3>Dane przechowywane lokalnie w przeglądarce</h3>
               <p>Serwis wykorzystuje <code>localStorage</code> do zapamiętania wyboru motywu oraz odrzucenia propozycji instalacji aplikacji, a <code>sessionStorage</code> – automatycznie, bez działania Użytkownika – do odmierzania czasu przeglądania i ograniczenia wyświetlania tej propozycji w ramach sesji przeglądarki. W pakiecie produkcyjnym Service Worker podczas instalacji automatycznie zapisuje w Cache Storage wszystkie strony HTML pakietu, także te wcześniej nieodwiedzone, oraz wymagane zasoby statyczne. Odpowiedzi HTML na kolejne żądania nawigacji zapisuje w osobnej pamięci podręcznej. Zapisane strony i zasoby mogą być używane także w trybie offline.</p>
               <p>Dane zapisane wyłącznie lokalnie na urządzeniu Użytkownika nie są automatycznie przekazywane Administratorowi.</p>
@@ -255,7 +256,7 @@
             <section class="legal-section" id="odbiorcy-danych" aria-labelledby="odbiorcy-danych-heading">
               <h2 id="odbiorcy-danych-heading">6. Odbiorcy danych <a class="legal-anchor" href="#legal-heading" aria-label="Wróć na górę strony">↑</a></h2>
               <p>Dane osobowe mogą być udostępniane lub powierzane podmiotom wspierającym działanie Serwisu wyłącznie w zakresie niezbędnym do realizacji określonych celów.</p>
-              <p>W aktualnej wersji Serwisu są to dostawca hostingu i obsługi formularza, wskazany przez niego podprocesor filtrujący spam oraz operator osadzonej mapy. Dane mogą być także udostępnione podmiotom uprawnionym do ich otrzymania na podstawie obowiązujących przepisów prawa.</p>
+              <p>W aktualnej wersji Serwisu są to dostawca hostingu i obsługi formularza oraz wskazany przez niego podprocesor filtrujący spam. Dane mogą być także udostępnione podmiotom uprawnionym do ich otrzymania na podstawie obowiązujących przepisów prawa.</p>
               <h3 id="providers-table-heading">Wykaz najważniejszych dostawców</h3>
               <p class="legal-table-hint">Na węższych ekranach tabelę można przewijać poziomo.</p>
               <div class="legal-table-scroll" role="region" aria-labelledby="providers-table-heading" tabindex="0">
@@ -281,12 +282,6 @@
                       <td>Dane zgłoszeń formularza w zakresie przekazywanym przez Netlify; dokładnego zakresu nie opisuje dokumentacja Netlify</td>
                       <td>Podprocesor Netlify wskazany w wykazie podprocesorów Netlify</td>
                     </tr>
-                    <tr>
-                      <th scope="row">Google</th>
-                      <td>Osadzona mapa Google Maps na stronie kontaktowej</td>
-                      <td>Dane techniczne połączenia z mapą; dokładny zakres zależy od działania usługi i ustawień Użytkownika</td>
-                      <td>Odrębny administrator danych przetwarzanych w ramach usługi Google Maps</td>
-                    </tr>
                   </tbody>
                 </table>
               </div>
@@ -297,7 +292,7 @@
             <section class="legal-section" id="przekazywanie-danych-poza-eog" aria-labelledby="przekazywanie-danych-poza-eog-heading">
               <h2 id="przekazywanie-danych-poza-eog-heading">7. Przekazywanie danych poza Europejski Obszar Gospodarczy <a class="legal-anchor" href="#legal-heading" aria-label="Wróć na górę strony">↑</a></h2>
               <p>Niektórzy dostawcy usług technicznych mogą przetwarzać dane poza Europejskim Obszarem Gospodarczym albo korzystać z infrastruktury znajdującej się poza tym obszarem.</p>
-              <p>Netlify i Google publikują informacje o międzynarodowym przetwarzaniu danych w swoich dokumentach dotyczących prywatności. Kod Serwisu nie pozwala ustalić rzeczywistych lokalizacji przetwarzania danych Użytkowników ani zabezpieczeń mających zastosowanie do konkretnej relacji z Administratorem.</p>
+              <p>Netlify publikuje informacje o międzynarodowym przetwarzaniu danych w swoich dokumentach dotyczących prywatności. Kod Serwisu nie pozwala ustalić rzeczywistych lokalizacji przetwarzania danych Użytkowników ani zabezpieczeń mających zastosowanie do konkretnej relacji z Administratorem.</p>
               <p>W wykazie podprocesorów Netlify jako lokalizację przetwarzania danych przez Automattic, Inc. (Akismet) wskazano Stany Zjednoczone.</p>
               <p>Zakres ewentualnych transferów poza Europejski Obszar Gospodarczy oraz stosowane mechanizmy wymagają potwierdzenia przez Administratora. W tej sprawie można skontaktować się z Administratorem pod adresem <a href="mailto:kontakt@kp-code.pl">kontakt@kp-code.pl</a>.</p>
             </section>
@@ -346,7 +341,7 @@
               <h2 id="pliki-cookies-heading">11. Pliki cookies i podobne technologie <a class="legal-anchor" href="#legal-heading" aria-label="Wróć na górę strony">↑</a></h2>
               <p>Serwis korzysta z technologii przechowywania danych w zakresie odpowiadającym jego rzeczywistemu działaniu.</p>
               <ul><li><code>localStorage</code> zapisuje wybrany motyw oraz odrzucenie propozycji instalacji aplikacji,</li><li><code>sessionStorage</code> automatycznie zapisuje czas przeglądania i informację o wyświetleniu propozycji instalacji aplikacji w ramach sesji przeglądarki,</li><li>Cache Storage i Service Worker umożliwiają ponowne użycie zasobów i dostęp do wybranych stron w trybie offline.</li></ul>
-              <p>W kodzie aktualnej wersji Serwisu nie stwierdzono ustawiania klasycznych plików cookies przez sam Serwis. Nie wdrożono mechanizmu zarządzania zgodą na technologie przechowywania danych. Osadzona mapa Google Maps może korzystać z własnych technologii, których dokładny zakres nie wynika z kodu Serwisu.</p>
+              <p>W kodzie aktualnej wersji Serwisu nie stwierdzono ustawiania klasycznych plików cookies przez sam Serwis. Nie wdrożono mechanizmu zarządzania zgodą na technologie przechowywania danych. Po przejściu do Google Maps Google może stosować własne technologie przechowywania danych zgodnie z zasadami tej usługi.</p>
               <p>Szczegółowy wykaz technologii, ich cele, dostawcy i okresy przechowywania znajdują się w dokumencie <a href="cookies.html">Polityka cookies</a>.</p>
             </section>
 
@@ -374,7 +369,7 @@
               <p>Administrator udziela odpowiedzi bez zbędnej zwłoki, z uwzględnieniem charakteru żądania oraz terminów wynikających z obowiązujących przepisów.</p>
             </section>
 
-            <p class="legal-updated"><strong>Data ostatniej aktualizacji:</strong> <time datetime="2026-11-22">22.11.2026</time></p>
+            <p class="legal-updated"><strong>Data ostatniej aktualizacji:</strong> <time datetime="2026-11-23">23.11.2026</time></p>
           </article>
         </div>
       </section>

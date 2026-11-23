@@ -11,7 +11,7 @@ Vista Hotels & Travel to demonstracyjny, statyczny serwis wielostronicowy dla fi
 - Filtrowanie pokoi i galerii, panele kart oraz galeria z podglądem typu lightbox.
 - Motyw jasny, ciemny i automatyczny; wybór jasnego lub ciemnego motywu jest zapisywany lokalnie w przeglądarce.
 - Formularz zapytania z walidacją JavaScript, polami terminu pobytu i znacznikiem Netlify Forms. Wysłanie zapytania nie stanowi rezerwacji.
-- Osadzona mapa Google na stronie kontaktowej ze statycznym widokiem zastępczym.
+- Lokalny, statyczny obraz mapy na stronie kontaktowej i odnośnik do Google Maps.
 
 ### Stack technologiczny
 
@@ -129,7 +129,7 @@ Vista Hotels & Travel is a demonstrational static multi-page site for a fictiona
 - Room and gallery filtering, tab panels, and a gallery lightbox.
 - Light, dark, and automatic themes; a light or dark preference is stored locally in the browser.
 - An inquiry form with JavaScript validation, stay-date fields, and Netlify Forms markup. Submitting an inquiry does not create a reservation.
-- An embedded Google map on the contact page with a static fallback view.
+- A locally hosted static map image and an external Google Maps link on the contact page.
 
 ### Tech Stack
 

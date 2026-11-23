@@ -11,7 +11,6 @@ import { initCompactHeader } from "./features/compact-header.js";
 import { initGalleryFilters } from "./features/gallery-filters.js";
 import { setAriaCurrent } from "./features/aria-current.js";
 import { initJsonLd } from "./features/seo-jsonld.js";
-import { initMapEmbed } from "./features/map-embed.js";
 import { initInstallBanner } from "./features/install-banner.js";
 import * as logger from "./features/logger.js";
 
@@ -73,7 +72,6 @@ function boot() {
   initTabs();
   initRoomFilters();
   initJsonLd();
-  initMapEmbed();
 
   if (document.getElementById("gallery-filters")) {
     initGalleryFilters();
