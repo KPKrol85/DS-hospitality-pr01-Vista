@@ -88,6 +88,7 @@ For each implementation task, determine `Changelog: yes` or `Changelog: no`. Add
 
 ### Fixed
 
+- Clarified inquiry data retention, email handling, and the limits of the form confirmation page.
 - Removed inaccurate primary-image structured data from five pages while preserving social-sharing metadata.
 - Aligned the header brand link's accessible name with its visible Vista Hotels & Travel label to meet WCAG 2.5.3.
 - Corrected homepage project inquiry CTAs to open the contact form instead of the footer-adjacent CTA section.

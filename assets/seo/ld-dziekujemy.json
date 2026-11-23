@@ -14,7 +14,7 @@
       "@id": "https://ds-hospitality-pr01-vista.netlify.app/dziekujemy.html#webpage",
       "url": "https://ds-hospitality-pr01-vista.netlify.app/dziekujemy.html",
       "name": "Vista | Dziękujemy za zapytanie — Hotels & Travel",
-      "description": "Potwierdzenie przesłania do KP_Code Digital Studio zapytania o demonstracyjny projekt Vista — Hotels & Travel. Wysłanie formularza nie oznacza rezerwacji noclegu.",
+      "description": "Strona wyświetlana po przesłaniu zapytania o projekt Vista do Netlify Forms. Jej wyświetlenie nie potwierdza odbioru wiadomości przez operatora.",
       "isPartOf": {
         "@id": "https://ds-hospitality-pr01-vista.netlify.app/#website"
       },
