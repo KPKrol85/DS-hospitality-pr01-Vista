@@ -104,6 +104,8 @@ Strony mają tytuły, opisy, adresy canonical, metadane Open Graph i Twitter ora
 
 ### PWA i obsługa offline
 
+W pakiecie produkcyjnym przycisk „Zainstaluj aplikację” pojawia się w stopce, gdy przeglądarka udostępni okno instalacji. Jego wybranie otwiera natywne okno przeglądarki. Akcja instalacji nie zapisuje danych w `localStorage` ani `sessionStorage`.
+
 `site.webmanifest` definiuje ikony, skróty i widok aplikacji. Rejestracja `pwa/service-worker.js` jest aktywna tylko dla HTML z produkcyjnym znacznikiem `data-vista-build="production"`, także przy lokalnym serwowaniu `dist/`. Produkcyjny worker jest generowany z plików obecnych w pakiecie; buforuje zasoby, zapamiętuje odwiedzone strony HTML i w razie nieudanej nawigacji próbuje wyświetlić stronę z pamięci lub `offline.html`. Wersja pamięci podręcznej zależy od zawartości odpowiednich plików produkcyjnych. Zachowanie offline zależy od wcześniejszej instalacji workera i zawartości pamięci przeglądarki.
 
 ### Wydajność
@@ -221,6 +223,8 @@ These mechanisms are not a claim of WCAG conformance.
 Pages include titles, descriptions, canonical URLs, Open Graph and Twitter metadata, and embedded JSON-LD. `assets/seo/` holds additional data loaded by JavaScript; the repository also contains `robots.txt` and `sitemap.xml`.
 
 ### PWA and Offline Support
+
+In production builds, the “Zainstaluj aplikację” (Install app) button appears in the footer when the browser makes an install prompt available. Activating it opens the browser's native prompt. The install action does not write to `localStorage` or `sessionStorage`.
 
 `site.webmanifest` defines icons, shortcuts, and an app display mode. Registration of `pwa/service-worker.js` is active only for HTML with the `data-vista-build="production"` marker, including when `dist/` is served locally. The production worker is generated from files present in the package; it caches assets, saves visited HTML pages, and attempts to serve a cached page or `offline.html` after a failed navigation. Its cache version depends on the relevant production content. Offline behavior depends on prior worker installation and browser cache contents.
 
