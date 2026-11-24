@@ -152,7 +152,7 @@ function galleryFragmentScenario(fragment, filter, exerciseControls = false, red
       page.on('pageerror', (error) => errors.push(error.message));
       await page.emulateMedia({ reducedMotion });
       await page.addInitScript(() => {
-        // Observe the real DEV branch after initGalleryFilters(), without registering a production worker.
+        // Observe source-mode offline cleanup after initGalleryFilters().
         window.gallerySwScopes = [];
         const getRegistration = navigator.serviceWorker.getRegistration;
         navigator.serviceWorker.getRegistration = function (...args) {
@@ -169,8 +169,10 @@ function galleryFragmentScenario(fragment, filter, exerciseControls = false, red
     },
     setup: async (page) => {
       await assertGalleryFilter(page, filter);
-      assert.deepEqual(await page.evaluate(() => window.gallerySwScopes),
-        [new URL('/', page.url()).href], 'Initialization must reach configureSW() in source mode');
+      // Cleanup may recheck the registration while holding the storage lock.
+      const checkedScopes = await page.evaluate(() => [...new Set(window.gallerySwScopes)]);
+      assert.deepEqual(checkedScopes, [new URL('/', page.url()).href],
+        'Initialization must reach the source offline setup and check the root service worker scope');
 
       if (exerciseControls) {
         assert.equal(new URL(page.url()).hash, '#foo%22bar', 'Chromium percent-encodes the literal quote');
