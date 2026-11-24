@@ -191,7 +191,7 @@
                 <li>daty pobytu i liczbę osób, jeżeli Użytkownik poda te demonstracyjne dane,</li>
                 <li>treść wiadomości i inne informacje dobrowolnie przekazane przez Użytkownika.</li>
               </ul>
-              <p>W związku z połączeniem z Serwisem mogą być przetwarzane dane techniczne, w tym adres IP oraz informacje o przeglądarce i żądaniu. Dokładny zakres danych rejestrowanych przez dostawców wymaga potwierdzenia.</p>
+              <p>Przy połączeniu z Serwisem infrastruktura Netlify otrzymuje dane techniczne potrzebne do obsługi żądania. Dane te mogą obejmować adres IP, datę i godzinę żądania, adres żądanego zasobu oraz informacje o przeglądarce przekazywane w nagłówkach żądania. Zasady przetwarzania danych technicznych przez Netlify opisano w sekcjach 4 i 6.</p>
               <h3>Dane przechowywane lokalnie w przeglądarce</h3>
               <p>Serwis wykorzystuje <code>localStorage</code> do zapamiętania wyboru motywu. Domyślnie Serwis działa online bez używania Cache Storage do zapisywania zasobów offline. Przeglądarka może osobno korzystać ze swojej zwykłej pamięci podręcznej HTTP.</p>
               <p>Po wybraniu „Włącz tryb offline” w stopce wersji produkcyjnej Serwis zapisuje w IndexedDB stan przygotowania i wyboru trybu offline. Service Worker pobiera do Cache Storage strony HTML pakietu, w tym nieodwiedzone, oraz wymagane zasoby statyczne. W trakcie przeglądania może zapisywać kolejne zasoby statyczne i odpowiedzi HTML wraz z adresami żądań. Po przygotowaniu nowej wersji zastępuje poprzednią pamięć. Dane mogą też zostać usunięte przez Użytkownika lub przeglądarkę.</p>
@@ -230,20 +230,21 @@
                     </tr>
                     <tr>
                       <th scope="row">Ochrona formularza przed spamem i automatycznymi zgłoszeniami</th>
-                      <td>Dane zgłoszenia przesłanego przez formularz, w tym zawartość pola ochronnego</td>
+                      <td>Dane zgłoszenia, w tym zawartość pola ochronnego, oraz dane techniczne wykorzystywane do filtrowania spamu</td>
                       <td>Art. 6 ust. 1 lit. f RODO — prawnie uzasadniony interes Administratora polegający na ochronie formularza przed spamem i nadużyciami</td>
                       <td>Zgodnie z sekcją 8</td>
                     </tr>
                     <tr>
-                      <th scope="row">Udostępnienie Serwisu i zapewnienie bezpieczeństwa infrastruktury</th>
+                      <th scope="row">Udostępnianie Serwisu, diagnozowanie błędów i ochrona przed nadużyciami</th>
                       <td>Dane techniczne połączenia przetwarzane przez dostawcę hostingu</td>
-                      <td>Wymaga potwierdzenia przez Administratora</td>
-                      <td>Okresy przechowywania danych technicznych przez dostawcę wymagają potwierdzenia</td>
+                      <td>Art. 6 ust. 1 lit. f RODO w zakresie niezbędnym do realizacji prawnie uzasadnionego interesu Administratora polegającego na dostarczaniu żądanych stron, utrzymaniu dostępności Serwisu oraz wykrywaniu awarii i nadużyć zagrażających jego działaniu</td>
+                      <td>Zgodnie z sekcją 8</td>
                     </tr>
                   </tbody>
                 </table>
               </div>
-              <p>Przesłanie formularza nie wymaga wyrażenia zgody na przetwarzanie danych osobowych. Podstawa prawna przetwarzania danych technicznych związanych z udostępnieniem Serwisu wymaga potwierdzenia przez Administratora.</p>
+              <p>Przesłanie formularza nie wymaga wyrażenia zgody na przetwarzanie danych osobowych.</p>
+              <p>Art. 6 ust. 1 lit. f RODO ma zastosowanie, jeżeli przetwarzanie jest niezbędne do realizacji wskazanego interesu, a interesy lub podstawowe prawa i wolności Użytkownika nie mają nad nim nadrzędnego charakteru. Odrębne cele Netlify opisano w sekcji 6, a prawo do sprzeciwu w sekcji 9.</p>
               <p>Dane nie są wykorzystywane do innych, niezgodnych celów bez odpowiedniej podstawy prawnej i przekazania Użytkownikowi wymaganych informacji.</p>
             </section>
 
@@ -259,7 +260,7 @@
               <h2 id="odbiorcy-danych-heading">6. Odbiorcy danych <a class="legal-anchor" href="#legal-heading" aria-label="Wróć na górę strony">↑</a></h2>
               <p>Dane osobowe mogą być udostępniane lub powierzane podmiotom wspierającym działanie Serwisu wyłącznie w zakresie niezbędnym do realizacji określonych celów.</p>
               <p>W aktualnej wersji Serwisu są to dostawca hostingu i obsługi formularza, wskazany przez niego podprocesor filtrujący spam oraz dostawca poczty elektronicznej Administratora. Dane mogą być także udostępnione podmiotom uprawnionym do ich otrzymania na podstawie obowiązujących przepisów prawa.</p>
-              <p>Netlify wysyła powiadomienia o nowych zgłoszeniach z formularza na adres <a href="mailto:kontakt@kp-code.pl">kontakt@kp-code.pl</a>.</p>
+              <p>Netlify wysyła na adres <a href="mailto:kontakt@kp-code.pl">kontakt@kp-code.pl</a> powiadomienia o nowych zgłoszeniach, które trafiły na listę zweryfikowanych zgłoszeń w Netlify Forms.</p>
               <h3 id="providers-table-heading">Wykaz najważniejszych dostawców</h3>
               <p class="legal-table-hint">Na węższych ekranach tabelę można przewijać poziomo.</p>
               <div class="legal-table-scroll" role="region" aria-labelledby="providers-table-heading" tabindex="0">
@@ -275,35 +276,46 @@
                   <tbody>
                     <tr>
                       <th scope="row">Netlify, Inc.</th>
-                      <td>Hosting Serwisu i Netlify Forms</td>
-                      <td>Dane przekazywane w formularzu oraz dane techniczne połączenia</td>
-                      <td>Podmiot przetwarzający w zakresie danych formularza; zakres innych ról wymaga potwierdzenia</td>
+                      <td>Hosting Serwisu, obsługa zgłoszeń w Netlify Forms i wysyłka powiadomień o zgłoszeniach</td>
+                      <td>Dane przekazywane w formularzu oraz dane techniczne połączenia, w tym metadane żądań</td>
+                      <td>Podmiot przetwarzający dane zgłoszeń i dane techniczne na rzecz Administratora w ramach hostingu i obsługi formularza</td>
                     </tr>
                     <tr>
                       <th scope="row">Automattic, Inc. (Akismet)</th>
                       <td>Automatyczne filtrowanie spamu w zgłoszeniach Netlify Forms</td>
-                      <td>Dane zgłoszeń formularza w zakresie przekazywanym przez Netlify; dokładnego zakresu nie opisuje dokumentacja Netlify</td>
-                      <td>Podprocesor Netlify wskazany w wykazie podprocesorów Netlify</td>
+                      <td>Dane zgłoszenia i dane techniczne przekazywane przez Netlify na potrzeby oceny spamu. W zależności od integracji Akismet może otrzymywać m.in. treść wiadomości, dane nadawcy i adres IP.</td>
+                      <td>Podprocesor Netlify w zakresie filtrowania zgłoszeń, wskazany w <a href="https://www.netlify.com/trust-center/?itemUid=e3fae2ca-94a9-416b-b577-5c90e382df57">wykazie podprocesorów Netlify</a></td>
                     </tr>
                     <tr>
-                      <th scope="row">Simply.com</th>
-                      <td>Obsługa poczty elektronicznej Administratora</td>
-                      <td>Powiadomienia o nowych zgłoszeniach i korespondencja e-mail dotycząca zapytań</td>
-                      <td>Rola w przetwarzaniu danych osobowych wymaga potwierdzenia</td>
+                      <th scope="row">Simply.com A/S</th>
+                      <td>Hosting skrzynki <a href="mailto:kontakt@kp-code.pl">kontakt@kp-code.pl</a> i obsługa poczty Administratora</td>
+                      <td>Adresy nadawców i odbiorców, dane techniczne doręczenia oraz dane zawarte w powiadomieniach, korespondencji bezpośredniej i ewentualnych załącznikach do wiadomości e-mail</td>
+                      <td>Podmiot przetwarzający dane w imieniu Administratora w ramach hostingu poczty elektronicznej</td>
                     </tr>
                   </tbody>
                 </table>
               </div>
+              <p>Netlify działa również jako odrębny administrator danych osobowych, gdy przetwarza dane usługi do własnych celów, takich jak utrzymanie bezpieczeństwa platformy oraz wykrywanie oszustw i nadużyć. Zasady tego przetwarzania określa <a href="https://www.netlify.com/privacy/">polityka prywatności Netlify</a>.</p>
               <p>Dane osobowe nie są sprzedawane ani udostępniane innym podmiotom do ich własnych celów marketingowych, chyba że Użytkownik został o tym wyraźnie poinformowany i istnieje odpowiednia podstawa prawna.</p>
               <p>Samo umieszczenie w Serwisie zwykłego odnośnika do zewnętrznej strony nie oznacza, że jej operator otrzymuje dane osobowe przed wybraniem tego odnośnika przez Użytkownika.</p>
             </section>
 
             <section class="legal-section" id="przekazywanie-danych-poza-eog" aria-labelledby="przekazywanie-danych-poza-eog-heading">
               <h2 id="przekazywanie-danych-poza-eog-heading">7. Przekazywanie danych poza Europejski Obszar Gospodarczy <a class="legal-anchor" href="#legal-heading" aria-label="Wróć na górę strony">↑</a></h2>
-              <p>Niektórzy dostawcy usług technicznych mogą przetwarzać dane poza Europejskim Obszarem Gospodarczym albo korzystać z infrastruktury znajdującej się poza tym obszarem.</p>
-              <p>Netlify publikuje informacje o międzynarodowym przetwarzaniu danych w swoich dokumentach dotyczących prywatności. Kod Serwisu nie pozwala ustalić rzeczywistych lokalizacji przetwarzania danych Użytkowników ani zabezpieczeń mających zastosowanie do konkretnej relacji z Administratorem.</p>
-              <p>W wykazie podprocesorów Netlify jako lokalizację przetwarzania danych przez Automattic, Inc. (Akismet) wskazano Stany Zjednoczone.</p>
-              <p>Zakres ewentualnych transferów poza Europejski Obszar Gospodarczy oraz stosowane mechanizmy wymagają potwierdzenia przez Administratora. W tej sprawie można skontaktować się z Administratorem pod adresem <a href="mailto:kontakt@kp-code.pl">kontakt@kp-code.pl</a>.</p>
+              <p>
+                Netlify, Inc. ma siedzibę w Stanach Zjednoczonych i udostępnia Serwis przez globalną sieć dostarczania treści. Korzystanie z hostingu i Netlify Forms może wiązać się z przekazywaniem danych do Stanów Zjednoczonych.
+                Netlify deklaruje uczestnictwo w EU–U.S. Data Privacy Framework (DPF), objętym decyzją Komisji Europejskiej stwierdzającą odpowiedni stopień ochrony.
+                Dla transferów od klienta do Netlify, które wymagają zabezpieczeń na podstawie RODO i których nie obejmuje DPF, opublikowana umowa powierzenia przewiduje standardowe klauzule umowne Komisji Europejskiej.
+                Zakres tych mechanizmów opisuje <a href="https://www.netlify.com/pdf/netlify-dpa.pdf">umowa powierzenia Netlify</a>.
+              </p>
+              <p>
+                Netlify wskazuje Stany Zjednoczone w wykazie podprocesorów jako lokalizację przetwarzania przez Automattic, Inc. (Akismet).
+                Opublikowana umowa Netlify przewiduje obowiązki ochrony danych dla podprocesorów i standardowe klauzule umowne dla dalszych transferów objętych sekcją 14.6 tej umowy.
+                Akismet opisuje globalną infrastrukturę i wskazuje standardowe klauzule umowne dla transferów do Stanów Zjednoczonych oraz innych państw poza Unią Europejską.
+                Zasady deklarowane przez dostawcę usługi opisuje <a href="https://akismet.com/gdpr/">dokumentacja Akismet dotycząca RODO</a>.
+              </p>
+              <p>Simply.com A/S wskazuje Danię jako miejsce hostingu poczty i przechowywania danych. Opublikowany wzór umowy powierzenia przewiduje przetwarzanie w Europejskim Obszarze Gospodarczym (EOG). Zgodnie ze wzorem przetwarzanie poza EOG wymaga pisemnej zgody Administratora, chyba że wynika z prawa Unii Europejskiej lub państwa członkowskiego. Warunki te opisuje <a href="https://static.simply.com/files/documents/gdpr/1.8/EN%20-%20Data%20Processing%20Agreement%20v.%201.8.pdf">wzór umowy powierzenia Simply.com</a>.</p>
+              <p>Informacje o zabezpieczeniach stosowanych przy przekazywaniu danych poza EOG oraz ich kopię można uzyskać, kontaktując się z Administratorem pod adresem <a href="mailto:kontakt@kp-code.pl">kontakt@kp-code.pl</a>.</p>
             </section>
 
             <section class="legal-section" id="okres-przechowywania-danych" aria-labelledby="okres-przechowywania-danych-heading">
@@ -316,7 +328,9 @@
                 <li>zgodnie z przyjętą procedurą Administrator co miesiąc przegląda zgłoszenia w Netlify Forms, w tym te zachowane na liście spamu, i usuwa je ręcznie po obsłudze, najpóźniej w ciągu 90 dni od otrzymania,</li>
                 <li>korespondencja dotycząca zapytania, które nie doprowadziło do nawiązania współpracy, jest przechowywana przez 12 miesięcy od ostatniej wiadomości, chyba że dłuższe przechowywanie jest uzasadnione, w szczególności w celu ustalenia, dochodzenia lub obrony roszczeń,</li>
                 <li>w przypadku nawiązania współpracy okres przechowywania korespondencji wynika z zasad przekazanych w związku z tą współpracą,</li>
-                <li>dane techniczne, logi i kopie danych, w tym kopie zapasowe, pozostające pod kontrolą dostawców usług podlegają ich zasadom retencji, a stosowane przez nich okresy przechowywania wymagają potwierdzenia,</li>
+                <li>Netlify udostępnia dane diagnostyczne o ruchu przez okres zależny od planu usługi. Opublikowana umowa powierzenia przewiduje, że po zakończeniu świadczenia usług dane w kopiach zapasowych i logach są usuwane zgodnie z cyklem rotacji kopii i retencją logów, z uwzględnieniem obowiązków prawnych dostawcy. Dla danych przetwarzanych we własnych celach polityka Netlify wskazuje m.in. cel przetwarzania, charakter danych i obowiązki prawne jako kryteria retencji,</li>
+                <li>Akismet deklaruje automatyczne usuwanie zdecydowanej większości danych związanych z filtrowaniem spamu po upływie okresu od dwóch tygodni do 90 dni. Część danych może być przechowywana dłużej,</li>
+                <li>Simply.com A/S opisuje codzienne kopie zapasowe poczty, zwykle przechowywane przez 30 dni na potrzeby odtworzenia danych. Dostawca prowadzi też logi pocztowe na potrzeby diagnostyki i badania incydentów. W publicznej dokumentacji hostingu poczty nie podaje okresu retencji tych logów,</li>
                 <li>dane zapisane wyłącznie lokalnie w przeglądarce pozostają na urządzeniu Użytkownika do momentu ich usunięcia przez Serwis albo samodzielnego usunięcia przez Użytkownika; okresy i warunki dla poszczególnych mechanizmów opisuje <a href="cookies.html">Polityka cookies</a>.</li>
               </ul>
               <p>Administrator ręcznie zarządza przechowywaniem i usuwaniem korespondencji w swojej skrzynce pocztowej. Po zakończeniu właściwego okresu dane pozostające pod kontrolą Administratora są usuwane, anonimizowane albo pozostają przechowywane wyłącznie wtedy, gdy istnieje dalsza podstawa prawna.</p>
@@ -344,6 +358,7 @@
               <h2 id="zautomatyzowane-podejmowanie-decyzji-heading">10. Zautomatyzowane podejmowanie decyzji i profilowanie <a class="legal-anchor" href="#legal-heading" aria-label="Wróć na górę strony">↑</a></h2>
               <p>Dane osobowe nie są wykorzystywane do podejmowania decyzji opartych wyłącznie na zautomatyzowanym przetwarzaniu, które wywoływałyby wobec Użytkownika skutki prawne lub w podobny sposób istotnie na niego wpływały.</p>
               <p>Administrator nie stosuje profilowania wobec Użytkowników Serwisu.</p>
+              <p>Netlify Forms odrzuca zgłoszenie, jeżeli ukryte pole ochronne zostało wypełnione. Akismet może oznaczyć otrzymane zgłoszenie jako spam. W razie trudności z przesłaniem zapytania Użytkownik może skontaktować się z Administratorem pocztą elektroniczną pod adresem wskazanym w sekcji 14.</p>
             </section>
 
             <section class="legal-section" id="pliki-cookies" aria-labelledby="pliki-cookies-heading">
@@ -357,8 +372,8 @@
 
             <section class="legal-section" id="bezpieczenstwo-danych" aria-labelledby="bezpieczenstwo-danych-heading">
               <h2 id="bezpieczenstwo-danych-heading">12. Bezpieczeństwo danych <a class="legal-anchor" href="#legal-heading" aria-label="Wróć na górę strony">↑</a></h2>
-              <p>W konfiguracji Serwisu przewidziano szyfrowaną transmisję HTTPS oraz nagłówki ograniczające źródła treści i dostęp do wybranych funkcji przeglądarki. Formularz zawiera pole ochronne przed automatycznymi zgłoszeniami. Według dokumentacji Netlify wszystkie zgłoszenia przesyłane do Netlify Forms są ponadto automatycznie filtrowane pod kątem spamu z wykorzystaniem usługi Akismet.</p>
-              <p>Środki organizacyjne Administratora oraz zabezpieczenia i procedury dostawców usług wymagają potwierdzenia poza kodem projektu.</p>
+              <p>Serwis jest udostępniany przez HTTPS. Jego konfiguracja obejmuje nagłówki ograniczające źródła treści i dostęp do wybranych funkcji przeglądarki. Formularz zawiera ukryte pole ochronne przed automatycznymi zgłoszeniami. Netlify Forms wykorzystuje Akismet do filtrowania spamu w otrzymanych zgłoszeniach.</p>
+              <p>Netlify opisuje automatyczne ograniczanie ruchu zagrażającego dostępności hostowanych stron, a Simply.com A/S dokumentuje kontrolę dostępu do infrastruktury i tworzenie kopii zapasowych. Szczegóły zawierają <a href="https://docs.netlify.com/manage/security/overview/">dokumentacja bezpieczeństwa Netlify</a> oraz <a href="https://static.simply.com/files/documents/gdpr/1.8/EN%20-%20Security%20Environment%20v.%201.2.pdf">opis zabezpieczeń Simply.com</a>.</p>
               <p>Opis środków bezpieczeństwa nie stanowi gwarancji całkowitego wyeliminowania ryzyka związanego z korzystaniem z Internetu.</p>
               <p>Użytkownik powinien unikać przesyłania informacji, które nie są konieczne do realizacji konkretnego celu.</p>
             </section>

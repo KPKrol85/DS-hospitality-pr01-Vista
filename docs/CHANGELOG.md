@@ -40,6 +40,7 @@ For each implementation task, determine `Changelog: yes` or `Changelog: no`. Add
 - Aligned displayed contact formatting, form placeholders, and the cookies-policy operator identity with the owner-approved author details.
 - Documented inquiry legal bases, form-submission and correspondence retention periods, and Netlify's Akismet spam-filtering subprocessor in the privacy policy.
 - Corrected public disclosures about embedded map loading, offline caching, and optional inquiry fields.
+- Clarified the privacy policy’s disclosures on technical data, service providers, international transfers, retention, and safeguards.
 
 ### Build and Tooling
 
