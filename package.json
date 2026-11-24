@@ -4,7 +4,7 @@
   "private": true,
   "description": "A responsive hospitality demonstration website built with HTML, CSS, and vanilla JavaScript, featuring accessibility, PWA, SEO, and light/dark themes.",
   "author": "Kamil Król — KP_Code Digital Studio",
-  "license": "SEE LICENSE IN LICENSE",
+  "license": "SEE LICENSE IN LICENSE.md",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/KPKrol85/DS-hospitality-pr01-Vista.git"
