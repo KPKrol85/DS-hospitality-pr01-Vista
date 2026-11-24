@@ -1222,11 +1222,25 @@
   }
 }
 
-/* Footer installation action */
+/* Footer PWA actions */
 
-.install-action {
+.install-action,
+.offline-action .btn {
   --btn-min-inline-size: 0;
   min-block-size: 44px;
   max-inline-size: 100%;
   font-size: var(--fs-300);
+}
+
+.offline-action {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-xs);
+  max-inline-size: 60ch;
+  text-align: center;
+}
+
+.offline-action .btn[aria-disabled="true"] {
+  cursor: default;
+  transform: none;
 }

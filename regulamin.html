@@ -239,7 +239,7 @@
                 <li>korzystanie z elementów interaktywnych interfejsu,</li>
                 <li>zmianę ustawień wyglądu lub działania strony,</li>
                 <li>lokalne zapisywanie wybranych danych w przeglądarce,</li>
-                <li>korzystanie z funkcjonalności działających w trybie offline,</li>
+                <li>włączenie dostępu do wybranych treści w trybie offline,</li>
                 <li>przesłanie zapytania za pośrednictwem Formularza,</li>
                 <li>przejście do zewnętrznych stron i profili Operatora,</li>
                 <li>przeglądanie galerii oraz filtrowanie pokoi.</li>
@@ -247,8 +247,11 @@
               <p>Niektóre funkcjonalności korzystają z pamięci przeglądarki, w szczególności:</p>
               <ul>
                 <li><code>localStorage</code> do zapamiętania motywu,</li>
-                <li>Cache Storage i Service Workera do ponownego użycia zasobów oraz odwiedzonych stron, także w trybie offline.</li>
+                <li>IndexedDB do zapamiętania stanu trybu offline po jego włączeniu,</li>
+                <li>Cache Storage i Service Workera do zapisania i ponownego użycia stron i zasobów po włączeniu trybu offline.</li>
               </ul>
+              <p>Domyślnie Serwis działa online. Po wybraniu „Włącz tryb offline” w stopce wersji produkcyjnej Serwis pobiera strony HTML i wymagane zasoby statyczne. Następnie może zapisywać kolejne zasoby i odwiedzane strony. Pliki są zastępowane po przygotowaniu nowej wersji. Pamięć offline Vista jest odrębna od zwykłej pamięci podręcznej HTTP przeglądarki.</p>
+              <p>Opcja „Wyłącz tryb offline” usuwa ustawienie i pamięci offline Vista oraz wyrejestrowuje jego Service Workera. Instalacja aplikacji jest niezależna od trybu offline. Po otrzymaniu nowej wersji Serwisu i workera poprzednia automatyczna rejestracja i zapisane zasoby są usuwane. Zainstalowana aplikacja nadal uruchamia się online. Dostęp offline wymaga włączenia tej funkcji, a urządzenia pozostające bez połączenia otrzymają aktualizację dopiero po powrocie do sieci.</p>
               <p>Dane zapisane wyłącznie lokalnie pozostają na urządzeniu Użytkownika, chyba że dana funkcjonalność wyraźnie umożliwia ich przesłanie lub synchronizację.</p>
             </section>
 
@@ -450,6 +453,7 @@
                 <li>hosting,</li>
                 <li>pocztę elektroniczną,</li>
                 <li><code>localStorage</code>,</li>
+                <li>IndexedDB,</li>
                 <li>Cache Storage,</li>
                 <li>Service Workera,</li>
                 <li>usługi zewnętrzne.</li>
@@ -506,7 +510,7 @@
               <p>Niniejszy Regulamin dotyczy demonstracyjnego charakteru Serwisu oraz rzeczywiście udostępnionych funkcjonalności. Nie zastępuje regulaminu sprzedaży, rezerwacji, świadczenia odpłatnych usług ani innych procesów, które nie zostały wdrożone w Serwisie.</p>
             </section>
 
-            <p class="legal-updated"><strong>Data ostatniej aktualizacji:</strong> <time datetime="2026-11-23">23.11.2026</time></p>
+            <p class="legal-updated"><strong>Data ostatniej aktualizacji:</strong> <time datetime="2026-11-24">24.11.2026</time></p>
           </article>
         </div>
       </section>

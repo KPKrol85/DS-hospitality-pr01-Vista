@@ -18,7 +18,7 @@ Canonical source files remain directly usable during development. Production bun
 - `npm run dev` serves canonical sources with live reload at `http://127.0.0.1:8181`.
 - `npm run build` executes the complete production pipeline through `build:dist`.
 - The production build cleans `dist/`, generates and verifies CSS and JavaScript bundles, packages public files, rewrites HTML asset references, generates the production Service Worker, and verifies the distribution.
-- Production HTML receives `data-vista-build="production"` to enable Service Worker registration.
+- Production HTML receives `data-vista-build="production"` to enable the installation and offline controls. The offline control registers the Service Worker on request. An existing automatic registration can receive the guarded worker through the browser update lifecycle.
 - `npm run preview` serves an existing production package at `http://127.0.0.1:8182/` without rebuilding it.
 
 Development mode does not require production bundles or register the production Service Worker. The generated distribution remains separate from canonical sources.

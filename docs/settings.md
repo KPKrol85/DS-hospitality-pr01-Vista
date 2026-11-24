@@ -2,7 +2,7 @@
 
 This is the maintained detailed developer workflow guide. [`package.json`](../package.json) is authoritative for available npm scripts and their exact command chains.
 
-Root HTML, `css/style.css` with `css/modules/`, and `js/script.js` with `js/features/` are the editable development sources. A local HTTP server can serve these files directly. Production bundles are generated only in `dist/`; the full build marks packaged HTML with `data-vista-build="production"` for service worker registration. Root `netlify.toml` runs `npm run build` and publishes `dist/`.
+Root HTML, `css/style.css` with `css/modules/`, and `js/script.js` with `js/features/` are the editable development sources. A local HTTP server can serve these files directly. Production bundles are generated only in `dist/`. The full build marks packaged HTML with `data-vista-build="production"` to enable the production-only installation and offline controls. Root `netlify.toml` runs `npm run build` and publishes `dist/`.
 
 ## npm scripts (from `package.json`)
 
@@ -30,3 +30,5 @@ Root HTML, `css/style.css` with `css/modules/`, and `js/script.js` with `js/feat
 ## Local production preview
 
 Run `npm run build`, then `npm run preview`, and open `http://127.0.0.1:8182/`. Rebuild after source changes to refresh the package; stop preview with Ctrl+C. Preview serves only package files through GET/HEAD and supplies `Service-Worker-Allowed: /` for the production worker. It does not emulate Netlify Forms, Edge Functions, or the full Netlify header and redirect behavior. Use `npm run dev` for source editing with live reload. See [dist notes](dist-notes.md) for packaging behavior.
+
+In a clean browser profile, preview starts online. Use the footer to enable or disable offline mode. To check offline fallback, disconnect with Service Worker bypass disabled. To check migration, serve the old and new packages in order on the same test origin, keeping the old registration and an open tab between versions.

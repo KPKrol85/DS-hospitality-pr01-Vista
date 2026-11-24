@@ -1,10 +1,10 @@
 # Dist Pipeline Notes
 
-`npm run build` and `npm run build:dist` both create a fresh, complete `dist/` from canonical sources. The workflow removes the old package, generates and verifies CSS and JavaScript directly in `dist/`, copies public assets, rewrites packaged HTML, generates the production service worker, and verifies the package. Standalone `build:css` and `build:js` write only their respective bundles without clearing other output. Source HTML remains readable and usable without generated `.min` files; packaged HTML receives `data-vista-build="production"` to enable service worker registration. Root `netlify.toml` runs the full build and publishes `dist/`.
+`npm run build` and `npm run build:dist` both create a fresh, complete `dist/` from canonical sources. The workflow removes the old package, generates and verifies CSS and JavaScript directly in `dist/`, copies public assets, rewrites packaged HTML, generates the production service worker, and verifies the package. Standalone `build:css` and `build:js` write only their respective bundles without clearing other output. Source HTML remains readable and usable without generated `.min` files. Packaged HTML receives `data-vista-build="production"` to enable the installation and offline controls. Root `netlify.toml` runs the full build and publishes `dist/`.
 
 ## Copied HTML pages
 
-`scripts/build-dist.mjs` automatically discovers all regular root `*.html` files. It packages them according to the source asset-tag contract, rewrites their production references, and includes them in the generated worker's precache. No separate page list or fixed package page count is maintained here; see the [project context](CONTEXT-PROJECT.md#maintenance-rules) for page-maintenance requirements.
+`scripts/build-dist.mjs` automatically discovers all regular root `*.html` files. It packages them according to the source asset-tag contract, rewrites their production references, and includes them in the generated worker's precache list. The worker uses the list after explicit offline activation or when updating a confirmed offline installation. No separate page list or fixed package page count is maintained here; see the [project context](CONTEXT-PROJECT.md#maintenance-rules) for page-maintenance requirements.
 
 ## Generated production paths
 

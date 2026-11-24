@@ -12,52 +12,11 @@ import { initGalleryFilters } from "./features/gallery-filters.js";
 import { setAriaCurrent } from "./features/aria-current.js";
 import { initJsonLd } from "./features/seo-jsonld.js";
 import { initInstallAction } from "./features/install-action.js";
-import * as logger from "./features/logger.js";
+import { initOfflineAction } from "./features/offline-action.js";
 
 function setYear() {
   const el = document.querySelector("[data-year]");
   if (el) el.textContent = new Date().getFullYear();
-}
-
-async function configureSW() {
-  if (!("serviceWorker" in navigator)) return;
-
-  const workerUrl = new URL("/pwa/service-worker.js", location.origin).href;
-  const rootScope = new URL("/", location.origin).href;
-
-  try {
-    if (document.documentElement.dataset.vistaBuild === "production") {
-      const registration = await navigator.serviceWorker.register(workerUrl, { scope: "/" });
-      logger.info("[PWA] Service Worker zarejestrowany", registration.scope);
-      return;
-    }
-
-    // A prior production visit may leave Vista's worker controlling source pages.
-    const registration = await navigator.serviceWorker.getRegistration(rootScope);
-    if (!registration || registration.scope !== rootScope) return;
-
-    const workers = [registration.active, registration.waiting, registration.installing].filter(Boolean);
-    if (!workers.length || workers.some((worker) => worker.scriptURL !== workerUrl)) return;
-
-    const controlledByVista = navigator.serviceWorker.controller?.scriptURL === workerUrl;
-    await registration.unregister();
-
-    if ("caches" in window) {
-      const cacheNames = await caches.keys();
-      await Promise.all(
-        cacheNames
-          .filter((name) =>
-            /^vista-(?:static|html)-[a-f0-9]{12}$/.test(name) ||
-            /^th-(?:static|html)-(?:v1\.2\.1|[a-f0-9]{12})$/.test(name)
-          )
-          .map((name) => caches.delete(name))
-      );
-    }
-
-    if (controlledByVista) location.reload();
-  } catch (error) {
-    logger.error("[PWA] Błąd konfiguracji Service Workera", error);
-  }
 }
 
 function boot() {
@@ -77,7 +36,7 @@ function boot() {
     initGalleryFilters();
   }
 
-  void configureSW();
+  initOfflineAction();
 }
 
 // The deferred bundle runs after parsing. Listen before DOMContentLoaded to capture early install prompts.

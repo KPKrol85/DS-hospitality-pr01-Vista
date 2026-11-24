@@ -193,7 +193,9 @@
               </ul>
               <p>W związku z połączeniem z Serwisem mogą być przetwarzane dane techniczne, w tym adres IP oraz informacje o przeglądarce i żądaniu. Dokładny zakres danych rejestrowanych przez dostawców wymaga potwierdzenia.</p>
               <h3>Dane przechowywane lokalnie w przeglądarce</h3>
-              <p>Serwis wykorzystuje <code>localStorage</code> do zapamiętania wyboru motywu. W pakiecie produkcyjnym Service Worker podczas instalacji automatycznie zapisuje w Cache Storage wszystkie strony HTML pakietu, także te wcześniej nieodwiedzone, oraz wymagane zasoby statyczne. Odpowiedzi HTML na kolejne żądania nawigacji zapisuje w osobnej pamięci podręcznej. Zapisane strony i zasoby mogą być używane także w trybie offline.</p>
+              <p>Serwis wykorzystuje <code>localStorage</code> do zapamiętania wyboru motywu. Domyślnie Serwis działa online bez używania Cache Storage do zapisywania zasobów offline. Przeglądarka może osobno korzystać ze swojej zwykłej pamięci podręcznej HTTP.</p>
+              <p>Po wybraniu „Włącz tryb offline” w stopce wersji produkcyjnej Serwis zapisuje w IndexedDB stan przygotowania i wyboru trybu offline. Service Worker pobiera do Cache Storage strony HTML pakietu, w tym nieodwiedzone, oraz wymagane zasoby statyczne. W trakcie przeglądania może zapisywać kolejne zasoby statyczne i odpowiedzi HTML wraz z adresami żądań. Po przygotowaniu nowej wersji zastępuje poprzednią pamięć. Dane mogą też zostać usunięte przez Użytkownika lub przeglądarkę.</p>
+              <p>Opcja „Wyłącz tryb offline” w stopce usuwa zapisany wybór i pamięci offline Vista oraz wyrejestrowuje Service Workera Vista. Po otrzymaniu aktualizacji Serwisu i workera przeglądarka usuwa także wcześniejsze automatycznie utworzone pamięci offline i ich rejestrację. Urządzenie, które pozostaje offline, otrzyma aktualizację dopiero po ponownym połączeniu. Dotychczas zainstalowana aplikacja nadal uruchamia się online, a przywrócenie dostępu offline wymaga włączenia tej funkcji w aplikacji.</p>
               <p>Dane zapisane wyłącznie lokalnie na urządzeniu Użytkownika nie są automatycznie przekazywane Administratorowi.</p>
               <p>Szczegółowe informacje dotyczące plików cookies i podobnych technologii znajdują się w dokumencie <a href="cookies.html">Polityka cookies</a>.</p>
             </section>
@@ -347,8 +349,8 @@
             <section class="legal-section" id="pliki-cookies" aria-labelledby="pliki-cookies-heading">
               <h2 id="pliki-cookies-heading">11. Pliki cookies i podobne technologie <a class="legal-anchor" href="#legal-heading" aria-label="Wróć na górę strony">↑</a></h2>
               <p>Serwis korzysta z technologii przechowywania danych w zakresie odpowiadającym jego rzeczywistemu działaniu.</p>
-              <ul><li><code>localStorage</code> zapisuje wybrany motyw,</li><li>Cache Storage i Service Worker umożliwiają ponowne użycie zasobów i dostęp do wybranych stron w trybie offline.</li></ul>
-              <p>Gdy przeglądarka udostępni instalację aplikacji, Użytkownik może otworzyć jej okno instalacji przyciskiem w stopce wersji produkcyjnej Serwisu. Serwis nie zapisuje w pamięci przeglądarki informacji o wyświetleniu przycisku ani o wyborze dokonanym w oknie instalacji.</p>
+              <ul><li><code>localStorage</code> zapisuje wybrany motyw,</li><li>IndexedDB, Cache Storage i Service Worker obsługują tryb offline włączony przez Użytkownika.</li></ul>
+              <p>Gdy przeglądarka udostępni instalację aplikacji, Użytkownik może otworzyć jej okno instalacji przyciskiem w stopce wersji produkcyjnej Serwisu. Instalacja i uruchomienie aplikacji są niezależne od trybu offline. Serwis nie zapisuje w pamięci przeglądarki informacji o wyświetleniu przycisku ani o wyborze dokonanym w oknie instalacji.</p>
               <p>W kodzie aktualnej wersji Serwisu nie stwierdzono ustawiania klasycznych plików cookies przez sam Serwis. Nie wdrożono mechanizmu zarządzania zgodą na technologie przechowywania danych. Po przejściu do Google Maps Google może stosować własne technologie przechowywania danych zgodnie z zasadami tej usługi.</p>
               <p>Szczegółowy wykaz technologii, ich cele, dostawcy i okresy przechowywania znajdują się w dokumencie <a href="cookies.html">Polityka cookies</a>.</p>
             </section>
@@ -377,7 +379,7 @@
               <p>Administrator udziela odpowiedzi bez zbędnej zwłoki, z uwzględnieniem charakteru żądania oraz terminów wynikających z obowiązujących przepisów.</p>
             </section>
 
-            <p class="legal-updated"><strong>Data ostatniej aktualizacji:</strong> <time datetime="2026-11-23">23.11.2026</time></p>
+            <p class="legal-updated"><strong>Data ostatniej aktualizacji:</strong> <time datetime="2026-11-24">24.11.2026</time></p>
           </article>
         </div>
       </section>

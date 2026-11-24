@@ -171,6 +171,7 @@
               <p>Oprócz plików cookies Serwis wykorzystuje inne technologie umożliwiające zapis lub odczyt informacji na urządzeniu końcowym:</p>
               <ul>
                 <li><code>localStorage</code>,</li>
+                <li>IndexedDB,</li>
                 <li>Cache Storage,</li>
                 <li>Service Worker.</li>
               </ul>
@@ -183,14 +184,12 @@
               <p>W zależności od ich funkcji technologie przechowywania danych mogą należeć do następujących kategorii:</p>
               <h3>Technologie niezbędne</h3>
               <p>Umożliwiają prawidłowe i bezpieczne funkcjonowanie Serwisu albo dostarczenie funkcjonalności wyraźnie żądanej przez Użytkownika.</p>
-              <p>W aktualnej wersji obejmują zapewnienie działania wybranych zasobów w trybie offline.</p>
               <h3>Technologie funkcjonalne</h3>
-              <p>Pozwalają zapamiętać ustawienia wybrane przez Użytkownika lub dostosować działanie wybranych funkcji. W Serwisie dotyczy to wyboru jasnego lub ciemnego motywu.</p>
-              <p>Serwis nie pobiera zgody na technologie funkcjonalne. Klucz <code>theme-pref</code> jest zapisywany po wyborze jasnego lub ciemnego motywu przez Użytkownika.</p>
-              <p>W wersji produkcyjnej przycisk „Zainstaluj aplikację” pojawia się w stopce, gdy przeglądarka udostępni możliwość otwarcia okna instalacji. Przycisk otwiera to okno po wybraniu go przez Użytkownika. Serwis nie zapisuje w pamięci przeglądarki informacji o wyświetleniu przycisku ani o wyborze dokonanym w oknie instalacji.</p>
+              <p>Pozwalają zapamiętać ustawienia wybrane przez Użytkownika lub dostosować działanie wybranych funkcji. Klucz <code>theme-pref</code> jest zapisywany po wyborze jasnego lub ciemnego motywu. Tryb offline jest opcjonalny i domyślnie wyłączony. W wersji produkcyjnej Użytkownik może go uruchomić przyciskiem „Włącz tryb offline” w stopce. Cache Storage używana przez Vista jest odrębna od zwykłej pamięci podręcznej HTTP przeglądarki.</p>
+              <p>W wersji produkcyjnej przycisk „Zainstaluj aplikację” pojawia się w stopce, gdy przeglądarka udostępni możliwość otwarcia okna instalacji. Instalacja aplikacji i jej uruchomienie nie włączają trybu offline. Serwis nie zapisuje w pamięci przeglądarki informacji o wyświetleniu przycisku ani o wyborze dokonanym w oknie instalacji.</p>
               <p>Dane dawnego banera instalacyjnego mogą pozostać w pamięci przeglądarki po aktualizacji Serwisu. Aktualna wersja Serwisu ich nie odczytuje ani nie usuwa automatycznie.</p>
               <h3 id="technology-inventory-heading">Wykaz technologii stosowanych w Serwisie</h3>
-              <p>Service Worker jest rejestrowany tylko przez strony z pakietu produkcyjnego, również w jego lokalnym podglądzie. W nazwach pamięci Cache Storage {hash} oznacza wspólny, generowany podczas budowania pakietu 12-znakowy szesnastkowy skrót jego treści.</p>
+              <p>Strony z pakietu produkcyjnego rejestrują Service Workera na żądanie Użytkownika. Dotyczy to również lokalnego podglądu tego pakietu. W nazwach pamięci Cache Storage {hash} oznacza 12-znakowy szesnastkowy skrót treści pakietu.</p>
               <p class="legal-table-hint">Na węższych ekranach tabelę można przewijać poziomo.</p>
               <div class="legal-table-scroll" role="region" aria-labelledby="technology-inventory-heading" tabindex="0">
                 <table class="legal-table">
@@ -214,28 +213,36 @@
                       <td>Do usunięcia danych witryny albo przywrócenia ustawienia automatycznego.</td>
                     </tr>
                     <tr>
+                      <th scope="row"><code>vista-offline</code></th>
+                      <td>IndexedDB</td>
+                      <td>Operator</td>
+                      <td>funkcjonalna</td>
+                      <td>Zapis stanu przygotowania, wyboru trybu offline i informacji technicznych potrzebnych do zmiany tego ustawienia.</td>
+                      <td>Do wyłączenia trybu offline albo usunięcia danych witryny.</td>
+                    </tr>
+                    <tr>
                       <th scope="row"><code>vista-static-{hash}</code></th>
                       <td>Cache Storage</td>
                       <td>Operator</td>
-                      <td>niezbędna</td>
-                      <td>Automatyczny zapis wszystkich stron HTML pakietu, także tych wcześniej nieodwiedzonych, oraz wymaganych zasobów statycznych przy instalacji Service Workera. Pamięć przechowuje też zasoby statyczne pobrane później. Zapisane pliki mogą być używane także w trybie offline.</td>
-                      <td>Do usunięcia danych witryny lub zastąpienia przy zmianie wersji pamięci podręcznej.</td>
+                      <td>funkcjonalna</td>
+                      <td>Zapis stron HTML pakietu, również wcześniej nieodwiedzonych, oraz wymaganych zasobów statycznych po włączeniu trybu offline. Pamięć przechowuje też zasoby statyczne pobrane podczas przeglądania.</td>
+                      <td>Do wyłączenia trybu offline, przygotowania nowej wersji lub usunięcia danych witryny.</td>
                     </tr>
                     <tr>
                       <th scope="row"><code>vista-html-{hash}</code></th>
                       <td>Cache Storage</td>
                       <td>Operator</td>
-                      <td>niezbędna</td>
+                      <td>funkcjonalna</td>
                       <td>Zapis odpowiedzi HTML na kolejne żądania nawigacji do ponownego użycia w trybie offline.</td>
-                      <td>Do usunięcia danych witryny lub zastąpienia przy zmianie wersji pamięci podręcznej.</td>
+                      <td>Do wyłączenia trybu offline, przygotowania nowej wersji lub usunięcia danych witryny.</td>
                     </tr>
                     <tr>
                       <th scope="row"><code>pwa/service-worker.js</code></th>
                       <td>Service Worker</td>
                       <td>Operator</td>
-                      <td>niezbędna</td>
-                      <td>Obsługa pamięci podręcznej i działania strony w trybie offline.</td>
-                      <td>Do wyrejestrowania w przeglądarce.</td>
+                      <td>funkcjonalna</td>
+                      <td>Obsługa zapisanych zasobów i działania Serwisu w trybie offline.</td>
+                      <td>Do wyłączenia trybu offline albo wyrejestrowania w przeglądarce.</td>
                     </tr>
                   </tbody>
                 </table>
@@ -280,12 +287,14 @@
             <section class="legal-section" id="zarzadzanie-ustawieniami" aria-labelledby="zarzadzanie-ustawieniami-heading">
               <h2 id="zarzadzanie-ustawieniami-heading">6. Zarządzanie ustawieniami cookies i podobnych technologii <a class="legal-anchor" href="#cookies-heading" aria-label="Wróć na górę strony">↑</a></h2>
               <p>W aktualnej wersji Serwisu nie wdrożono mechanizmu zarządzania zgodą na technologie przechowywania danych.</p>
+              <p>Opcja „Wyłącz tryb offline” w stopce usuwa wpis wyboru z IndexedDB i pamięci offline Vista. Po zakończeniu usuwania Serwis wyrejestrowuje swojego Service Workera. Wyłączenie nie zmienia zapisanego motywu ani zwykłej pamięci podręcznej HTTP.</p>
+              <p>Przy aktualizacji poprzedniej wersji Serwis usuwa automatyczne rejestracje Vista i powiązane pamięci po otrzymaniu przez przeglądarkę nowego pakietu i workera. Urządzenia pozostające offline przejdą tę zmianę po ponownym połączeniu. Dotychczas zainstalowana aplikacja pozostaje dostępna online, a dostęp offline wymaga włączenia tej funkcji.</p>
               <p>Użytkownik może zarządzać technologiami przechowywania danych poprzez ustawienia używanej przeglądarki internetowej lub usunięcie danych witryny zapisanych w przeglądarce.</p>
               <p>W zależności od przeglądarki Użytkownik może w szczególności:</p>
               <ul>
                 <li>ograniczyć zapisywanie lub usunąć wcześniej zapisane pliki cookies,</li>
                 <li>usunąć dane zapisane w <code>localStorage</code> i <code>sessionStorage</code>,</li>
-                <li>usunąć dane Cache Storage oraz rejestrację Service Workera,</li>
+                <li>usunąć dane IndexedDB i Cache Storage oraz rejestrację Service Workera,</li>
                 <li>zablokować wybrane mechanizmy pamięci witryny.</li>
               </ul>
               <p>Szczegółowy sposób zarządzania danymi witryn zależy od rodzaju i wersji używanej przeglądarki.</p>
@@ -324,7 +333,7 @@
               <p>Operator udziela odpowiedzi w możliwie najkrótszym terminie, z uwzględnieniem charakteru zgłoszenia oraz obowiązujących przepisów prawa.</p>
             </section>
 
-            <p class="legal-updated"><strong>Data ostatniej aktualizacji:</strong> <time datetime="2026-11-23">23.11.2026</time></p>
+            <p class="legal-updated"><strong>Data ostatniej aktualizacji:</strong> <time datetime="2026-11-24">24.11.2026</time></p>
           </article>
         </div>
       </section>

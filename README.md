@@ -54,7 +54,7 @@ Uruchom serwer deweloperski:
 npm run dev
 ```
 
-Serwer działa pod adresem `http://127.0.0.1:8181` i udostępnia bezpośrednio kanoniczne źródła: strony HTML z katalogu głównego, czytelne `css/style.css` i `js/script.js` wraz z modułami JavaScript oraz zasoby publiczne. Po zapisaniu zmian w tych plikach przeglądarka automatycznie przeładowuje stronę. Skrypt przeładowania jest dodawany tylko do odpowiedzi serwera i nie zmienia plików źródłowych. Praca lokalna nie wymaga wygenerowanych plików `.min` ani wcześniejszego buildu produkcyjnego, a serwer nie tworzy ani nie zmienia `dist/`. Nie odtwarza funkcji platformy Netlify, takich jak Netlify Forms, Edge Functions, nagłówki czy przekierowania. Strony źródłowe można też serwować dowolnym statycznym serwerem HTTP, bez automatycznego przeładowania. W tym trybie nie jest automatycznie rejestrowany produkcyjny Service Worker. Kod deweloperski sprawdza i usuwa wcześniejszą rejestrację Vista dla jej właściwego zakresu oraz pamięci podręczne należące do Vista, jeśli pozostały po uruchomieniu produkcyjnego pakietu na tym samym originie.
+Serwer działa pod adresem `http://127.0.0.1:8181` i udostępnia bezpośrednio kanoniczne źródła: strony HTML z katalogu głównego, czytelne `css/style.css` i `js/script.js` wraz z modułami JavaScript oraz zasoby publiczne. Po zapisaniu zmian w tych plikach przeglądarka automatycznie przeładowuje stronę. Skrypt przeładowania jest dodawany tylko do odpowiedzi serwera i nie zmienia plików źródłowych. Praca lokalna nie wymaga wygenerowanych plików `.min` ani wcześniejszego buildu produkcyjnego, a serwer nie tworzy ani nie zmienia `dist/`. Nie odtwarza funkcji platformy Netlify, takich jak Netlify Forms, Edge Functions, nagłówki czy przekierowania. Strony źródłowe można też serwować dowolnym statycznym serwerem HTTP, bez automatycznego przeładowania. Tryb deweloperski nie inicjuje trybu offline. Kod deweloperski sprawdza i usuwa wcześniejszą rejestrację Vista dla jej właściwego zakresu oraz pamięci podręczne należące do Vista, jeśli pozostały po uruchomieniu produkcyjnego pakietu na tym samym originie.
 
 ### Build produkcyjny
 
@@ -65,7 +65,7 @@ npm run img:opt
 npm run build
 ```
 
-`npm run build` jest aliasem `npm run build:dist`. Obie komendy czyszczą `dist/`, generują z aktualnych źródeł `dist/css/style.min.css` i `dist/js/script.min.js`, pakują wymagane pliki publiczne, przepisują odwołania w kopiach HTML i weryfikują wynik. Produkcyjny HTML otrzymuje znacznik `data-vista-build="production"`, który steruje rejestracją Service Workera. Worker powstaje po przygotowaniu zasobów pakietu. `npm run build:css` i `npm run build:js` tworzą osobne pliki w `dist/` bez czyszczenia pozostałej zawartości; `npm run dist:clean` usuwa tylko wygenerowany katalog `dist/`. Plików w `dist/` nie należy edytować ręcznie ani dodawać do repozytorium.
+`npm run build` jest aliasem `npm run build:dist`. Obie komendy czyszczą `dist/`, generują z aktualnych źródeł `dist/css/style.min.css` i `dist/js/script.min.js`, pakują wymagane pliki publiczne, przepisują odwołania w kopiach HTML i weryfikują wynik. Produkcyjny HTML otrzymuje znacznik `data-vista-build="production"`, który udostępnia akcje instalacji i trybu offline. Worker powstaje po przygotowaniu zasobów pakietu. `npm run build:css` i `npm run build:js` tworzą osobne pliki w `dist/` bez czyszczenia pozostałej zawartości; `npm run dist:clean` usuwa tylko wygenerowany katalog `dist/`. Plików w `dist/` nie należy edytować ręcznie ani dodawać do repozytorium.
 
 Build automatycznie wykrywa wszystkie pliki `*.html` w katalogu głównym; nie wymaga ręcznego wykazu stron. Gotowy `dist/` można obejrzeć lokalnie:
 
@@ -106,7 +106,9 @@ Strony mają tytuły, opisy, adresy canonical, metadane Open Graph i Twitter ora
 
 W pakiecie produkcyjnym przycisk „Zainstaluj aplikację” pojawia się w stopce, gdy przeglądarka udostępni okno instalacji. Jego wybranie otwiera natywne okno przeglądarki. Akcja instalacji nie zapisuje danych w `localStorage` ani `sessionStorage`.
 
-`site.webmanifest` definiuje ikony, skróty i widok aplikacji. Rejestracja `pwa/service-worker.js` jest aktywna tylko dla HTML z produkcyjnym znacznikiem `data-vista-build="production"`, także przy lokalnym serwowaniu `dist/`. Produkcyjny worker jest generowany z plików obecnych w pakiecie; buforuje zasoby, zapamiętuje odwiedzone strony HTML i w razie nieudanej nawigacji próbuje wyświetlić stronę z pamięci lub `offline.html`. Wersja pamięci podręcznej zależy od zawartości odpowiednich plików produkcyjnych. Zachowanie offline zależy od wcześniejszej instalacji workera i zawartości pamięci przeglądarki.
+Instalacja PWA i tryb offline są niezależne. W stopce pakietu produkcyjnego, również w lokalnym podglądzie, „Włącz tryb offline” rejestruje workera i pobiera strony HTML oraz wymagane zasoby statyczne. Worker buforuje też odwiedzone strony i zasoby. Przy utracie połączenia może zwrócić zapisaną stronę lub `offline.html`. „Wyłącz tryb offline” usuwa zapisany wybór i pamięci Vista oraz wyrejestrowuje workera.
+
+Po odebraniu nowej wersji strony i workera wcześniejsze automatyczne rejestracje oraz ich pamięci są usuwane. Dotychczas zainstalowane aplikacje nadal działają online. Dostęp offline wymaga włączenia tej funkcji w stopce.
 
 ### Wydajność
 
@@ -114,7 +116,7 @@ Strony używają obrazów `picture`/`srcset` w formatach AVIF, WebP i formacie z
 
 ### Dane i trwałość stanu
 
-`localStorage` przechowuje preferencję motywu (`theme-pref`). Service worker korzysta z Cache Storage dla zasobów i stron HTML. Formularz nie zapisuje rezerwacji w aplikacji; jest skonfigurowany jako zapytanie dla Netlify Forms.
+`localStorage` przechowuje preferencję motywu (`theme-pref`). IndexedDB przechowuje stan trybu offline, a Cache Storage jego wersjonowane zasoby. Formularz nie zapisuje rezerwacji w aplikacji. Jest skonfigurowany jako zapytanie dla Netlify Forms.
 
 ### Licencja
 
@@ -174,7 +176,7 @@ Start the development server:
 npm run dev
 ```
 
-The server runs at `http://127.0.0.1:8181` and serves canonical sources directly: root HTML pages, readable `css/style.css` and `js/script.js` with JavaScript modules, and public assets. Saving changes to these files reloads the browser automatically. The reload script is added only to server responses and does not modify source files. Local development does not require generated `.min` files or a prior production build, and the server does not create or modify `dist/`. It does not emulate Netlify platform features such as Netlify Forms, Edge Functions, headers, or redirects. Source pages can also be served by any static HTTP server, without automatic reload. The production service worker is not registered automatically in this mode. Development code checks for and removes an earlier Vista registration within its intended scope and Vista-owned caches if they remain after serving the production package on the same origin.
+The server runs at `http://127.0.0.1:8181` and serves canonical sources directly: root HTML pages, readable `css/style.css` and `js/script.js` with JavaScript modules, and public assets. Saving changes to these files reloads the browser automatically. The reload script is added only to server responses and does not modify source files. Local development does not require generated `.min` files or a prior production build, and the server does not create or modify `dist/`. It does not emulate Netlify platform features such as Netlify Forms, Edge Functions, headers, or redirects. Source pages can also be served by any static HTTP server, without automatic reload. Development mode does not initialize offline mode. Development code checks for and removes an earlier Vista registration within its intended scope and Vista-owned caches if they remain after serving the production package on the same origin.
 
 ### Production Build
 
@@ -185,7 +187,7 @@ npm run img:opt
 npm run build
 ```
 
-`npm run build` is an alias for `npm run build:dist`. Both commands clean `dist/`, generate `dist/css/style.min.css` and `dist/js/script.min.js` from current sources, package the required public files, rewrite references in copied HTML, and verify the result. Production HTML receives a `data-vista-build="production"` marker that controls service worker registration. The worker is generated after the package assets are prepared. `npm run build:css` and `npm run build:js` create their individual files in `dist/` without cleaning other output; `npm run dist:clean` removes only the generated `dist/` directory. Files in `dist/` should not be edited manually or committed.
+`npm run build` is an alias for `npm run build:dist`. Both commands clean `dist/`, generate `dist/css/style.min.css` and `dist/js/script.min.js` from current sources, package the required public files, rewrite references in copied HTML, and verify the result. Production HTML receives a `data-vista-build="production"` marker that enables the installation and offline controls. The worker is generated after the package assets are prepared. `npm run build:css` and `npm run build:js` create their individual files in `dist/` without cleaning other output; `npm run dist:clean` removes only the generated `dist/` directory. Files in `dist/` should not be edited manually or committed.
 
 The build automatically discovers all root `*.html` files; no manual page list is required. Preview the completed `dist/` locally:
 
@@ -226,7 +228,9 @@ Pages include titles, descriptions, canonical URLs, Open Graph and Twitter metad
 
 In production builds, the “Zainstaluj aplikację” (Install app) button appears in the footer when the browser makes an install prompt available. Activating it opens the browser's native prompt. The install action does not write to `localStorage` or `sessionStorage`.
 
-`site.webmanifest` defines icons, shortcuts, and an app display mode. Registration of `pwa/service-worker.js` is active only for HTML with the `data-vista-build="production"` marker, including when `dist/` is served locally. The production worker is generated from files present in the package; it caches assets, saves visited HTML pages, and attempts to serve a cached page or `offline.html` after a failed navigation. Its cache version depends on the relevant production content. Offline behavior depends on prior worker installation and browser cache contents.
+PWA installation and offline mode are independent. In the production footer, including in local preview, “Włącz tryb offline” (Enable offline mode) registers the worker and downloads HTML pages and required static assets. The worker also caches visited pages and assets. When a navigation fails, it can serve a cached page or the offline fallback. “Wyłącz tryb offline” (Disable offline mode) removes the saved preference and Vista caches, then unregisters the worker.
+
+Once the browser receives the new page and worker, Vista removes earlier automatic registrations and their caches. Existing installed apps continue to work online. Offline access resumes after the user enables it.
 
 ### Performance
 
@@ -234,7 +238,7 @@ Pages use `picture`/`srcset` images in AVIF, WebP, and fallback formats, while t
 
 ### Data and State Persistence
 
-`localStorage` stores the theme preference (`theme-pref`). The service worker uses Cache Storage for assets and HTML pages. The form does not save reservations in the application; it is configured as a Netlify Forms inquiry.
+`localStorage` stores the theme preference (`theme-pref`). IndexedDB stores the offline activation state, and Cache Storage holds versioned offline resources. The form does not save reservations in the application. It is configured as a Netlify Forms inquiry.
 
 ### License
 
