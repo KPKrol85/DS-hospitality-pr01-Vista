@@ -120,7 +120,7 @@ Strony używają obrazów `picture`/`srcset` w formatach AVIF, WebP i formacie z
 
 ### Licencja
 
-Oryginalne materiały projektu są objęte własnościowymi warunkami KP_Code opisanymi w [LICENSE.md](LICENSE.md). Materiały podmiotów trzecich podlegają ich odrębnym licencjom.
+Oryginalne materiały projektu są objęte własnościowymi warunkami KP_Code opisanymi w [LICENSE.md](LICENSE.md). Informacje o pochodzeniu i odrębnych licencjach materiałów podmiotów trzecich zawiera [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md).
 
 ## EN
 
@@ -242,4 +242,4 @@ Pages use `picture`/`srcset` images in AVIF, WebP, and fallback formats, while t
 
 ### License
 
-Original project materials are governed by the KP_Code proprietary terms in [LICENSE.md](LICENSE.md). Third-party materials remain subject to their separate licenses.
+Original project materials are governed by the KP_Code proprietary terms in [LICENSE.md](LICENSE.md). The sources and separate terms for third-party materials are documented in [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md).

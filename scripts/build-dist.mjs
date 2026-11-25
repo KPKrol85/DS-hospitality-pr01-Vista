@@ -9,6 +9,8 @@ const DIST_DIR = path.join(ROOT_DIR, "dist");
 const HOME_PAGE = "index.html";
 
 const COPIED_FILES = [
+  ["LICENSE.md", "LICENSE.md"],
+  ["THIRD-PARTY-NOTICES.md", "THIRD-PARTY-NOTICES.md"],
   ["js/theme-init.js", "js/theme-init.js"],
   ["site.webmanifest", "site.webmanifest"],
   ["robots.txt", "robots.txt"],
@@ -256,6 +258,9 @@ async function verifyDistribution(htmlPages) {
     ...htmlPages,
     ...BUNDLE_FILES,
     ...COPIED_FILES.map(([, destinationPath]) => destinationPath),
+    "assets/fonts/Inter-OFL.txt",
+    "assets/fonts/Manrope-OFL.txt",
+    "assets/img/icons/Tabler-Icons-MIT.txt",
     "pwa/service-worker.js",
   ];
   for (const file of requiredFiles) {

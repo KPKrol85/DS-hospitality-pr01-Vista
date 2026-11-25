@@ -30,6 +30,16 @@
 - `assets/img/shortcuts/`
 - `assets/img/ui/`
 
+## Licensing documents
+
+The build copies the two root documents directly and the upstream license files with their asset directories. Distribution verification requires all five files.
+
+- `LICENSE.md`
+- `THIRD-PARTY-NOTICES.md`
+- `assets/fonts/Inter-OFL.txt`
+- `assets/fonts/Manrope-OFL.txt`
+- `assets/img/icons/Tabler-Icons-MIT.txt`
+
 ## Excluded development-only paths
 
 - `css/style.css`
