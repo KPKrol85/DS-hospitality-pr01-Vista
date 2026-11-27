@@ -59,10 +59,47 @@
   border-color: color-mix(in oklab, var(--primary) 35%, var(--border));
 }
 
+/* Both glyphs share one grid cell; data-theme selects the visible one, so the first paint is already correct.
+   The incoming glyph turns in after the outgoing one starts to leave; reduced motion swaps them instantly. */
 .theme-toggle__icon {
+  --theme-toggle-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  grid-area: 1 / 1;
   width: 20px;
   height: 20px;
+  color: var(--primary);
   pointer-events: none;
+  transition:
+    opacity 0.3s ease 0.08s,
+    transform 0.6s var(--theme-toggle-ease);
+}
+
+.theme-toggle__icon--sun {
+  --theme-toggle-exit: rotate(90deg) scale(0.5);
+}
+
+.theme-toggle__icon--moon {
+  --theme-toggle-exit: rotate(-90deg) scale(0.5);
+}
+
+:root:not([data-theme="dark"]) .theme-toggle__icon--moon,
+:root[data-theme="dark"] .theme-toggle__icon--sun {
+  opacity: 0;
+  transform: var(--theme-toggle-exit);
+  transition:
+    opacity 0.2s ease,
+    transform 0.45s var(--theme-toggle-ease);
+}
+
+/* Without a resolved theme (no JavaScript), mirror the system fallback in tokens.css. */
+@media (prefers-color-scheme: dark) {
+  :root:is(:not([data-theme]), [data-theme="auto"]) .theme-toggle__icon--moon {
+    opacity: 1;
+    transform: none;
+  }
+  :root:is(:not([data-theme]), [data-theme="auto"]) .theme-toggle__icon--sun {
+    opacity: 0;
+    transform: var(--theme-toggle-exit);
+  }
 }
 
 /* btn */

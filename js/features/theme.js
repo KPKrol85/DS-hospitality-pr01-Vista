@@ -1,9 +1,5 @@
 const STORAGE_KEY = "theme-pref";
 const PREFS = new Set(["auto", "light", "dark"]);
-const ICONS = {
-  light: "/assets/img/icons/sun-40x40.svg",
-  dark: "/assets/img/icons/moon-40x40.svg",
-};
 
 function getStoredPref() {
   try {
@@ -38,11 +34,6 @@ function getActiveTheme(pref, media) {
   return pref;
 }
 
-function updateToggleIcon(iconEl, activeTheme) {
-  if (!iconEl) return;
-  iconEl.src = ICONS[activeTheme] || ICONS.light;
-}
-
 function updateToggleState(toggleEl, activeTheme) {
   if (!toggleEl) return;
   toggleEl.setAttribute("aria-label", "Zmień motyw kolorystyczny");
@@ -52,13 +43,11 @@ function updateToggleState(toggleEl, activeTheme) {
 export function initTheme() {
   const media = matchMedia("(prefers-color-scheme: dark)");
   const toggle = document.querySelector("[data-theme-toggle]");
-  const icon = toggle?.querySelector(".theme-toggle__icon");
   let pref = getStoredPref();
 
   const sync = () => {
     applyTheme(pref, media);
     const activeTheme = getActiveTheme(pref, media);
-    updateToggleIcon(icon, activeTheme);
     updateToggleState(toggle, activeTheme);
   };
 

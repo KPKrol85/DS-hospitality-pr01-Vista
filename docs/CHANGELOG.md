@@ -67,6 +67,7 @@ For each implementation task, determine `Changelog: yes` or `Changelog: no`. Add
 - Unified the featured Luxury Suite name across the homepage and room catalogue and aligned offers page metadata with the current catalogue.
 - Consolidated theme colours and gradients into shared palette tokens.
 - Replaced repeated inline SVG icons with a cached, reusable 15-symbol sprite.
+- Replaced the 1.7 MB raster-embedded theme-toggle graphics with original sun and moon sprite symbols selected by the resolved theme from first paint, with a reduced-motion-aware rotating cross-fade.
 - Redesigned the contact page with a responsive two-column layout, integrated map, and clearer form hierarchy.
 - Refined responsive grids, content alignment, heading scales, and button sizing.
 - Standardized theme-aware focus rings, form typography, and active navigation and filter states.

@@ -780,6 +780,36 @@ function custom404Scenario() {
     return observed;
   }
 
+  // The decorative sprite glyph matching the effective theme must be the only visible one once transitions settle.
+  async function assertThemeToggle(page, theme, javaScriptEnabled) {
+    const state = await page.locator('#theme-toggle').evaluate(async (toggle) => {
+      const icons = [...toggle.querySelectorAll('.theme-toggle__icon')];
+      await Promise.all(icons.flatMap((icon) => icon.getAnimations()).map((animation) => animation.finished.catch(() => {})));
+      return {
+        name: toggle.getAttribute('aria-label'),
+        pressed: toggle.getAttribute('aria-pressed'),
+        images: toggle.querySelectorAll('img').length,
+        icons: icons.map((icon) => ({
+          tag: icon.localName,
+          hidden: icon.getAttribute('aria-hidden'),
+          href: icon.querySelector('use')?.getAttribute('href'),
+          // A non-empty box proves the external sprite symbol resolved, even when the sprite is served from cache.
+          rendered: (({ width, height }) => width > 0 && height > 0)(icon.querySelector('use').getBBox()),
+          opacity: getComputedStyle(icon).opacity
+        }))
+      };
+    });
+    assert.equal(state.name, 'Zmień motyw kolorystyczny', 'Theme toggle must keep its accessible name');
+    if (javaScriptEnabled) assert.equal(state.pressed, String(theme === 'dark'), `${theme}: aria-pressed must follow the theme`);
+    assert.equal(state.images, 0, 'Theme toggle must not load raster icon images');
+    assert.deepEqual(state.icons.map(({ tag, hidden, href, rendered }) => [tag, hidden, href, rendered]), [
+      ['svg', 'true', '/assets/img/icons/sprite.svg#icon-sun', true],
+      ['svg', 'true', '/assets/img/icons/sprite.svg#icon-moon', true]
+    ], 'Theme toggle must render decorative root-safe sprite symbols');
+    assert.deepEqual(state.icons.map(({ opacity }) => opacity), theme === 'dark' ? ['0', '1'] : ['1', '0'],
+      `${theme}: only the matching theme icon must be visible`);
+  }
+
   async function verify(page, response, observed, missingPath, javaScriptEnabled) {
     const origin = new URL(page.url()).origin;
     assert.equal(response.status(), 404, 'Missing document must retain HTTP 404');
@@ -804,11 +834,17 @@ function custom404Scenario() {
       assert.equal(await page.locator('html').getAttribute('class'), 'js');
       assert.match(await page.locator('[data-year]').innerText(), /^\d{4}$/);
       const initialTheme = await page.locator('html').getAttribute('data-theme');
+      await assertThemeToggle(page, initialTheme, true);
       await page.locator('#theme-toggle').click();
-      assert.notEqual(await page.locator('html').getAttribute('data-theme'), initialTheme);
+      const toggledTheme = await page.locator('html').getAttribute('data-theme');
+      assert.notEqual(toggledTheme, initialTheme);
+      await assertThemeToggle(page, toggledTheme, true);
       await page.locator('#theme-toggle').click();
       assert.equal(await page.locator('html').getAttribute('data-theme'), initialTheme);
+      await assertThemeToggle(page, initialTheme, true);
     } else {
+      const systemTheme = await page.evaluate(() => (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'));
+      await assertThemeToggle(page, systemTheme, false);
       assert.equal(await page.locator('html').getAttribute('class'), 'no-js');
       assert.equal(await page.locator('#site-nav').isVisible(), true, 'No-JS mobile navigation must remain visible');
       const navLinks = page.locator('#site-nav a');
@@ -857,9 +893,8 @@ function custom404Scenario() {
       'Skip link must not load another document');
 
     await page.waitForLoadState('networkidle');
-    const required = ['/css/style.css', '/assets/img/logo/logo-128x128.svg', '/assets/img/logo/logo-160x160.svg',
-      '/assets/img/icons/sun-40x40.svg'];
-    if (javaScriptEnabled) required.push('/js/theme-init.js', '/js/script.js', '/assets/seo/ld-404.json', '/assets/img/icons/moon-40x40.svg');
+    const required = ['/css/style.css', '/assets/img/logo/logo-128x128.svg', '/assets/img/logo/logo-160x160.svg'];
+    if (javaScriptEnabled) required.push('/js/theme-init.js', '/js/script.js', '/assets/seo/ld-404.json');
     for (const asset of required) {
       assert.ok(observed.responses.some((item) => new URL(item.url()).pathname === asset && item.status() === 200),
         `Expected successful root asset response: ${asset}`);
