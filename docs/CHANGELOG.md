@@ -89,6 +89,7 @@ For each implementation task, determine `Changelog: yes` or `Changelog: no`. Add
 - Made inquiry stay dates and guest count optional, accepting supplied dates only as a valid future pair, and removed the unreachable inline success message.
 - Excluded the offline fallback page from search indexing.
 - Replaced the embedded Google Maps view with a local map image and an external link to prevent automatic Google Maps requests from the contact page.
+- Consolidated the footer brand description and demonstration notice into a single disclosure beneath the footer brand.
 
 ### Fixed
 

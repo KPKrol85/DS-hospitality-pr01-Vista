@@ -821,12 +821,12 @@ function custom404Scenario() {
     assert.equal(await page.locator('body').evaluate((el) => getComputedStyle(el).marginTop), '0px',
       'Source stylesheet must be applied');
 
-    const disclosure = page.locator('.site-footer .footer__disclosure');
+    const disclosure = page.locator('.site-footer .footer__brand .footer__text');
     assert.equal(await disclosure.count(), 1, 'Exactly one permanent footer disclosure is required');
     assert.equal(await disclosure.isVisible(), true, 'Disclosure must remain visible with and without JavaScript');
     const disclosureText = await disclosure.innerText();
-    assert.match(disclosureText, /Vista Hotels & Travel to fikcyjna marka/);
-    assert.match(disclosureText, /demonstracyjnym projektem portfolio autorstwa KP_Code Digital Studio/);
+    assert.match(disclosureText, /Vista — Hotels & Travel to fikcyjna marka hotelowa/);
+    assert.match(disclosureText, /demonstracyjny projekt portfolio KP_Code Digital Studio/);
     assert.match(disclosureText, /usługi, oferty, ceny i historia firmy mają charakter przykładowy/);
     assert.equal(await page.getByRole('dialog').count(), 0, '404 content must be available without dismissing a dialog');
 
